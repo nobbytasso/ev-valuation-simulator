@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { useScenarioStore } from '../store/scenarioStore.ts'
 import { SECTOR_LABELS } from '../store/scenarioTypes.ts'
 import type { Scenario } from '../store/scenarioTypes.ts'
-import { GenericScenarioView } from './GenericScenarioView.tsx'
+import { ClimateTechScenarioView } from './sectors/climateTech/ClimateTechScenarioView.tsx'
 import { DrugDiscoveryScenarioView } from './sectors/drugDiscovery/DrugDiscoveryScenarioView.tsx'
 import { EcD2cScenarioView } from './sectors/ecD2c/EcD2cScenarioView.tsx'
 import { MedicalDeviceScenarioView } from './sectors/medicalDevice/MedicalDeviceScenarioView.tsx'
@@ -16,10 +16,7 @@ interface SectorViewProps {
   onDelete: () => void
 }
 
-/**
- * セクターごとの専用ビューへディスパッチする。専用ビュー未実装のセクターは
- * GenericScenarioView(生JSON編集)にフォールバックする。
- */
+/** セクターごとの専用ビューへディスパッチする。全6セクター実装済み(Phase 3完了)。 */
 function SectorView({ scenario, onSave, onDelete }: SectorViewProps) {
   switch (scenario.sector) {
     case 'saas_jp':
@@ -32,8 +29,8 @@ function SectorView({ scenario, onSave, onDelete }: SectorViewProps) {
       return <MedicalDeviceScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
     case 'drug_discovery':
       return <DrugDiscoveryScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
-    default:
-      return <GenericScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
+    case 'climate_tech':
+      return <ClimateTechScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
   }
 }
 

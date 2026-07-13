@@ -1,0 +1,16 @@
+.climate-tech-form__capex {
+  margin-top: 1rem;
+}
+
+.climate-tech-form__capex table {
+  width: auto;
+  margin-bottom: 0.5rem;
+}
+
+.climate-tech-form__capex label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  gap: 0.25rem;
+}
