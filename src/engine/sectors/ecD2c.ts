@@ -5,6 +5,7 @@
  * 評価手法: EV/売上 または EV/粗利マルチプル + ユニットエコノミクス(診断)。
  * 依存ゼロの純粋関数のみ。
  */
+import { atLeast, collectIssues, inRange, positiveInteger } from '../common/validation.ts'
 import type { EngineResult, Money, Range3, Ratio, SectorValuationResult, Yen } from '../types.ts'
 
 export interface EcD2cInputs {
@@ -39,6 +40,24 @@ export interface EcD2cInputs {
  * 境界条件: annualRevenue = 0 ⇒ EV = 0。f2Rate → 1 でも lifetimeYears は上限でキャップ。
  */
 export function evaluateEcD2c(inputs: EcD2cInputs): EngineResult<SectorValuationResult> {
+  const issues = collectIssues(
+    atLeast(inputs.annualRevenue, 'annualRevenue', 0),
+    atLeast(inputs.revenueGrowth, 'revenueGrowth', -1, { exclusive: true }),
+    inRange(inputs.grossMargin, 'grossMargin', 0, 1),
+    inRange(inputs.f2Rate, 'f2Rate', 0, 1, { maxExclusive: true }),
+    atLeast(inputs.aov, 'aov', 0),
+    atLeast(inputs.purchaseFrequency, 'purchaseFrequency', 0),
+    atLeast(inputs.cac, 'cac', 0),
+    inRange(inputs.adCostRatio, 'adCostRatio', 0, 1),
+    inRange(inputs.logisticsCostRatio, 'logisticsCostRatio', 0, 1),
+    atLeast(inputs.inventoryTurnover, 'inventoryTurnover', 0, { exclusive: true }),
+    atLeast(inputs.evMultiple.pessimistic, 'evMultiple.pessimistic', 0, { exclusive: true }),
+    atLeast(inputs.evMultiple.base, 'evMultiple.base', 0, { exclusive: true }),
+    atLeast(inputs.evMultiple.optimistic, 'evMultiple.optimistic', 0, { exclusive: true }),
+    positiveInteger(inputs.maxLifetimeYears, 'maxLifetimeYears'),
+  )
+  if (issues.length > 0) return { ok: false, errors: issues }
+
   const revenueNtm = inputs.annualRevenue * (1 + inputs.revenueGrowth)
   const basisNtm = inputs.multipleBasis === 'revenue' ? revenueNtm : revenueNtm * inputs.grossMargin
 

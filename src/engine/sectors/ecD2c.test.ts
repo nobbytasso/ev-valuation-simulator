@@ -137,4 +137,30 @@ describe('EcD2c プロパティ', () => {
     )
     for (const item of items) expect(item.span).toBeCloseTo(0, 6)
   })
+
+  const domainViolations: ((i: EcD2cInputs) => EcD2cInputs)[] = [
+    (i) => ({ ...i, annualRevenue: -1 }),
+    (i) => ({ ...i, revenueGrowth: -1 }),
+    (i) => ({ ...i, grossMargin: 1.5 }),
+    (i) => ({ ...i, f2Rate: 1 }),
+    (i) => ({ ...i, f2Rate: -0.1 }),
+    (i) => ({ ...i, aov: -1 }),
+    (i) => ({ ...i, purchaseFrequency: -1 }),
+    (i) => ({ ...i, cac: -1 }),
+    (i) => ({ ...i, adCostRatio: 1.5 }),
+    (i) => ({ ...i, logisticsCostRatio: -0.1 }),
+    (i) => ({ ...i, inventoryTurnover: 0 }),
+    (i) => ({ ...i, evMultiple: { ...i.evMultiple, base: 0 } }),
+    (i) => ({ ...i, maxLifetimeYears: 0 }),
+  ]
+
+  it('ドメイン外入力 → ok:false(§0.2.1)', () => {
+    fc.assert(
+      fc.property(fc.constantFrom(...domainViolations), (corrupt) => {
+        const result = evaluateEcD2c(corrupt(buildInputs()))
+        expect(result.ok).toBe(false)
+      }),
+      { numRuns: 50 },
+    )
+  })
 })

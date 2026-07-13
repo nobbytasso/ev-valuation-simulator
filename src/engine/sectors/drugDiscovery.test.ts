@@ -265,4 +265,48 @@ describe('DrugDiscovery プロパティ', () => {
     if (!combined.ok || !single1.ok || !single2.ok) return
     expect(combined.value.ev.base).toBeCloseTo(single1.value.ev.base + single2.value.ev.base, 6)
   })
+
+  function buildValidInputs(): DrugDiscoveryInputs {
+    return {
+      assets: [buildAsset()],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    }
+  }
+
+  const domainViolations: ((i: DrugDiscoveryInputs) => DrugDiscoveryInputs)[] = [
+    (i) => ({
+      ...i,
+      assets: [{ ...i.assets[0], phaseSuccessProbs: { ...i.assets[0].phaseSuccessProbs, phase2: 1.5 } }],
+    }),
+    (i) => ({
+      ...i,
+      assets: [{ ...i.assets[0], phaseSuccessProbs: { ...i.assets[0].phaseSuccessProbs, phase2: -0.1 } }],
+    }),
+    (i) => ({
+      ...i,
+      assets: [{ ...i.assets[0], phaseDurations: { ...i.assets[0].phaseDurations, phase2: 0 } }],
+    }),
+    (i) => ({
+      ...i,
+      assets: [{ ...i.assets[0], phaseDurations: { ...i.assets[0].phaseDurations, phase2: 1.5 } }],
+    }),
+    (i) => ({ ...i, assets: [{ ...i.assets[0], developmentCosts: { ...i.assets[0].developmentCosts, phase2: -1 } }] }),
+    (i) => ({ ...i, assets: [{ ...i.assets[0], declineRate: 1.5 }] }),
+    (i) => ({ ...i, assets: [{ ...i.assets[0], peakSales: -1 }] }),
+    (i) => ({ ...i, assets: [{ ...i.assets[0], yearsToPeak: 0 }] }),
+    (i) => ({ ...i, assets: [{ ...i.assets[0], plateauYears: -1 }] }),
+    (i) => ({ ...i, discountRate: { ...i.discountRate, base: 0 } }),
+    (i) => ({ ...i, modelHorizonYears: 2.5 }),
+  ]
+
+  it('ドメイン外入力 → ok:false(§0.2.1、ネストしたassets[i].xxxも検証)', () => {
+    fc.assert(
+      fc.property(fc.constantFrom(...domainViolations), (corrupt) => {
+        const result = evaluateDrugDiscovery(corrupt(buildValidInputs()))
+        expect(result.ok).toBe(false)
+      }),
+      { numRuns: 50 },
+    )
+  })
 })

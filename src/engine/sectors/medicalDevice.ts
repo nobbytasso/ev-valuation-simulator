@@ -6,6 +6,7 @@
  * 依存ゼロの純粋関数のみ。
  */
 import { presentValue, presentValueOfTerminalValue, terminalValue } from '../common/npv.ts'
+import { atLeast, collectIssues, inRange, nonNegativeInteger, positiveInteger } from '../common/validation.ts'
 import type { EngineResult, Money, Range3, Ratio, SectorValuationResult, YearIndex } from '../types.ts'
 
 export type DeviceClass = 'I' | 'II' | 'III' | 'IV'
@@ -42,32 +43,37 @@ export interface MedicalDeviceInputs {
  *          recurringRatio → 1 は ValidationIssue(発散)。
  */
 export function evaluateMedicalDevice(inputs: MedicalDeviceInputs): EngineResult<SectorValuationResult> {
-  if (inputs.recurringRatio >= 1) {
-    return {
-      ok: false,
-      errors: [
+  const rateIssues = (['pessimistic', 'base', 'optimistic'] as const).flatMap((key) => {
+    const rate = inputs.discountRate[key]
+    const label = `discountRate.${key}`
+    const domainIssue = atLeast(rate, label, 0, { exclusive: true })
+    if (domainIssue) return [domainIssue]
+    if (rate <= inputs.terminalGrowth) {
+      return [
         {
-          field: 'recurringRatio',
-          code: 'RECURRING_RATIO_DIVERGENT',
-          message: 'recurringRatio は 1 未満である必要があります(売上が発散します)',
+          field: 'discountRate',
+          code: 'TERMINAL_GROWTH_GTE_DISCOUNT',
+          message: '割引率は永久成長率を上回る必要があります',
         },
-      ],
+      ]
     }
-  }
-  for (const key of ['pessimistic', 'base', 'optimistic'] as const) {
-    if (inputs.discountRate[key] <= inputs.terminalGrowth) {
-      return {
-        ok: false,
-        errors: [
-          {
-            field: 'discountRate',
-            code: 'TERMINAL_GROWTH_GTE_DISCOUNT',
-            message: '割引率は永久成長率を上回る必要があります',
-          },
-        ],
-      }
-    }
-  }
+    return []
+  })
+
+  const issues = [
+    ...collectIssues(
+      atLeast(inputs.annualProcedures, 'annualProcedures', 0),
+      atLeast(inputs.procedureGrowth, 'procedureGrowth', -1, { exclusive: true }),
+      nonNegativeInteger(inputs.approvalDelayYears, 'approvalDelayYears'),
+      atLeast(inputs.pricePerProcedure, 'pricePerProcedure', 0),
+      inRange(inputs.peakPenetration, 'peakPenetration', 0, 1),
+      positiveInteger(inputs.yearsToPeak, 'yearsToPeak'),
+      inRange(inputs.recurringRatio, 'recurringRatio', 0, 1, { maxExclusive: true }),
+      positiveInteger(inputs.projectionYears, 'projectionYears'),
+    ),
+    ...rateIssues,
+  ]
+  if (issues.length > 0) return { ok: false, errors: issues }
 
   const L = inputs.launchYear + inputs.approvalDelayYears
 

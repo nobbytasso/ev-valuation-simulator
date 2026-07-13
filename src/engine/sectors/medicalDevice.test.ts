@@ -132,4 +132,27 @@ describe('MedicalDevice プロパティ', () => {
     )
     for (const item of items) expect(item.span).toBeCloseTo(0, 6)
   })
+
+  const domainViolations: ((i: MedicalDeviceInputs) => MedicalDeviceInputs)[] = [
+    (i) => ({ ...i, annualProcedures: -1 }),
+    (i) => ({ ...i, procedureGrowth: -1 }),
+    (i) => ({ ...i, approvalDelayYears: -1 }),
+    (i) => ({ ...i, approvalDelayYears: 1.5 }),
+    (i) => ({ ...i, pricePerProcedure: -1 }),
+    (i) => ({ ...i, peakPenetration: 1.5 }),
+    (i) => ({ ...i, yearsToPeak: 0 }),
+    (i) => ({ ...i, recurringRatio: 1.5 }),
+    (i) => ({ ...i, projectionYears: 2.5 }),
+    (i) => ({ ...i, discountRate: { ...i.discountRate, base: 0 } }),
+  ]
+
+  it('ドメイン外入力 → ok:false(§0.2.1)', () => {
+    fc.assert(
+      fc.property(fc.constantFrom(...domainViolations), (corrupt) => {
+        const result = evaluateMedicalDevice(corrupt(buildInputs()))
+        expect(result.ok).toBe(false)
+      }),
+      { numRuns: 50 },
+    )
+  })
 })

@@ -5,6 +5,7 @@
  * 評価手法: プロジェクトDCF(CAPEX重視)+ マイルストーン(量産化)到達確率によるリスク調整。
  * 依存ゼロの純粋関数のみ。
  */
+import { atLeast, collectIssues, inRange, positiveInteger } from '../common/validation.ts'
 import type { EngineResult, Money, Range3, Ratio, SectorValuationResult, Yen, YearIndex } from '../types.ts'
 
 export interface ClimateTechInputs {
@@ -50,6 +51,32 @@ export interface ClimateTechInputs {
  * 境界条件: P = 1 ⇒ 通常のプロジェクトNPVと一致。EVは負を許容(UIで警告)。
  */
 export function evaluateClimateTech(inputs: ClimateTechInputs): EngineResult<SectorValuationResult> {
+  const issues = [
+    ...collectIssues(
+      inRange(inputs.subsidyCoverage, 'subsidyCoverage', 0, 1),
+      inRange(inputs.massProductionProb, 'massProductionProb', 0, 1),
+      atLeast(inputs.annualCapacityUnits, 'annualCapacityUnits', 0),
+      positiveInteger(inputs.rampYears, 'rampYears'),
+      atLeast(inputs.unitPrice, 'unitPrice', 0),
+      atLeast(inputs.unitCost0, 'unitCost0', 0),
+      inRange(inputs.costDeclineRate, 'costDeclineRate', 0, 1, { maxExclusive: true }),
+      inRange(inputs.offtakeCoverage, 'offtakeCoverage', 0, 1),
+      inRange(inputs.merchantRealization, 'merchantRealization', 0, 1),
+      atLeast(inputs.fixedOpexAnnual, 'fixedOpexAnnual', 0),
+      atLeast(inputs.carbonCreditVolume, 'carbonCreditVolume', 0),
+      atLeast(inputs.carbonCreditPrice, 'carbonCreditPrice', 0),
+      atLeast(inputs.discountRate.pessimistic, 'discountRate.pessimistic', 0, { exclusive: true }),
+      atLeast(inputs.discountRate.base, 'discountRate.base', 0, { exclusive: true }),
+      atLeast(inputs.discountRate.optimistic, 'discountRate.optimistic', 0, { exclusive: true }),
+      positiveInteger(inputs.projectYears, 'projectYears'),
+    ),
+    ...inputs.capexSchedule.flatMap((entry, i) => {
+      const issue = atLeast(entry.amount, `capexSchedule[${i}].amount`, 0)
+      return issue ? [issue] : []
+    }),
+  ]
+  if (issues.length > 0) return { ok: false, errors: issues }
+
   const capexByYear = new Map<number, number>()
   for (const entry of inputs.capexSchedule) {
     capexByYear.set(entry.yearIndex, (capexByYear.get(entry.yearIndex) ?? 0) + entry.amount)

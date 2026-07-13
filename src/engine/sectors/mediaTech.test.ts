@@ -121,4 +121,28 @@ describe('MediaTech プロパティ', () => {
     )
     for (const item of items) expect(item.span).toBeCloseTo(0, 6)
   })
+
+  const domainViolations: ((i: MediaTechInputs) => MediaTechInputs)[] = [
+    (i) => ({ ...i, mau: -1 }),
+    (i) => ({ ...i, mauGrowth: -1 }),
+    (i) => ({ ...i, growthDecayFactor: 1.5 }),
+    (i) => ({ ...i, growthDecayFactor: 0 }),
+    (i) => ({ ...i, dauMauRatio: 1.5 }),
+    (i) => ({ ...i, arpuMonthly: { ...i.arpuMonthly, ad: -1 } }),
+    (i) => ({ ...i, monthlyChurn: 1.5 }),
+    (i) => ({ ...i, contentCostRatio: -0.1 }),
+    (i) => ({ ...i, cpa: -1 }),
+    (i) => ({ ...i, evSalesMultiple: { ...i.evSalesMultiple, base: 0 } }),
+    (i) => ({ ...i, projectionYears: 2.5 }),
+  ]
+
+  it('ドメイン外入力 → ok:false(§0.2.1)', () => {
+    fc.assert(
+      fc.property(fc.constantFrom(...domainViolations), (corrupt) => {
+        const result = evaluateMediaTech(corrupt(buildInputs()))
+        expect(result.ok).toBe(false)
+      }),
+      { numRuns: 50 },
+    )
+  })
 })

@@ -130,4 +130,32 @@ describe('ClimateTech プロパティ', () => {
     )
     for (const item of items) expect(item.span).toBeCloseTo(0, 6)
   })
+
+  const domainViolations: ((i: ClimateTechInputs) => ClimateTechInputs)[] = [
+    (i) => ({ ...i, subsidyCoverage: 1.5 }),
+    (i) => ({ ...i, massProductionProb: -0.1 }),
+    (i) => ({ ...i, annualCapacityUnits: -1 }),
+    (i) => ({ ...i, rampYears: 0 }),
+    (i) => ({ ...i, unitPrice: -1 }),
+    (i) => ({ ...i, unitCost0: -1 }),
+    (i) => ({ ...i, costDeclineRate: 1 }),
+    (i) => ({ ...i, offtakeCoverage: 1.5 }),
+    (i) => ({ ...i, merchantRealization: 1.5 }),
+    (i) => ({ ...i, fixedOpexAnnual: -1 }),
+    (i) => ({ ...i, carbonCreditVolume: -1 }),
+    (i) => ({ ...i, carbonCreditPrice: -1 }),
+    (i) => ({ ...i, discountRate: { ...i.discountRate, base: 0 } }),
+    (i) => ({ ...i, projectYears: 2.5 }),
+    (i) => ({ ...i, capexSchedule: [{ yearIndex: 0, amount: -1 }] }),
+  ]
+
+  it('ドメイン外入力 → ok:false(§0.2.1)', () => {
+    fc.assert(
+      fc.property(fc.constantFrom(...domainViolations), (corrupt) => {
+        const result = evaluateClimateTech(corrupt(buildInputs()))
+        expect(result.ok).toBe(false)
+      }),
+      { numRuns: 50 },
+    )
+  })
 })

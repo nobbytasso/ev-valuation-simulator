@@ -226,4 +226,30 @@ describe('SaaS プロパティ', () => {
     expect(itemsWithDelta.length).toBe(SAAS_SENSITIVITY_DRIVERS.length)
     expect(itemsWithDelta.every((item) => item.span >= 0)).toBe(true)
   })
+
+  const domainViolations: ((i: SaasInputs) => SaasInputs)[] = [
+    (i) => ({ ...i, arr: -1 }),
+    (i) => ({ ...i, arrGrowth: -1 }),
+    (i) => ({ ...i, grossMargin: 1.5 }),
+    (i) => ({ ...i, grossMargin: -0.1 }),
+    (i) => ({ ...i, operatingMargin: 1.5 }),
+    (i) => ({ ...i, fcfMargin: -1.5 }),
+    (i) => ({ ...i, grossChurn: 1.5 }),
+    (i) => ({ ...i, cacPaybackMonths: 0 }),
+    (i) => ({ ...i, evArrMultiple: { ...i.evArrMultiple, base: 0 } }),
+    (i) => ({ ...i, projectionYears: 2.5 }),
+    (i) => ({ ...i, growthDecayFactor: 1.5 }),
+    (i) => ({ ...i, growthDecayFactor: 0 }),
+    (i) => ({ ...i, discountRate: 0 }),
+  ]
+
+  it('ドメイン外入力 → ok:false(§0.2.1)', () => {
+    fc.assert(
+      fc.property(validInputsArb, fc.constantFrom(...domainViolations), (inputs, corrupt) => {
+        const result = evaluateSaas(corrupt(inputs))
+        expect(result.ok).toBe(false)
+      }),
+      { numRuns: 50 },
+    )
+  })
 })

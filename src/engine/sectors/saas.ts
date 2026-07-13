@@ -6,6 +6,7 @@
  * 依存ゼロの純粋関数のみ。
  */
 import { presentValue, presentValueOfTerminalValue, terminalValue } from '../common/npv.ts'
+import { atLeast, collectIssues, inRange, positiveInteger } from '../common/validation.ts'
 import type { EngineResult, Money, Range3, Ratio, SectorValuationResult } from '../types.ts'
 
 export interface SaasInputs {
@@ -41,18 +42,29 @@ export interface SaasInputs {
  * 境界条件: arr = 0 ⇒ EV = 0。r ≤ terminalGrowth は ValidationIssue。
  */
 export function evaluateSaas(inputs: SaasInputs): EngineResult<SectorValuationResult> {
-  if (inputs.discountRate <= inputs.terminalGrowth) {
-    return {
-      ok: false,
-      errors: [
-        {
+  const issues = collectIssues(
+    atLeast(inputs.arr, 'arr', 0),
+    atLeast(inputs.arrGrowth, 'arrGrowth', -1, { exclusive: true }),
+    inRange(inputs.grossMargin, 'grossMargin', 0, 1),
+    inRange(inputs.operatingMargin, 'operatingMargin', -1, 1),
+    inRange(inputs.fcfMargin, 'fcfMargin', -1, 1),
+    inRange(inputs.grossChurn, 'grossChurn', 0, 1),
+    atLeast(inputs.cacPaybackMonths, 'cacPaybackMonths', 0, { exclusive: true }),
+    atLeast(inputs.evArrMultiple.pessimistic, 'evArrMultiple.pessimistic', 0, { exclusive: true }),
+    atLeast(inputs.evArrMultiple.base, 'evArrMultiple.base', 0, { exclusive: true }),
+    atLeast(inputs.evArrMultiple.optimistic, 'evArrMultiple.optimistic', 0, { exclusive: true }),
+    positiveInteger(inputs.projectionYears, 'projectionYears'),
+    inRange(inputs.growthDecayFactor, 'growthDecayFactor', 0, 1, { minExclusive: true }),
+    atLeast(inputs.discountRate, 'discountRate', 0, { exclusive: true }),
+    inputs.discountRate <= inputs.terminalGrowth
+      ? {
           field: 'discountRate',
           code: 'TERMINAL_GROWTH_GTE_DISCOUNT',
           message: '割引率は永久成長率を上回る必要があります',
-        },
-      ],
-    }
-  }
+        }
+      : null,
+  )
+  if (issues.length > 0) return { ok: false, errors: issues }
 
   const arrBasisValue = inputs.arrBasis === 'current' ? inputs.arr : inputs.arr * (1 + inputs.arrGrowth)
   const ev = {

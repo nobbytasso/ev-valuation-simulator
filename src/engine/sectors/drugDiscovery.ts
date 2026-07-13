@@ -17,7 +17,8 @@
  *    u < modelHorizonYears(§2.2)の範囲、すなわち t ∈ [launchYear, launchYear + modelHorizonYears)
  *    を評価する(launchYearの大小に関わらず常に modelHorizonYears 年分の売上を評価する)。
  */
-import type { EngineResult, Money, Range3, Ratio, SectorValuationResult, YearIndex } from '../types.ts'
+import { atLeast, collectIssues, inRange, nonNegativeInteger, positiveInteger } from '../common/validation.ts'
+import type { EngineResult, Money, Range3, Ratio, SectorValuationResult, ValidationIssue, YearIndex } from '../types.ts'
 
 export type Phase = 'preclinical' | 'phase1' | 'phase2' | 'phase3' | 'filing'
 // フェーズ順序は上記の通り。'filing' 成功で上市
@@ -144,6 +145,22 @@ function computeAssetRnpv(asset: PipelineAsset, rate: Ratio, modelHorizonYears: 
   return npv
 }
 
+/** 品目1件分のドメイン検証(§0.2.1)。フィールド名は assets[<i>].xxx 形式。 */
+function validateAsset(asset: PipelineAsset, index: number): ValidationIssue[] {
+  const prefix = `assets[${index}]`
+  const checks: (ValidationIssue | null)[] = []
+  for (const phase of PHASE_ORDER) {
+    checks.push(inRange(asset.phaseSuccessProbs[phase], `${prefix}.phaseSuccessProbs.${phase}`, 0, 1))
+    checks.push(positiveInteger(asset.phaseDurations[phase], `${prefix}.phaseDurations.${phase}`))
+    checks.push(atLeast(asset.developmentCosts[phase], `${prefix}.developmentCosts.${phase}`, 0))
+  }
+  checks.push(inRange(asset.declineRate, `${prefix}.declineRate`, 0, 1))
+  checks.push(atLeast(asset.peakSales, `${prefix}.peakSales`, 0))
+  checks.push(positiveInteger(asset.yearsToPeak, `${prefix}.yearsToPeak`))
+  checks.push(nonNegativeInteger(asset.plateauYears, `${prefix}.plateauYears`))
+  return collectIssues(...checks)
+}
+
 /**
  * 境界条件:
  * - 全フェーズ確率 = 1 ⇒ rNPV = 通常NPV
@@ -152,6 +169,17 @@ function computeAssetRnpv(asset: PipelineAsset, rate: Ratio, modelHorizonYears: 
  * - rNPV は負になり得る(そのまま返す)
  */
 export function evaluateDrugDiscovery(inputs: DrugDiscoveryInputs): EngineResult<SectorValuationResult> {
+  const issues = [
+    ...inputs.assets.flatMap((asset, i) => validateAsset(asset, i)),
+    ...collectIssues(
+      atLeast(inputs.discountRate.pessimistic, 'discountRate.pessimistic', 0, { exclusive: true }),
+      atLeast(inputs.discountRate.base, 'discountRate.base', 0, { exclusive: true }),
+      atLeast(inputs.discountRate.optimistic, 'discountRate.optimistic', 0, { exclusive: true }),
+      positiveInteger(inputs.modelHorizonYears, 'modelHorizonYears'),
+    ),
+  ]
+  if (issues.length > 0) return { ok: false, errors: issues }
+
   const evAt = (rate: Ratio): Money =>
     inputs.assets.reduce((sum, asset) => sum + computeAssetRnpv(asset, rate, inputs.modelHorizonYears), 0)
 

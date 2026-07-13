@@ -5,6 +5,7 @@
  * 評価手法: EV/売上マルチプル + ユーザーエコノミクス(診断)。
  * 依存ゼロの純粋関数のみ。
  */
+import { atLeast, collectIssues, inRange, positiveInteger } from '../common/validation.ts'
 import type { EngineResult, Money, Range3, Ratio, SectorValuationResult, Yen } from '../types.ts'
 
 export interface MediaTechInputs {
@@ -35,6 +36,24 @@ export interface MediaTechInputs {
  * 境界条件: mau = 0 ⇒ EV = 0。monthlyChurn = 0 ⇒ LTV系指標は省略(§0.2)。
  */
 export function evaluateMediaTech(inputs: MediaTechInputs): EngineResult<SectorValuationResult> {
+  const issues = collectIssues(
+    atLeast(inputs.mau, 'mau', 0),
+    atLeast(inputs.mauGrowth, 'mauGrowth', -1, { exclusive: true }),
+    inRange(inputs.growthDecayFactor, 'growthDecayFactor', 0, 1, { minExclusive: true }),
+    inRange(inputs.dauMauRatio, 'dauMauRatio', 0, 1),
+    atLeast(inputs.arpuMonthly.ad, 'arpuMonthly.ad', 0),
+    atLeast(inputs.arpuMonthly.paid, 'arpuMonthly.paid', 0),
+    atLeast(inputs.arpuMonthly.commerce, 'arpuMonthly.commerce', 0),
+    inRange(inputs.monthlyChurn, 'monthlyChurn', 0, 1),
+    inRange(inputs.contentCostRatio, 'contentCostRatio', 0, 1),
+    atLeast(inputs.cpa, 'cpa', 0),
+    atLeast(inputs.evSalesMultiple.pessimistic, 'evSalesMultiple.pessimistic', 0, { exclusive: true }),
+    atLeast(inputs.evSalesMultiple.base, 'evSalesMultiple.base', 0, { exclusive: true }),
+    atLeast(inputs.evSalesMultiple.optimistic, 'evSalesMultiple.optimistic', 0, { exclusive: true }),
+    positiveInteger(inputs.projectionYears, 'projectionYears'),
+  )
+  if (issues.length > 0) return { ok: false, errors: issues }
+
   const arpuTotal = inputs.arpuMonthly.ad + inputs.arpuMonthly.paid + inputs.arpuMonthly.commerce
 
   let mau = inputs.mau
