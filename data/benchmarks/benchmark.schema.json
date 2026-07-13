@@ -1,11 +1,11 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "VC Valuation Simulator Benchmark Data (v1.1 - simplified)",
-  "description": "セクター別ベンチマーク。分布方式を廃止し、業界標準値(単一値)と比較対象企業(Comps)の対比に簡易化。Cowork収集プロジェクトと本体実装の契約。",
+  "title": "VC Valuation Simulator Benchmark Data (v1.2)",
+  "description": "セクター別ベンチマーク。業界標準値(単一値)と比較対象企業(Comps)の対比方式。Cowork収集プロジェクトと本体実装の契約。v1.2: metric_id契約の修正・unit 'jpy'追加・definitionフィールド追加(要件Rev.5 §6参照)。",
   "type": "object",
   "required": ["schema_version", "sector", "sector_label_ja", "data_status", "as_of", "benchmarks"],
   "properties": {
-    "schema_version": { "type": "string", "const": "1.1" },
+    "schema_version": { "type": "string", "const": "1.2" },
     "sector": {
       "type": "string",
       "enum": ["saas_jp", "drug_discovery", "medical_device", "media_tech", "ec_d2c", "climate_tech"]
@@ -24,9 +24,9 @@
         "type": "object",
         "required": ["metric_id", "label_ja", "unit", "reference_type", "value", "source"],
         "properties": {
-          "metric_id": { "type": "string", "description": "エンジン側ドライバーIDと一致 (例: arr_growth_yoy)" },
+          "metric_id": { "type": "string", "description": "本体UI層のマッピング表(src/ui/sectors/*/…BenchmarkMetrics.ts)が対応付けるキー(snake_case、例: arr_growth_yoy)。エンジンのドライバーID(camelCase)とは命名規則が異なり、直接一致しない。新規metric追加時は本体側マッピング表への登録が必要" },
           "label_ja": { "type": "string" },
-          "unit": { "type": "string", "enum": ["percent", "ratio", "x_multiple", "jpy_mn", "usd_mn", "months", "years", "count"] },
+          "unit": { "type": "string", "enum": ["percent", "ratio", "x_multiple", "jpy", "jpy_mn", "usd_mn", "months", "years", "count"], "description": "jpy: 円建て単価(ARPU・注文単価・手技単価等。v1.2追加、従来countで代用していた箇所を移行) / jpy_mn: 百万円" },
           "reference_type": {
             "type": "string",
             "enum": ["industry_standard", "comp_company"],
@@ -38,6 +38,7 @@
           },
           "value": { "type": "number", "description": "基準値(UIでは基準線として重畳表示)" },
           "basis": { "type": ["string", "null"], "description": "値の根拠・算出基準の短い説明 (例: 直近通期実績)" },
+          "definition": { "type": ["string", "null"], "description": "指標の定義: 分子/分母/基準時点を明記 (例: '12ヶ月後残存ユーザー数 ÷ 12ヶ月前の新規登録ユーザー数、月次コホートベース')。v1.2追加。実データ(data_status=production)の納品時は必須。本体UIの派生指標式はこの定義に合わせて確定する" },
           "source": {
             "type": "object",
             "required": ["name", "retrieved_at"],

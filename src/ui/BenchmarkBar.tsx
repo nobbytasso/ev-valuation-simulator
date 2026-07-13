@@ -19,6 +19,7 @@ function formatValue(value: number, unit: BenchmarkUnit): string {
   if (unit === 'percent') return `${value.toFixed(1)}%`
   if (unit === 'x_multiple') return `${value.toFixed(1)}x`
   if (unit === 'ratio') return value.toFixed(2)
+  if (unit === 'jpy') return `${value.toLocaleString('ja-JP')}円`
   return value.toLocaleString('ja-JP')
 }
 
@@ -27,6 +28,7 @@ function formatDiff(diff: number, unit: BenchmarkUnit): string {
   if (unit === 'percent') return `${sign}${diff.toFixed(1)}pt`
   if (unit === 'x_multiple') return `${sign}${diff.toFixed(1)}x`
   if (unit === 'ratio') return `${sign}${diff.toFixed(2)}`
+  if (unit === 'jpy') return `${sign}${diff.toLocaleString('ja-JP')}円`
   return `${sign}${diff.toLocaleString('ja-JP')}`
 }
 

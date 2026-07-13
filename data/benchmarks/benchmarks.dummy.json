@@ -1,94 +1,598 @@
 {
-  "note": "全数値・企業名はダミー(開発・デザイン確認用)。実データはCoworkプロジェクトで同一スキーマ(v1.1)にて作成し差し替える。",
+  "note": "全数値・企業名はダミー(開発・デザイン確認用)。実データはCoworkプロジェクトで同一スキーマ(v1.2)にて作成し差し替える。",
   "sectors": [
     {
-      "schema_version": "1.1",
+      "schema_version": "1.2",
       "sector": "saas_jp",
       "sector_label_ja": "SaaS(日本)",
       "data_status": "dummy",
       "as_of": "2026-07-13",
       "benchmarks": [
-        { "metric_id": "arr_growth_yoy", "label_ja": "ARR成長率(YoY)", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 25, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "arr_growth_yoy", "label_ja": "ARR成長率(YoY)", "unit": "percent", "reference_type": "comp_company", "company_name": "ダミーSaaS社A", "value": 38, "basis": "直近通期(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "nrr", "label_ja": "NRR", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 110, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "gross_margin", "label_ja": "グロスマージン", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 72, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "operating_margin", "label_ja": "営業利益率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 3, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "rule_of_40", "label_ja": "Rule of 40", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 40, "basis": "定義上の基準値", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "基準値40は定義由来" },
-        { "metric_id": "ev_arr_multiple", "label_ja": "EV/ARRマルチプル", "unit": "x_multiple", "reference_type": "industry_standard", "company_name": null, "value": 5.5, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "ev_arr_multiple", "label_ja": "EV/ARRマルチプル", "unit": "x_multiple", "reference_type": "comp_company", "company_name": "ダミーSaaS社A", "value": 8.2, "basis": "直近時価(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" }
+        {
+          "metric_id": "arr_growth_yoy",
+          "label_ja": "ARR成長率(YoY)",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 25,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "arr_growth_yoy",
+          "label_ja": "ARR成長率(YoY)",
+          "unit": "percent",
+          "reference_type": "comp_company",
+          "company_name": "ダミーSaaS社A",
+          "value": 38,
+          "basis": "直近通期(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "nrr",
+          "label_ja": "NRR",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 110,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "gross_margin",
+          "label_ja": "グロスマージン",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 72,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "operating_margin",
+          "label_ja": "営業利益率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 3,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "rule_of_40",
+          "label_ja": "Rule of 40",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 40,
+          "basis": "定義上の基準値",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "基準値40は定義由来"
+        },
+        {
+          "metric_id": "ev_arr_multiple",
+          "label_ja": "EV/ARRマルチプル",
+          "unit": "x_multiple",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 5.5,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "ev_arr_multiple",
+          "label_ja": "EV/ARRマルチプル",
+          "unit": "x_multiple",
+          "reference_type": "comp_company",
+          "company_name": "ダミーSaaS社A",
+          "value": 8.2,
+          "basis": "直近時価(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        }
       ]
     },
     {
-      "schema_version": "1.1",
+      "schema_version": "1.2",
       "sector": "drug_discovery",
       "sector_label_ja": "創薬",
       "data_status": "dummy",
       "as_of": "2026-07-13",
       "benchmarks": [
-        { "metric_id": "pos_preclinical_to_p1", "label_ja": "成功確率: 前臨床→P1", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 65, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "pos_p1_to_p2", "label_ja": "成功確率: P1→P2", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 52, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "pos_p2_to_p3", "label_ja": "成功確率: P2→P3", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 29, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "pos_p3_to_approval", "label_ja": "成功確率: P3→承認", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 58, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "royalty_rate", "label_ja": "導出ロイヤリティ率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 12, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "discount_rate", "label_ja": "割引率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 11, "basis": "業界慣行(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "pipeline_value_ratio", "label_ja": "時価総額/rNPV比", "unit": "ratio", "reference_type": "comp_company", "company_name": "ダミーバイオ社B", "value": 0.7, "basis": "ダミー算定", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" }
+        {
+          "metric_id": "pos_preclinical_to_p1",
+          "label_ja": "成功確率: 前臨床→P1",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 65,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "pos_p1_to_p2",
+          "label_ja": "成功確率: P1→P2",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 52,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "pos_p2_to_p3",
+          "label_ja": "成功確率: P2→P3",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 29,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "pos_p3_to_approval",
+          "label_ja": "成功確率: P3→承認",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 58,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "royalty_rate",
+          "label_ja": "導出ロイヤリティ率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 12,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "discount_rate",
+          "label_ja": "割引率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 11,
+          "basis": "業界慣行(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "pipeline_value_ratio",
+          "label_ja": "時価総額/rNPV比",
+          "unit": "ratio",
+          "reference_type": "comp_company",
+          "company_name": "ダミーバイオ社B",
+          "value": 0.7,
+          "basis": "ダミー算定",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        }
       ]
     },
     {
-      "schema_version": "1.1",
+      "schema_version": "1.2",
       "sector": "medical_device",
       "sector_label_ja": "医療機器",
       "data_status": "dummy",
       "as_of": "2026-07-13",
       "benchmarks": [
-        { "metric_id": "approval_lead_time_class3", "label_ja": "承認リードタイム(クラスIII)", "unit": "years", "reference_type": "industry_standard", "company_name": null, "value": 2.5, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "penetration_5y", "label_ja": "上市5年後浸透率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 8, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "recurring_revenue_ratio", "label_ja": "リカーリング売上比率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 40, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "ev_sales_multiple", "label_ja": "EV/売上マルチプル", "unit": "x_multiple", "reference_type": "industry_standard", "company_name": null, "value": 4.0, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "ev_sales_multiple", "label_ja": "EV/売上マルチプル", "unit": "x_multiple", "reference_type": "comp_company", "company_name": "ダミーメドテック社C", "value": 5.8, "basis": "直近時価(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" }
+        {
+          "metric_id": "approval_lead_time_class3",
+          "label_ja": "承認リードタイム(クラスIII)",
+          "unit": "years",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 2.5,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "penetration_5y",
+          "label_ja": "上市5年後浸透率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 8,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "recurring_revenue_ratio",
+          "label_ja": "リカーリング売上比率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 40,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "ev_sales_multiple",
+          "label_ja": "EV/売上マルチプル",
+          "unit": "x_multiple",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 4.0,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "ev_sales_multiple",
+          "label_ja": "EV/売上マルチプル",
+          "unit": "x_multiple",
+          "reference_type": "comp_company",
+          "company_name": "ダミーメドテック社C",
+          "value": 5.8,
+          "basis": "直近時価(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        }
       ]
     },
     {
-      "schema_version": "1.1",
+      "schema_version": "1.2",
       "sector": "media_tech",
       "sector_label_ja": "メディアテック",
       "data_status": "dummy",
       "as_of": "2026-07-13",
       "benchmarks": [
-        { "metric_id": "arpu_monthly_jpy", "label_ja": "月次ARPU(円)", "unit": "count", "reference_type": "industry_standard", "company_name": null, "value": 350, "basis": "業界標準(ダミー)。単位は円", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "m12_retention", "label_ja": "12ヶ月継続率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 28, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "paid_conversion", "label_ja": "課金転換率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 5, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "ev_sales_multiple", "label_ja": "EV/売上マルチプル", "unit": "x_multiple", "reference_type": "industry_standard", "company_name": null, "value": 3.0, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "ev_sales_multiple", "label_ja": "EV/売上マルチプル", "unit": "x_multiple", "reference_type": "comp_company", "company_name": "ダミーメディア社D", "value": 4.4, "basis": "直近時価(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" }
+        {
+          "metric_id": "arpu_monthly_jpy",
+          "label_ja": "月次ARPU(円)",
+          "unit": "jpy",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 350,
+          "basis": "業界標準(ダミー)。単位は円",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "m12_retention",
+          "label_ja": "12ヶ月継続率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 28,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "paid_conversion",
+          "label_ja": "課金転換率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 5,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "ev_sales_multiple",
+          "label_ja": "EV/売上マルチプル",
+          "unit": "x_multiple",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 3.0,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "ev_sales_multiple",
+          "label_ja": "EV/売上マルチプル",
+          "unit": "x_multiple",
+          "reference_type": "comp_company",
+          "company_name": "ダミーメディア社D",
+          "value": 4.4,
+          "basis": "直近時価(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        }
       ]
     },
     {
-      "schema_version": "1.1",
+      "schema_version": "1.2",
       "sector": "ec_d2c",
       "sector_label_ja": "EC/D2C",
       "data_status": "dummy",
       "as_of": "2026-07-13",
       "benchmarks": [
-        { "metric_id": "revenue_growth_yoy", "label_ja": "売上成長率(YoY)", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 22, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "gross_margin", "label_ja": "粗利率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 58, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "f2_conversion", "label_ja": "F2転換率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 28, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "ltv_cac", "label_ja": "LTV/CAC", "unit": "ratio", "reference_type": "industry_standard", "company_name": null, "value": 3.0, "basis": "一般的な健全基準", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "ad_cost_ratio", "label_ja": "広告費率(対売上)", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 20, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "ev_sales_multiple", "label_ja": "EV/売上マルチプル", "unit": "x_multiple", "reference_type": "comp_company", "company_name": "ダミーD2C社E", "value": 1.9, "basis": "直近時価(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" }
+        {
+          "metric_id": "revenue_growth_yoy",
+          "label_ja": "売上成長率(YoY)",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 22,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "gross_margin",
+          "label_ja": "粗利率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 58,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "f2_conversion",
+          "label_ja": "F2転換率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 28,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "ltv_cac",
+          "label_ja": "LTV/CAC",
+          "unit": "ratio",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 3.0,
+          "basis": "一般的な健全基準",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "ad_cost_ratio",
+          "label_ja": "広告費率(対売上)",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 20,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "ev_sales_multiple",
+          "label_ja": "EV/売上マルチプル",
+          "unit": "x_multiple",
+          "reference_type": "comp_company",
+          "company_name": "ダミーD2C社E",
+          "value": 1.9,
+          "basis": "直近時価(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        }
       ]
     },
     {
-      "schema_version": "1.1",
+      "schema_version": "1.2",
       "sector": "climate_tech",
       "sector_label_ja": "クライメートテック",
       "data_status": "dummy",
       "as_of": "2026-07-13",
       "benchmarks": [
-        { "metric_id": "offtake_coverage", "label_ja": "オフテイク契約カバー率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 45, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "subsidy_dependency", "label_ja": "補助金・制度収入依存度", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 35, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "scaleup_success_prob", "label_ja": "量産化到達確率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 45, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "capex_intensity", "label_ja": "CAPEX/売上(定常時)", "unit": "ratio", "reference_type": "industry_standard", "company_name": null, "value": 0.6, "basis": "業界標準(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" },
-        { "metric_id": "discount_rate", "label_ja": "割引率", "unit": "percent", "reference_type": "industry_standard", "company_name": null, "value": 12, "basis": "業界慣行(ダミー)", "source": { "name": "DUMMY", "url": null, "retrieved_at": "2026-07-13" }, "notes": "ダミー値" }
+        {
+          "metric_id": "offtake_coverage",
+          "label_ja": "オフテイク契約カバー率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 45,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "subsidy_dependency",
+          "label_ja": "補助金・制度収入依存度",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 35,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "scaleup_success_prob",
+          "label_ja": "量産化到達確率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 45,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "capex_intensity",
+          "label_ja": "CAPEX/売上(定常時)",
+          "unit": "ratio",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 0.6,
+          "basis": "業界標準(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        },
+        {
+          "metric_id": "discount_rate",
+          "label_ja": "割引率",
+          "unit": "percent",
+          "reference_type": "industry_standard",
+          "company_name": null,
+          "value": 12,
+          "basis": "業界慣行(ダミー)",
+          "source": {
+            "name": "DUMMY",
+            "url": null,
+            "retrieved_at": "2026-07-13"
+          },
+          "notes": "ダミー値"
+        }
       ]
     }
   ]

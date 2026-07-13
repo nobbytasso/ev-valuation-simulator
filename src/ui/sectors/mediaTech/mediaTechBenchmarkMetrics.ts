@@ -12,8 +12,8 @@ import type { BenchmarkMetricConfig } from '../../benchmarkMetricConfig.ts'
 export const MEDIA_TECH_BENCHMARK_METRICS: BenchmarkMetricConfig<MediaTechInputs>[] = [
   {
     metricId: 'arpu_monthly_jpy',
-    label: '月次ARPU(円)',
-    unit: 'count',
+    label: '月次ARPU',
+    unit: 'jpy', // v1.2: 円建て単価はjpy(従来はcountで代用していた)
     getValue: (inputs) => inputs.arpuMonthly.ad + inputs.arpuMonthly.paid + inputs.arpuMonthly.commerce,
   },
   {

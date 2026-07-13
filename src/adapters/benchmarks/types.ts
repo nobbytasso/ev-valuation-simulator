@@ -1,9 +1,10 @@
 /**
- * ベンチマークデータ型。出典: data/benchmarks/benchmark.schema.json (v1.1)
+ * ベンチマークデータ型。出典: data/benchmarks/benchmark.schema.json (v1.2)
  */
 import type { SectorId } from '../../store/scenarioTypes.ts'
 
-export type BenchmarkUnit = 'percent' | 'ratio' | 'x_multiple' | 'jpy_mn' | 'usd_mn' | 'months' | 'years' | 'count'
+/** jpy = 円建て単価(ARPU・注文単価等。v1.2追加) */
+export type BenchmarkUnit = 'percent' | 'ratio' | 'x_multiple' | 'jpy' | 'jpy_mn' | 'usd_mn' | 'months' | 'years' | 'count'
 export type BenchmarkReferenceType = 'industry_standard' | 'comp_company'
 export type DataStatus = 'dummy' | 'production'
 
@@ -22,6 +23,8 @@ export interface BenchmarkEntry {
   company_name: string | null
   value: number
   basis?: string | null
+  /** 指標の定義(分子/分母/基準時点)。v1.2追加、実データでは必須 */
+  definition?: string | null
   source: BenchmarkSourceInfo
   notes?: string | null
 }
