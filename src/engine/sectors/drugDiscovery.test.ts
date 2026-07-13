@@ -448,6 +448,18 @@ describe('DrugDiscovery 感度分析ドライバー(§1.5.1, D-6/B-1)', () => {
     expect(applyDrugDiscoveryDriver(inputs, 'assets[9].peakSales', 1.2)).toBe(inputs)
   })
 
+  it('applyDrugDiscoveryDriver: 不正なフェーズ名(phaseSuccessProbs.<phase>)は入力をそのまま返す(D-6監査 指摘12)', () => {
+    const inputs: DrugDiscoveryInputs = {
+      assets: [buildAsset()],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    }
+    expect(() => applyDrugDiscoveryDriver(inputs, 'assets[0].phaseSuccessProbs.bogusPhase', 1.2)).not.toThrow()
+    const result = applyDrugDiscoveryDriver(inputs, 'assets[0].phaseSuccessProbs.bogusPhase', 1.2)
+    expect(result).toBe(inputs)
+    expect(Object.keys(result.assets[0].phaseSuccessProbs)).not.toContain('bogusPhase')
+  })
+
   it('drugDiscoveryBaseEv: baseケースのEVを返し、ドメイン外入力ではNaN', () => {
     const inputs: DrugDiscoveryInputs = {
       assets: [buildAsset()],

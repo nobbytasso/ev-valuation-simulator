@@ -240,6 +240,8 @@ const ASSET_DRIVER_RE = /^assets\[(\d+)\]\.(.+)$/
  * - discountRate.base のみポイント変動(加法)。乗算のmultiplier(1±δ)から符号のみを取り出し、
  *   固定幅 δ_r(既定0.02、U-20)を加減算する。δ_rを可変にする場合はDriverApplier型の
  *   シグネチャ拡張が必要(TODO、Phase 4着手時に要相談)。
+ * - phaseSuccessProbs.<phase> の <phase> が PHASE_ORDER に存在しない場合は適用せず、
+ *   入力を同一参照のまま返す(不明なdriverId・範囲外のasset indexと同じ扱い、§1.5.1)。
  */
 export function applyDrugDiscoveryDriver(
   inputs: DrugDiscoveryInputs,
@@ -266,7 +268,9 @@ export function applyDrugDiscoveryDriver(
   } else if (subPath === 'launchYear') {
     updatedAsset = { ...asset, launchYear: Math.max(Math.round(asset.launchYear * multiplier), 1) }
   } else if (subPath.startsWith('phaseSuccessProbs.')) {
-    const phase = subPath.slice('phaseSuccessProbs.'.length) as Phase
+    const phaseName = subPath.slice('phaseSuccessProbs.'.length)
+    if (!PHASE_ORDER.includes(phaseName as Phase)) return inputs
+    const phase = phaseName as Phase
     const value = Math.min(Math.max(asset.phaseSuccessProbs[phase] * multiplier, 0), 1)
     updatedAsset = { ...asset, phaseSuccessProbs: { ...asset.phaseSuccessProbs, [phase]: value } }
   } else if (subPath === 'commercialization.contributionMargin' && asset.commercialization.type === 'own') {
