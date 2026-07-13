@@ -6,6 +6,13 @@ export interface ListItemKeys {
   push: () => void
   /** index番目を削除した直後に呼ぶ(removeハンドラ内でonChangeと対にして呼ぶ)。 */
   removeAt: (index: number) => void
+  /**
+   * 行配列をadd/remove以外の経路で丸ごと差し替えた直後に、差し替えを行った側
+   * (フックの所有コンポーネント)が呼ぶ(phase4-spec.md §5.1)。全キーを新規uuidで
+   * count件再生成する。呼び忘れても`keys[i] ?? String(i)`のフォールバックにより
+   * 安全(キー重複・例外は起きない。劣化ははみ出した行の再マウントに限られる)。
+   */
+  reset: (count: number) => void
 }
 
 /**
@@ -27,5 +34,6 @@ export function useStableListKeys(initialCount: number): ListItemKeys {
   const [keys, setKeys] = useState<string[]>(() => Array.from({ length: initialCount }, () => crypto.randomUUID()))
   const push = () => setKeys((prev) => [...prev, crypto.randomUUID()])
   const removeAt = (index: number) => setKeys((prev) => prev.filter((_, i) => i !== index))
-  return { keys, push, removeAt }
+  const reset = (count: number) => setKeys(Array.from({ length: count }, () => crypto.randomUUID()))
+  return { keys, push, removeAt, reset }
 }

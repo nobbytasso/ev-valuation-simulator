@@ -25,4 +25,37 @@ describe('useStableListKeys(D-12/B-8)', () => {
     expect(result.current.keys).toEqual([keyA, keyC])
     expect(result.current.keys).not.toContain(keyB)
   })
+
+  describe('reset(Phase 4、phase4-spec.md §5.1)', () => {
+    it('reset(count)で全キーが新規のuuidにcount件再生成される', () => {
+      const { result } = renderHook(() => useStableListKeys(2))
+      const before = result.current.keys
+      act(() => result.current.reset(3))
+      expect(result.current.keys).toHaveLength(3)
+      expect(new Set(result.current.keys).size).toBe(3)
+      for (const key of result.current.keys) {
+        expect(before).not.toContain(key)
+      }
+    })
+
+    it('reset(0)で空リストになる', () => {
+      const { result } = renderHook(() => useStableListKeys(3))
+      act(() => result.current.reset(0))
+      expect(result.current.keys).toEqual([])
+    })
+
+    it('reset後もpush・removeAtが正常動作する', () => {
+      const { result } = renderHook(() => useStableListKeys(2))
+      act(() => result.current.reset(1))
+      expect(result.current.keys).toHaveLength(1)
+
+      act(() => result.current.push())
+      expect(result.current.keys).toHaveLength(2)
+
+      const [keyA, keyB] = result.current.keys
+      act(() => result.current.removeAt(0))
+      expect(result.current.keys).toEqual([keyB])
+      expect(result.current.keys).not.toContain(keyA)
+    })
+  })
 })
