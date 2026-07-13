@@ -4,6 +4,7 @@ import { useScenarioStore } from '../store/scenarioStore.ts'
 import { SECTOR_LABELS } from '../store/scenarioTypes.ts'
 import type { Scenario } from '../store/scenarioTypes.ts'
 import { GenericScenarioView } from './GenericScenarioView.tsx'
+import { EcD2cScenarioView } from './sectors/ecD2c/EcD2cScenarioView.tsx'
 import { SaasScenarioView } from './sectors/saas/SaasScenarioView.tsx'
 
 /**
@@ -38,6 +39,8 @@ export function ScenarioDetailPage() {
 
       {scenario.sector === 'saas_jp' ? (
         <SaasScenarioView scenario={scenario} onSave={handleSave} onDelete={handleDelete} />
+      ) : scenario.sector === 'ec_d2c' ? (
+        <EcD2cScenarioView scenario={scenario} onSave={handleSave} onDelete={handleDelete} />
       ) : (
         <GenericScenarioView scenario={scenario} onSave={handleSave} onDelete={handleDelete} />
       )}

@@ -1,14 +1,15 @@
-.saas-view section {
+/* セクター結果ビュー(プリセット・アクション行)の共通レイアウト。全セクターで共有。 */
+.sector-scenario-view section {
   margin-bottom: 2rem;
 }
 
-.saas-view__presets {
+.sector-scenario-view__presets {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
 }
 
-.saas-view__presets button {
+.sector-scenario-view__presets button {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -23,12 +24,12 @@
   max-width: 220px;
 }
 
-.saas-view__presets button span {
+.sector-scenario-view__presets button span {
   font-size: 0.8rem;
   color: var(--color-text-muted);
 }
 
-.saas-view__actions {
+.sector-scenario-view__actions {
   display: flex;
   gap: 0.75rem;
 }

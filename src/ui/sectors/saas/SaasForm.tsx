@@ -1,5 +1,5 @@
 import type { SaasInputs } from '../../../engine/index.ts'
-import './SaasForm.css'
+import '../../sectorForm.css'
 
 export interface SaasFormProps {
   inputs: SaasInputs
@@ -13,7 +13,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
     onChange({ ...inputs, evArrMultiple: { ...inputs.evArrMultiple, [key]: value } })
 
   return (
-    <div className="saas-form">
+    <div className="sector-form">
       <label>
         ARR(百万円)
         <input type="number" step="10" value={inputs.arr} onChange={(e) => set('arr', Number(e.target.value))} />
@@ -84,7 +84,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
         </select>
       </label>
 
-      <fieldset className="saas-form__multiple">
+      <fieldset className="sector-form__multiple">
         <legend>EV/ARRマルチプル(x)</legend>
         <label>
           悲観
