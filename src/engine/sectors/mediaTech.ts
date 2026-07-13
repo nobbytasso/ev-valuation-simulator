@@ -35,6 +35,16 @@ export interface MediaTechInputs {
  *
  * 境界条件: mau = 0 ⇒ EV = 0。monthlyChurn = 0 ⇒ LTV系指標は省略(§0.2)。
  */
+
+/**
+ * 月次解約率一定を仮定したnヶ月後残存率 = (1 − monthlyChurn)^n。
+ * UI側での複製実装を避けるための公開ヘルパー(D-9/B-3。定義: docs/requirements-rev5.md §6.1)。
+ * keyMetricsには含めない(含めるとgolden fixtureの出力が変わり再生成が必要になるため)。
+ */
+export function retentionAfterMonths(monthlyChurn: Ratio, months: number): Ratio {
+  return Math.pow(1 - monthlyChurn, months)
+}
+
 export function evaluateMediaTech(inputs: MediaTechInputs): EngineResult<SectorValuationResult> {
   const issues = collectIssues(
     atLeast(inputs.mau, 'mau', 0),

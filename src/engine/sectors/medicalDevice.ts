@@ -42,6 +42,18 @@ export interface MedicalDeviceInputs {
  * 境界条件: peakPenetration = 0 または annualProcedures = 0 ⇒ EV = 0。
  *          recurringRatio → 1 は ValidationIssue(発散)。
  */
+
+/**
+ * Pen(t) = 上市後経過年tにおける市場浸透率(上記式のPen(t)そのまま)。
+ * UI側での複製実装を避けるための公開ヘルパー(D-9/B-3)。keyMetricsには含めない
+ * (含めるとgolden fixtureの出力が変わり再生成が必要になるため)。
+ */
+export function penetrationAtYear(inputs: MedicalDeviceInputs, t: YearIndex): Ratio {
+  const L = inputs.launchYear + inputs.approvalDelayYears
+  if (t < L) return 0
+  return Math.min(inputs.peakPenetration, (inputs.peakPenetration * (t - L + 1)) / inputs.yearsToPeak)
+}
+
 export function evaluateMedicalDevice(inputs: MedicalDeviceInputs): EngineResult<SectorValuationResult> {
   const rateIssues = (['pessimistic', 'base', 'optimistic'] as const).flatMap((key) => {
     const rate = inputs.discountRate[key]
@@ -75,13 +87,11 @@ export function evaluateMedicalDevice(inputs: MedicalDeviceInputs): EngineResult
   ]
   if (issues.length > 0) return { ok: false, errors: issues }
 
-  const L = inputs.launchYear + inputs.approvalDelayYears
-
   const computeAt = (rate: Ratio): { ev: Money; cashflows: { t: number; cf: Money }[] } => {
     const cashflows: { t: number; cf: Money }[] = []
     for (let t = 1; t <= inputs.projectionYears; t++) {
       const procedures = inputs.annualProcedures * Math.pow(1 + inputs.procedureGrowth, t)
-      const pen = t >= L ? Math.min(inputs.peakPenetration, (inputs.peakPenetration * (t - L + 1)) / inputs.yearsToPeak) : 0
+      const pen = penetrationAtYear(inputs, t)
       const deviceRev = (procedures * pen * inputs.pricePerProcedure) / 1e6
       const totalRev = deviceRev / (1 - inputs.recurringRatio)
       const fcf = totalRev * inputs.operatingMargin

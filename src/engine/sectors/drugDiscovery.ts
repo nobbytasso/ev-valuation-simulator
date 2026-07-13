@@ -60,6 +60,17 @@ interface PhaseTiming {
   remaining: Phase[]
 }
 
+/**
+ * 残フェーズ(currentPhase以降)の成功確率の積 = 上市確率(POS)。§2.2定義式そのまま。
+ * UI側での複製実装を避けるための公開ヘルパー(D-9/B-3)。keyMetricsには含めない
+ * (含めるとgolden fixtureの出力が変わり再生成が必要になるため)。
+ */
+export function computeAssetPos(asset: PipelineAsset): Ratio {
+  const idx = PHASE_ORDER.indexOf(asset.currentPhase)
+  const remaining = PHASE_ORDER.slice(idx)
+  return remaining.reduce((acc, phase) => acc * asset.phaseSuccessProbs[phase], 1)
+}
+
 function computePhaseTiming(asset: PipelineAsset): PhaseTiming {
   const idx = PHASE_ORDER.indexOf(asset.currentPhase)
   const remaining = PHASE_ORDER.slice(idx)
@@ -69,7 +80,7 @@ function computePhaseTiming(asset: PipelineAsset): PhaseTiming {
     pReach[p] = cumProb
     cumProb *= asset.phaseSuccessProbs[p]
   }
-  const pos = cumProb
+  const pos = computeAssetPos(asset)
 
   const cumThrough: Partial<Record<Phase, number>> = {}
   let cumYears = 0

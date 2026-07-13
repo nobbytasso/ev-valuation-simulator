@@ -9,6 +9,7 @@ import {
   evaluateMedicalDevice,
   MEDICAL_DEVICE_SENSITIVITY_DRIVERS,
   medicalDeviceBaseEv,
+  penetrationAtYear,
 } from './medicalDevice.ts'
 import type { MedicalDeviceInputs } from './medicalDevice.ts'
 import { buildTornado } from '../common/sensitivity.ts'
@@ -154,5 +155,13 @@ describe('MedicalDevice プロパティ', () => {
       }),
       { numRuns: 50 },
     )
+  })
+
+  it('penetrationAtYear: Pen(t)式(D-9公開ヘルパー)。t<L⇒0、t≥Lはmin(peak, peak×(t−L+1)/yearsToPeak)', () => {
+    const inputs = buildInputs({ launchYear: 2, approvalDelayYears: 1, peakPenetration: 0.3, yearsToPeak: 4 })
+    // L = 3
+    expect(penetrationAtYear(inputs, 2)).toBe(0)
+    expect(penetrationAtYear(inputs, 3)).toBeCloseTo(0.3 * (1 / 4), 9)
+    expect(penetrationAtYear(inputs, 7)).toBeCloseTo(0.3, 9) // t-L+1=5 > yearsToPeak=4 ⇒ peakでクランプ
   })
 })

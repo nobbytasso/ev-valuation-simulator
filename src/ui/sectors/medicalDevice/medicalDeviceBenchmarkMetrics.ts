@@ -7,6 +7,7 @@
  * 併記可」)、UI側で売上を再計算してまで近似値を出すのはエンジンとの二重実装に
  * なり避けたい。将来、実装ロジック側にimplied multipleを追加した際に対応する。
  */
+import { penetrationAtYear } from '../../../engine/index.ts'
 import type { MedicalDeviceInputs } from '../../../engine/index.ts'
 import type { BenchmarkMetricConfig } from '../../benchmarkMetricConfig.ts'
 
@@ -21,14 +22,12 @@ export const MEDICAL_DEVICE_BENCHMARK_METRICS: BenchmarkMetricConfig<MedicalDevi
     getValue: (inputs) => (inputs.deviceClass === 'III' ? inputs.launchYear + inputs.approvalDelayYears : undefined),
   },
   {
+    // penetration_5y = Pen(実効上市年+4)。エンジンのPen(t)式をpenetrationAtYear()経由で
+    // 直接呼び出す(D-9/B-3: UI側での式複製を廃止)。
     metricId: 'penetration_5y',
     label: '上市5年目の浸透率',
     unit: 'percent',
-    getValue: (inputs) => {
-      const u = 4 // 上市から5年目(u=0が1年目)
-      const penetration = Math.min(inputs.peakPenetration, (inputs.peakPenetration * (u + 1)) / inputs.yearsToPeak)
-      return penetration * 100
-    },
+    getValue: (inputs) => penetrationAtYear(inputs, inputs.launchYear + inputs.approvalDelayYears + 4) * 100,
   },
   {
     metricId: 'recurring_revenue_ratio',

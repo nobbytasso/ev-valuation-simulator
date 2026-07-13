@@ -6,6 +6,7 @@
  * (ブレンドARPUのみを扱うモデルのため、課金ユーザー比率という概念を持たない)。
  * 将来ドライバーを追加するまで比較対象から除外する。
  */
+import { retentionAfterMonths } from '../../../engine/index.ts'
 import type { MediaTechInputs } from '../../../engine/index.ts'
 import type { BenchmarkMetricConfig } from '../../benchmarkMetricConfig.ts'
 
@@ -17,10 +18,11 @@ export const MEDIA_TECH_BENCHMARK_METRICS: BenchmarkMetricConfig<MediaTechInputs
     getValue: (inputs) => inputs.arpuMonthly.ad + inputs.arpuMonthly.paid + inputs.arpuMonthly.commerce,
   },
   {
+    // (1-monthlyChurn)^12。エンジンのretentionAfterMonths()経由(D-9/B-3: UI側での式複製を廃止)。
     metricId: 'm12_retention',
     label: '12ヶ月継続率',
     unit: 'percent',
-    getValue: (inputs) => Math.pow(1 - inputs.monthlyChurn, 12) * 100,
+    getValue: (inputs) => retentionAfterMonths(inputs.monthlyChurn, 12) * 100,
   },
   {
     metricId: 'ev_sales_multiple',

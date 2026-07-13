@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url'
 import fc from 'fast-check'
 import { describe, expect, it } from 'vitest'
 import { closeEnough } from '../types.ts'
-import { evaluateDrugDiscovery, PHASE_ORDER } from './drugDiscovery.ts'
+import { computeAssetPos, evaluateDrugDiscovery, PHASE_ORDER } from './drugDiscovery.ts'
 import type { DrugDiscoveryInputs, Phase, PipelineAsset } from './drugDiscovery.ts'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -308,5 +308,13 @@ describe('DrugDiscovery プロパティ', () => {
       }),
       { numRuns: 50 },
     )
+  })
+
+  it('computeAssetPos: 残フェーズ(currentPhase以降)の成功確率の積(D-9公開ヘルパー)', () => {
+    const asset = buildAsset({
+      currentPhase: 'phase2',
+      phaseSuccessProbs: { preclinical: 0.5, phase1: 0.5, phase2: 0.3, phase3: 0.6, filing: 0.85 },
+    })
+    expect(computeAssetPos(asset)).toBeCloseTo(0.3 * 0.6 * 0.85, 9)
   })
 })

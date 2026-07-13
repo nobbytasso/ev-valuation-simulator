@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { StaticJsonSource } from '../../../adapters/benchmarks/StaticJsonSource.ts'
 import type { BenchmarkData } from '../../../adapters/benchmarks/types.ts'
-import { PHASE_ORDER, evaluateDrugDiscovery } from '../../../engine/index.ts'
-import type { PipelineAsset } from '../../../engine/index.ts'
+import { computeAssetPos, evaluateDrugDiscovery } from '../../../engine/index.ts'
 import type { Scenario } from '../../../store/scenarioTypes.ts'
 import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
@@ -18,13 +17,6 @@ export interface DrugDiscoveryScenarioViewProps {
   scenario: DrugDiscoveryScenario
   onSave: (next: DrugDiscoveryScenario) => void
   onDelete: () => void
-}
-
-/** 残フェーズの成功確率を掛け合わせた上市確率(POS)。エンジンの§2.2定義式そのまま。 */
-function computePos(asset: PipelineAsset): number {
-  const idx = PHASE_ORDER.indexOf(asset.currentPhase)
-  const remaining = PHASE_ORDER.slice(idx)
-  return remaining.reduce((acc, phase) => acc * asset.phaseSuccessProbs[phase], 1)
 }
 
 /**
@@ -100,7 +92,7 @@ export function DrugDiscoveryScenarioView({ scenario, onSave, onDelete }: DrugDi
           <ul>
             {draftInputs.assets.map((asset, i) => (
               <li key={i}>
-                {asset.name}: 上市確率(POS) {(computePos(asset) * 100).toFixed(1)}%
+                {asset.name}: 上市確率(POS) {(computeAssetPos(asset) * 100).toFixed(1)}%
               </li>
             ))}
           </ul>

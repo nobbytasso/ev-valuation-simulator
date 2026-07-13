@@ -9,6 +9,7 @@ import {
   evaluateMediaTech,
   MEDIA_TECH_SENSITIVITY_DRIVERS,
   mediaTechBaseEv,
+  retentionAfterMonths,
 } from './mediaTech.ts'
 import type { MediaTechInputs } from './mediaTech.ts'
 import { buildTornado } from '../common/sensitivity.ts'
@@ -154,5 +155,10 @@ describe('MediaTech プロパティ', () => {
       }),
       { numRuns: 50 },
     )
+  })
+
+  it('retentionAfterMonths: (1-churn)^n(D-9公開ヘルパー、requirements-rev5 §6.1 m12_retention定義)', () => {
+    expect(retentionAfterMonths(0.05, 12)).toBeCloseTo(Math.pow(0.95, 12), 9)
+    expect(retentionAfterMonths(0, 12)).toBe(1)
   })
 })
