@@ -34,11 +34,13 @@ def compute(inputs: Dict[str, Any]) -> Dict[str, Any]:
     key_metrics: Dict[str, float] = {}
     if monthly_churn > 0:
         avg_lifetime_months = 1.0 / monthly_churn
-        ltv = arpu_total * (1.0 - content_cost_ratio) * avg_lifetime_months
+        net_arpu = arpu_total * (1.0 - content_cost_ratio)
+        ltv = net_arpu * avg_lifetime_months
         key_metrics["avgLifetimeMonths"] = avg_lifetime_months
         key_metrics["ltv"] = ltv
         if cpa > 0:
             key_metrics["ltvCpaRatio"] = ltv / cpa
-            key_metrics["paybackMonths"] = cpa / (arpu_total * (1.0 - content_cost_ratio))
+        if net_arpu > 0:
+            key_metrics["paybackMonths"] = cpa / net_arpu
 
     return {"ev": ev, "keyMetrics": key_metrics}

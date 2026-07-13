@@ -103,12 +103,22 @@ describe('MediaTech プロパティ', () => {
     expect(result.value.ev.base).toBeLessThanOrEqual(result.value.ev.optimistic + 1e-6)
   })
 
-  it('ltvCpaRatio は cpa > 0 のときのみ算出される', () => {
+  it('ltvCpaRatio は cpa > 0 のときのみ算出される。paybackMonths は cpa = 0 でも算出される(§2.4 v0.4)', () => {
     const r1 = evaluateMediaTech(buildInputs({ cpa: 0 }))
     expect(r1.ok).toBe(true)
     if (!r1.ok) return
     expect(r1.value.keyMetrics.ltvCpaRatio).toBeUndefined()
     expect(r1.value.keyMetrics.avgLifetimeMonths).toBeDefined()
+    expect(r1.value.keyMetrics.paybackMonths).toBeCloseTo(0, 9)
+  })
+
+  it('paybackMonths は分母(ARPU_total × (1 − contentCostRatio)) = 0 のときキー省略される(§2.4 v0.4)', () => {
+    const r1 = evaluateMediaTech(buildInputs({ contentCostRatio: 1 }))
+    expect(r1.ok).toBe(true)
+    if (!r1.ok) return
+    expect(r1.value.keyMetrics.paybackMonths).toBeUndefined()
+    expect(r1.value.keyMetrics.ltv).toBeCloseTo(0, 9)
+    expect(r1.value.keyMetrics.ltvCpaRatio).toBeCloseTo(0, 9)
   })
 
   it('感度分析: δ=0でspan=0', () => {

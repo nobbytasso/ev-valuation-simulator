@@ -275,6 +275,16 @@ def media_tech_cases() -> List[BoundaryCase]:
         ("zero-growth", ["boundary", "zero-growth"], {**base, "mauGrowth": 0.0}),
         ("mau-zero", ["boundary", "zero-value"], {**base, "mau": 0.0}),
         ("churn-zero", ["boundary", "zero-value"], {**base, "monthlyChurn": 0.0}),
+        (
+            "cpa-zero",
+            ["boundary", "zero-value", "payback-guard"],
+            {**base, "cpa": 0.0},
+        ),
+        (
+            "net-arpu-zero",
+            ["boundary", "zero-value", "payback-guard"],
+            {**base, "contentCostRatio": 1.0},
+        ),
     ]
 
 

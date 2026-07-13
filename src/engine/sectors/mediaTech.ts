@@ -74,13 +74,16 @@ export function evaluateMediaTech(inputs: MediaTechInputs): EngineResult<SectorV
   const keyMetrics: Record<string, number> = {}
   if (inputs.monthlyChurn > 0) {
     const avgLifetimeMonths = 1 / inputs.monthlyChurn
-    const ltv = arpuTotal * (1 - inputs.contentCostRatio) * avgLifetimeMonths
+    const netArpu = arpuTotal * (1 - inputs.contentCostRatio)
+    const ltv = netArpu * avgLifetimeMonths
     keyMetrics.avgLifetimeMonths = avgLifetimeMonths
     keyMetrics.ltv = ltv
     if (inputs.cpa > 0) {
       keyMetrics.ltvCpaRatio = ltv / inputs.cpa
     }
-    keyMetrics.paybackMonths = inputs.cpa / (arpuTotal * (1 - inputs.contentCostRatio))
+    if (netArpu > 0) {
+      keyMetrics.paybackMonths = inputs.cpa / netArpu
+    }
   }
 
   return { ok: true, value: { ev, keyMetrics } }

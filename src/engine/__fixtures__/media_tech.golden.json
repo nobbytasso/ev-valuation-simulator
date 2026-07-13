@@ -3,7 +3,7 @@
   "sector": "media_tech",
   "generatedAt": "2026-07-13",
   "seed": 20260716,
-  "caseCount": 23,
+  "caseCount": 25,
   "cases": [
     {
       "id": "zero-growth",
@@ -118,6 +118,86 @@
           "optimistic": 42432.0
         },
         "keyMetrics": {}
+      }
+    },
+    {
+      "id": "cpa-zero",
+      "tags": [
+        "boundary",
+        "zero-value",
+        "payback-guard"
+      ],
+      "input": {
+        "mau": 2000000.0,
+        "mauGrowth": 0.3,
+        "growthDecayFactor": 0.85,
+        "dauMauRatio": 0.4,
+        "arpuMonthly": {
+          "ad": 100.0,
+          "paid": 50.0,
+          "commerce": 20.0
+        },
+        "monthlyChurn": 0.05,
+        "contentCostRatio": 0.3,
+        "cpa": 0.0,
+        "evSalesMultiple": {
+          "pessimistic": 3.0,
+          "base": 5.0,
+          "optimistic": 8.0
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 15912.0,
+          "base": 26520.0,
+          "optimistic": 42432.0
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 20.0,
+          "ltv": 2379.9999999999995,
+          "paybackMonths": 0.0
+        }
+      }
+    },
+    {
+      "id": "net-arpu-zero",
+      "tags": [
+        "boundary",
+        "zero-value",
+        "payback-guard"
+      ],
+      "input": {
+        "mau": 2000000.0,
+        "mauGrowth": 0.3,
+        "growthDecayFactor": 0.85,
+        "dauMauRatio": 0.4,
+        "arpuMonthly": {
+          "ad": 100.0,
+          "paid": 50.0,
+          "commerce": 20.0
+        },
+        "monthlyChurn": 0.05,
+        "contentCostRatio": 1.0,
+        "cpa": 800.0,
+        "evSalesMultiple": {
+          "pessimistic": 3.0,
+          "base": 5.0,
+          "optimistic": 8.0
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 15912.0,
+          "base": 26520.0,
+          "optimistic": 42432.0
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 20.0,
+          "ltv": 0.0,
+          "ltvCpaRatio": 0.0
+        }
       }
     },
     {
