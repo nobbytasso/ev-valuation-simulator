@@ -11,7 +11,7 @@ import type {
   SaasInputs,
 } from '../engine/index.ts'
 import { SCENARIO_SCHEMA_VERSION } from './scenarioTypes.ts'
-import type { Scenario, ScenarioVcMethodInputs, SectorId } from './scenarioTypes.ts'
+import type { Scenario, ScenarioCapitalPolicyInputs, ScenarioVcMethodInputs, SectorId } from './scenarioTypes.ts'
 
 function defaultSaasInputs(): SaasInputs {
   return {
@@ -146,6 +146,15 @@ export function defaultVcMethodInputs(): ScenarioVcMethodInputs {
   }
 }
 
+/** 資本政策入力の既定値。schemaVersion移行(v2→v3)でcapitalPolicyを補完する際にも使う。 */
+export function defaultCapitalPolicyInputs(): ScenarioCapitalPolicyInputs {
+  return {
+    initialCapTable: [{ id: 'founders', name: '創業者', ownership: 1 }],
+    rounds: [],
+    exitEvSource: 'base',
+  }
+}
+
 /** 新規シナリオを、指定セクターの妥当なデフォルト入力値つきで生成する。 */
 export function createScenario(sector: SectorId, name: string): Scenario {
   const id = crypto.randomUUID()
@@ -156,6 +165,7 @@ export function createScenario(sector: SectorId, name: string): Scenario {
     createdAt: now,
     updatedAt: now,
     vcMethod: defaultVcMethodInputs(),
+    capitalPolicy: defaultCapitalPolicyInputs(),
     schemaVersion: SCENARIO_SCHEMA_VERSION,
   }
   switch (sector) {

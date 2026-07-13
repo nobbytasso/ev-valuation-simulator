@@ -24,8 +24,9 @@ describe('LocalStorageAdapter + migrateScenario(ロード経路)', () => {
     const list = await adapter.list()
 
     expect(list).toHaveLength(1)
-    expect(list[0].schemaVersion).toBe(2)
+    expect(list[0].schemaVersion).toBe(3)
     expect(list[0].vcMethod).toBeDefined()
+    expect(list[0].capitalPolicy).toBeDefined()
     expect(list[0].id).toBe('legacy-saas-0001')
   })
 
@@ -52,7 +53,9 @@ describe('LocalStorageAdapter + migrateScenario(ロード経路)', () => {
     const list = await adapter.list()
 
     expect(list).toHaveLength(2)
-    expect(list.every((s) => s.schemaVersion === 2 && s.vcMethod !== undefined)).toBe(true)
+    expect(
+      list.every((s) => s.schemaVersion === 3 && s.vcMethod !== undefined && s.capitalPolicy !== undefined),
+    ).toBe(true)
   })
 
   it('1件が移行不能な破損データでも他の正常な項目のロードは継続する', async () => {
@@ -72,12 +75,14 @@ describe('LocalStorageAdapter + migrateScenario(インポート経路)', () => {
 
     const imported = await adapter.import(JSON.stringify(legacyScenarioV1))
 
-    expect(imported.schemaVersion).toBe(2)
+    expect(imported.schemaVersion).toBe(3)
     expect(imported.vcMethod).toBeDefined()
+    expect(imported.capitalPolicy).toBeDefined()
     expect(imported.id).not.toBe('legacy-saas-0001') // importは新規IDを採番する
 
     const persisted = await adapter.list()
     expect(persisted).toHaveLength(1)
     expect(persisted[0].vcMethod).toBeDefined()
+    expect(persisted[0].capitalPolicy).toBeDefined()
   })
 })

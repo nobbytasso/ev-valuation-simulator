@@ -3,9 +3,11 @@
  * (StorageAdapter/UI層とエンジン層で入力の型定義を二重管理しない)。
  */
 import type {
+  CapTableHolder,
   ClimateTechInputs,
   DrugDiscoveryInputs,
   EcD2cInputs,
+  FundingRound,
   MediaTechInputs,
   MedicalDeviceInputs,
   SaasInputs,
@@ -44,11 +46,23 @@ export interface ScenarioVcMethodInputs {
 }
 
 /**
+ * 資本政策(希薄化シミュレーター)の入力。出典: docs/engine-spec.md §1.4、phase4-spec.md §4.1
+ * エンジンの CapTableHolder / FundingRound 型をそのまま再利用する(二重管理しない)。
+ * Exit年は vcMethod.yearsToExit を共用し、ここでは持たない(U-22確定・P4-5裁定)。
+ */
+export interface ScenarioCapitalPolicyInputs {
+  initialCapTable: CapTableHolder[] // 初期持分。Σ=1(UI検証+エンジン検証validateDilutionInputs)
+  rounds: FundingRound[] // 将来ラウンド列(空配列可)
+  exitEvSource: 'pessimistic' | 'base' | 'optimistic' // Exit企業価値の参照レンジ点(既定 'base'、P4-4裁定)
+}
+
+/**
  * 永続化スキーマのバージョン。出典: docs/requirements-rev5.md §8、D-1裁定
  * v1: Phase 2形式(vcMethodフィールドなし)。v2: Phase 3でvcMethodを追加。
+ * v3: Phase 4でcapitalPolicyを追加。
  * 形式変更時はここを+1し、src/store/scenarioMigration.ts に移行手順を追記する。
  */
-export const SCENARIO_SCHEMA_VERSION = 2
+export const SCENARIO_SCHEMA_VERSION = 3
 
 interface ScenarioBase<TSector extends SectorId, TInputs> {
   id: string
@@ -56,6 +70,7 @@ interface ScenarioBase<TSector extends SectorId, TInputs> {
   sector: TSector
   inputs: TInputs
   vcMethod: ScenarioVcMethodInputs
+  capitalPolicy: ScenarioCapitalPolicyInputs // v3で追加
   schemaVersion: number
   createdAt: string // ISO8601
   updatedAt: string // ISO8601

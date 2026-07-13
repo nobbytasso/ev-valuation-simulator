@@ -1,16 +1,17 @@
 /**
  * シナリオ永続化データのマイグレーションパイプライン。
- * 出典: docs/requirements-rev5.md §8、docs/review-phase3.md D-1裁定
+ * 出典: docs/requirements-rev5.md §8、docs/review-phase3.md D-1裁定、phase4-spec.md §4.1
  *
  * Phase 2で保存されたシナリオ(vcMethodフィールドなし、schemaVersionフィールドなし)は
- * v1として扱う。Phase 3でvcMethodを追加したv2への移行手順をここに定義する。
+ * v1として扱う。Phase 3でvcMethodを追加したv2、Phase 4でcapitalPolicyを追加したv3への
+ * 移行手順をここに定義する。
  * ロード時(LocalStorageAdapter.list/load 内部の readAll)・インポート時
  * (LocalStorageAdapter.import)の両経路で同じ関数を通すことで、旧形式データでも
  * クラッシュしないことを保証する(LocalStorageAdapterへの注入は scenarioStore.ts)。
  *
- * 将来のスキーマ変更(v2→v3等)は MIGRATIONS に手順を追記するだけでよい。
+ * 将来のスキーマ変更(v3→v4等)は MIGRATIONS に手順を追記するだけでよい。
  */
-import { defaultVcMethodInputs } from './defaultInputs.ts'
+import { defaultCapitalPolicyInputs, defaultVcMethodInputs } from './defaultInputs.ts'
 import { SCENARIO_SCHEMA_VERSION } from './scenarioTypes.ts'
 import type { Scenario } from './scenarioTypes.ts'
 
@@ -26,9 +27,16 @@ function migrateV1ToV2(raw: RawRecord): RawRecord {
   return { ...raw, vcMethod: defaultVcMethodInputs() }
 }
 
+/** v2 → v3: capitalPolicy を既定値で補完する(Phase 4、phase4-spec.md §4.1)。 */
+function migrateV2ToV3(raw: RawRecord): RawRecord {
+  if (raw.capitalPolicy) return raw
+  return { ...raw, capitalPolicy: defaultCapitalPolicyInputs() }
+}
+
 /** キー: 移行前バージョン。値: そのバージョンから次バージョンへの変換手順。 */
 const MIGRATIONS: Record<number, (raw: RawRecord) => RawRecord> = {
   1: migrateV1ToV2,
+  2: migrateV2ToV3,
 }
 
 /**
