@@ -62,9 +62,9 @@ export function DrugDiscoveryScenarioView({ scenario, onSave, onDelete }: DrugDi
     onSave({ ...scenario, inputs: draftInputs, vcMethod: draftVcMethod })
   }
 
+  // プリセット適用はdraftの差し替えのみ(保存は「保存」ボタンで明示的に行う。C-7)。
   const applyPreset = (presetInputs: typeof draftInputs) => {
     setDraftInputs(presetInputs)
-    onSave({ ...scenario, inputs: presetInputs, vcMethod: draftVcMethod })
   }
 
   return (

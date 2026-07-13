@@ -26,13 +26,22 @@ describe('SaasScenarioView', () => {
     expect(await screen.findByText(/が含意するIRR/)).toBeInTheDocument()
   })
 
-  it('プリセット選択で入力値が切り替わり、保存される', async () => {
+  it('プリセット選択はdraftのみ差し替え、即保存はしない(C-7: 適用≠保存)', async () => {
     const user = userEvent.setup()
     const scenario = buildSaasScenario()
     const onSave = vi.fn()
     render(<SaasScenarioView scenario={scenario} onSave={onSave} onDelete={vi.fn()} />)
 
+    const saveButton = screen.getByRole('button', { name: '保存' })
+    expect(saveButton).toBeDisabled()
+
     await user.click(screen.getByRole('button', { name: /① 順調/ }))
+
+    expect(onSave).not.toHaveBeenCalled()
+    expect(screen.getByLabelText('ARR成長率(YoY, %)')).toHaveValue(35)
+    expect(saveButton).not.toBeDisabled()
+
+    await user.click(saveButton)
 
     expect(onSave).toHaveBeenCalledTimes(1)
     const saved = onSave.mock.calls[0][0] as Scenario

@@ -26,13 +26,21 @@ describe('MediaTechScenarioView', () => {
     expect(await screen.findByText(/が含意するIRR/)).toBeInTheDocument()
   })
 
-  it('プリセット選択で入力値が切り替わり、保存される', async () => {
+  it('プリセット選択はdraftのみ差し替え、即保存はしない(C-7: 適用≠保存)', async () => {
     const user = userEvent.setup()
     const scenario = buildMediaTechScenario()
     const onSave = vi.fn()
     render(<MediaTechScenarioView scenario={scenario} onSave={onSave} onDelete={vi.fn()} />)
 
+    const saveButton = screen.getByRole('button', { name: '保存' })
+    expect(saveButton).toBeDisabled()
+
     await user.click(screen.getByRole('button', { name: /② 課金転換率改善/ }))
+
+    expect(onSave).not.toHaveBeenCalled()
+    expect(saveButton).not.toBeDisabled()
+
+    await user.click(saveButton)
 
     expect(onSave).toHaveBeenCalledTimes(1)
     const saved = onSave.mock.calls[0][0] as Scenario
