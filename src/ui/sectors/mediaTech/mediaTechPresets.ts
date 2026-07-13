@@ -1,7 +1,11 @@
 /**
- * メディアテックシナリオプリセット。出典: docs/requirements-rev4.md §3.4
+ * メディアテックシナリオプリセット。出典: docs/requirements-rev5.md §3.4
  * 「広告市況悪化/課金転換率改善/ヒット有無」
- * 業界標準値(data/benchmarks/benchmarks.dummy.json)と整合させた仮値。
+ *
+ * 【プリセット値ポリシー(Rev.5 §3、D-7裁定)】説明文が業界標準値に言及する場合、
+ * 該当値は benchmarks.dummy.json(参照日: 2026-07-13)の業界標準値に完全一致させる
+ * (本セクターの説明文は現状、業界標準への言及なし)。Stage 1 では値はコード固定とし、
+ * 実データへの差し替え後も自動追随しない(動的連動は Stage 2 で検討)。
  */
 import type { MediaTechInputs } from '../../../engine/index.ts'
 

@@ -1,7 +1,12 @@
 /**
- * SaaS(日本)シナリオプリセット。出典: docs/requirements-rev4.md §3.1
+ * SaaS(日本)シナリオプリセット。出典: docs/requirements-rev5.md §3.1
  * 「①順調(Rule of 40達成継続) ②成長鈍化・利益率業界標準並 ③停滞・利益率業界標準以下」
- * 業界標準値(data/benchmarks/benchmarks.dummy.json)と整合させた仮値。
+ *
+ * 【プリセット値ポリシー(Rev.5 §3、D-7裁定)】説明文が業界標準値に言及する場合、
+ * 該当値は benchmarks.dummy.json(参照日: 2026-07-13)の業界標準値に完全一致させる。
+ * ②の営業利益率3% = operating_margin業界標準、②のマルチプルbase 5.5 = ev_arr_multiple業界標準。
+ * Stage 1 ではプリセット値はコード固定とし、実データへの差し替え後も自動追随しない
+ * (ベンチマーク値への動的連動は Stage 2 で検討)。
  */
 import type { SaasInputs } from '../../../engine/index.ts'
 

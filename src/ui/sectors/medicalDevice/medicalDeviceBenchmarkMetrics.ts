@@ -12,11 +12,13 @@ import type { BenchmarkMetricConfig } from '../../benchmarkMetricConfig.ts'
 
 export const MEDICAL_DEVICE_BENCHMARK_METRICS: BenchmarkMetricConfig<MedicalDeviceInputs>[] = [
   {
-    // Class III向け業界標準のため、Class III以外のデバイスでは比較対象外とする
+    // Class III向け業界標準のため、Class III以外のデバイスでは比較対象外とする。
+    // 比較値は実効上市までの年数 launchYear + approvalDelayYears(Rev.5 §6.1、C-4裁定)。
+    // 承認遅延シナリオのレバーがベンチマーク比較にも反映される。
     metricId: 'approval_lead_time_class3',
-    label: '承認までの想定期間(年)',
+    label: '実効上市までの年数(承認+償還)',
     unit: 'years',
-    getValue: (inputs) => (inputs.deviceClass === 'III' ? inputs.launchYear : undefined),
+    getValue: (inputs) => (inputs.deviceClass === 'III' ? inputs.launchYear + inputs.approvalDelayYears : undefined),
   },
   {
     metricId: 'penetration_5y',

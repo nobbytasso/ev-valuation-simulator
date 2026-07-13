@@ -72,7 +72,7 @@ describe('MedicalDeviceScenarioView', () => {
     // recurringRatio既定20% vs 業界標準40% → -20.0pt
     expect(await screen.findByText(/業界標準比 -20\.0pt/)).toBeInTheDocument()
     // deviceClass既定'II'のため承認期間の比較は表示されない
-    expect(screen.queryByText('承認までの想定期間(年)')).not.toBeInTheDocument()
+    expect(screen.queryByText('実効上市までの年数(承認+償還)')).not.toBeInTheDocument()
   })
 
   it('クラスをIIIに変更すると承認までの想定期間の比較が表示される', async () => {
@@ -82,8 +82,8 @@ describe('MedicalDeviceScenarioView', () => {
 
     await user.selectOptions(screen.getByLabelText('クラス分類'), 'III')
 
-    expect(await screen.findByText('承認までの想定期間(年)')).toBeInTheDocument()
-    // launchYear既定2年 vs 業界標準2.5年 → -0.5
+    expect(await screen.findByText('実効上市までの年数(承認+償還)')).toBeInTheDocument()
+    // 実効上市 = launchYear 2 + approvalDelayYears 0 = 2年 vs 業界標準2.5年 → -0.5
     expect(await screen.findByText(/業界標準比 -0\.5/)).toBeInTheDocument()
   })
 

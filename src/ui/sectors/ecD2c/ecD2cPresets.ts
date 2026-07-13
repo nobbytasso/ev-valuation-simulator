@@ -1,7 +1,11 @@
 /**
- * EC/D2Cシナリオプリセット。出典: docs/requirements-rev4.md §3.5
+ * EC/D2Cシナリオプリセット。出典: docs/requirements-rev5.md §3.5
  * 「①リピート育成成功 ②広告依存継続(CAC上昇) ③成長鈍化・在庫リスク」
- * 業界標準値(data/benchmarks/benchmarks.dummy.json)と整合させた仮値。
+ *
+ * 【プリセット値ポリシー(Rev.5 §3、D-7裁定)】説明文が業界標準値に言及する場合、
+ * 該当値は benchmarks.dummy.json(参照日: 2026-07-13)の業界標準値に完全一致させる。
+ * Stage 1 ではプリセット値はコード固定とし、実データへの差し替え後も自動追随しない
+ * (ベンチマーク値への動的連動は Stage 2 で検討)。
  */
 import type { EcD2cInputs } from '../../../engine/index.ts'
 
@@ -41,7 +45,7 @@ export const EC_D2C_PRESETS: EcD2cPreset[] = [
       annualRevenue: 2000,
       revenueGrowth: 0.2,
       grossMargin: 0.55,
-      f2Rate: 0.22,
+      f2Rate: 0.28, // = 業界標準28%(f2_conversion)に完全一致【D-7】
       aov: 7500,
       purchaseFrequency: 2.2,
       cac: 6000,
