@@ -6,7 +6,10 @@ export interface EcD2cFormProps {
   onChange: (next: EcD2cInputs) => void
 }
 
-/** EC/D2Cドライバー入力フォーム。出典: docs/engine-spec.md §2.5 */
+/**
+ * EC/D2Cドライバー入力フォーム。出典: docs/engine-spec.md §2.5, §0.2.1
+ * min/max はエンジンのドメイン制約(§0.2.1)に対応する。
+ */
 export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
   const set = <K extends keyof EcD2cInputs>(key: K, value: EcD2cInputs[K]) => onChange({ ...inputs, [key]: value })
   const setMultiple = (key: 'pessimistic' | 'base' | 'optimistic', value: number) =>
@@ -19,6 +22,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
         <input
           type="number"
           step="10"
+          min="0"
           value={inputs.annualRevenue}
           onChange={(e) => set('annualRevenue', Number(e.target.value))}
         />
@@ -28,6 +32,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
         <input
           type="number"
           step="1"
+          min="-99"
           value={inputs.revenueGrowth * 100}
           onChange={(e) => set('revenueGrowth', Number(e.target.value) / 100)}
         />
@@ -37,6 +42,8 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
         <input
           type="number"
           step="1"
+          min="0"
+          max="100"
           value={inputs.grossMargin * 100}
           onChange={(e) => set('grossMargin', Number(e.target.value) / 100)}
         />
@@ -46,32 +53,49 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
         <input
           type="number"
           step="1"
+          min="0"
+          max="99.9"
           value={inputs.f2Rate * 100}
           onChange={(e) => set('f2Rate', Number(e.target.value) / 100)}
         />
       </label>
       <label>
         平均注文単価(円)
-        <input type="number" step="100" value={inputs.aov} onChange={(e) => set('aov', Number(e.target.value))} />
+        <input
+          type="number"
+          step="100"
+          min="0"
+          value={inputs.aov}
+          onChange={(e) => set('aov', Number(e.target.value))}
+        />
       </label>
       <label>
         年間購入頻度(回)
         <input
           type="number"
           step="0.1"
+          min="0"
           value={inputs.purchaseFrequency}
           onChange={(e) => set('purchaseFrequency', Number(e.target.value))}
         />
       </label>
       <label>
         CAC(円)
-        <input type="number" step="100" value={inputs.cac} onChange={(e) => set('cac', Number(e.target.value))} />
+        <input
+          type="number"
+          step="100"
+          min="0"
+          value={inputs.cac}
+          onChange={(e) => set('cac', Number(e.target.value))}
+        />
       </label>
       <label>
         売上比広告費(%)
         <input
           type="number"
           step="1"
+          min="0"
+          max="100"
           value={inputs.adCostRatio * 100}
           onChange={(e) => set('adCostRatio', Number(e.target.value) / 100)}
         />
@@ -81,6 +105,8 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
         <input
           type="number"
           step="1"
+          min="0"
+          max="100"
           value={inputs.logisticsCostRatio * 100}
           onChange={(e) => set('logisticsCostRatio', Number(e.target.value) / 100)}
         />
@@ -90,6 +116,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
         <input
           type="number"
           step="0.5"
+          min="0.1"
           value={inputs.inventoryTurnover}
           onChange={(e) => set('inventoryTurnover', Number(e.target.value))}
         />
@@ -109,6 +136,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
         <input
           type="number"
           step="1"
+          min="1"
           value={inputs.maxLifetimeYears}
           onChange={(e) => set('maxLifetimeYears', Number(e.target.value))}
         />
@@ -121,6 +149,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
           <input
             type="number"
             step="0.1"
+            min="0.1"
             value={inputs.evMultiple.pessimistic}
             onChange={(e) => setMultiple('pessimistic', Number(e.target.value))}
           />
@@ -130,6 +159,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
           <input
             type="number"
             step="0.1"
+            min="0.1"
             value={inputs.evMultiple.base}
             onChange={(e) => setMultiple('base', Number(e.target.value))}
           />
@@ -139,6 +169,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
           <input
             type="number"
             step="0.1"
+            min="0.1"
             value={inputs.evMultiple.optimistic}
             onChange={(e) => setMultiple('optimistic', Number(e.target.value))}
           />

@@ -6,7 +6,10 @@ export interface SaasFormProps {
   onChange: (next: SaasInputs) => void
 }
 
-/** SaaS(日本)ドライバー入力フォーム。出典: docs/engine-spec.md §2.1 */
+/**
+ * SaaS(日本)ドライバー入力フォーム。出典: docs/engine-spec.md §2.1, §0.2.1
+ * min/max はエンジンのドメイン制約(§0.2.1)に対応する(表示単位は%のためドメインの0-1を100倍)。
+ */
 export function SaasForm({ inputs, onChange }: SaasFormProps) {
   const set = <K extends keyof SaasInputs>(key: K, value: SaasInputs[K]) => onChange({ ...inputs, [key]: value })
   const setMultiple = (key: 'pessimistic' | 'base' | 'optimistic', value: number) =>
@@ -16,13 +19,20 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
     <div className="sector-form">
       <label>
         ARR(百万円)
-        <input type="number" step="10" value={inputs.arr} onChange={(e) => set('arr', Number(e.target.value))} />
+        <input
+          type="number"
+          step="10"
+          min="0"
+          value={inputs.arr}
+          onChange={(e) => set('arr', Number(e.target.value))}
+        />
       </label>
       <label>
         ARR成長率(YoY, %)
         <input
           type="number"
           step="1"
+          min="-99"
           value={inputs.arrGrowth * 100}
           onChange={(e) => set('arrGrowth', Number(e.target.value) / 100)}
         />
@@ -36,6 +46,8 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
         <input
           type="number"
           step="1"
+          min="0"
+          max="100"
           value={inputs.grossMargin * 100}
           onChange={(e) => set('grossMargin', Number(e.target.value) / 100)}
         />
@@ -45,6 +57,8 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
         <input
           type="number"
           step="1"
+          min="-100"
+          max="100"
           value={inputs.operatingMargin * 100}
           onChange={(e) => set('operatingMargin', Number(e.target.value) / 100)}
         />
@@ -54,6 +68,8 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
         <input
           type="number"
           step="1"
+          min="-100"
+          max="100"
           value={inputs.fcfMargin * 100}
           onChange={(e) => set('fcfMargin', Number(e.target.value) / 100)}
         />
@@ -63,6 +79,8 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
         <input
           type="number"
           step="1"
+          min="0"
+          max="100"
           value={inputs.grossChurn * 100}
           onChange={(e) => set('grossChurn', Number(e.target.value) / 100)}
         />
@@ -72,6 +90,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
         <input
           type="number"
           step="1"
+          min="0.1"
           value={inputs.cacPaybackMonths}
           onChange={(e) => set('cacPaybackMonths', Number(e.target.value))}
         />
@@ -91,6 +110,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
           <input
             type="number"
             step="0.1"
+            min="0.1"
             value={inputs.evArrMultiple.pessimistic}
             onChange={(e) => setMultiple('pessimistic', Number(e.target.value))}
           />
@@ -100,6 +120,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
           <input
             type="number"
             step="0.1"
+            min="0.1"
             value={inputs.evArrMultiple.base}
             onChange={(e) => setMultiple('base', Number(e.target.value))}
           />
@@ -109,6 +130,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
           <input
             type="number"
             step="0.1"
+            min="0.1"
             value={inputs.evArrMultiple.optimistic}
             onChange={(e) => setMultiple('optimistic', Number(e.target.value))}
           />
@@ -120,6 +142,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
         <input
           type="number"
           step="1"
+          min="1"
           value={inputs.projectionYears}
           onChange={(e) => set('projectionYears', Number(e.target.value))}
         />
@@ -129,6 +152,8 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
         <input
           type="number"
           step="0.01"
+          min="0.01"
+          max="1"
           value={inputs.growthDecayFactor}
           onChange={(e) => set('growthDecayFactor', Number(e.target.value))}
         />
@@ -138,6 +163,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
         <input
           type="number"
           step="0.5"
+          min="0.1"
           value={inputs.discountRate * 100}
           onChange={(e) => set('discountRate', Number(e.target.value) / 100)}
         />

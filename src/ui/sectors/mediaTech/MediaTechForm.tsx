@@ -6,7 +6,10 @@ export interface MediaTechFormProps {
   onChange: (next: MediaTechInputs) => void
 }
 
-/** メディアテックドライバー入力フォーム。出典: docs/engine-spec.md §2.4 */
+/**
+ * メディアテックドライバー入力フォーム。出典: docs/engine-spec.md §2.4, §0.2.1
+ * min/max はエンジンのドメイン制約(§0.2.1)に対応する。
+ */
 export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
   const set = <K extends keyof MediaTechInputs>(key: K, value: MediaTechInputs[K]) =>
     onChange({ ...inputs, [key]: value })
@@ -19,13 +22,20 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
     <div className="sector-form">
       <label>
         MAU(人)
-        <input type="number" step="1000" value={inputs.mau} onChange={(e) => set('mau', Number(e.target.value))} />
+        <input
+          type="number"
+          step="1000"
+          min="0"
+          value={inputs.mau}
+          onChange={(e) => set('mau', Number(e.target.value))}
+        />
       </label>
       <label>
         MAU成長率(年率, %)
         <input
           type="number"
           step="1"
+          min="-99"
           value={inputs.mauGrowth * 100}
           onChange={(e) => set('mauGrowth', Number(e.target.value) / 100)}
         />
@@ -35,6 +45,8 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
         <input
           type="number"
           step="0.01"
+          min="0.01"
+          max="1"
           value={inputs.growthDecayFactor}
           onChange={(e) => set('growthDecayFactor', Number(e.target.value))}
         />
@@ -44,6 +56,8 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
         <input
           type="number"
           step="1"
+          min="0"
+          max="100"
           value={inputs.dauMauRatio * 100}
           onChange={(e) => set('dauMauRatio', Number(e.target.value) / 100)}
         />
@@ -53,6 +67,8 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
         <input
           type="number"
           step="0.5"
+          min="0"
+          max="100"
           value={inputs.monthlyChurn * 100}
           onChange={(e) => set('monthlyChurn', Number(e.target.value) / 100)}
         />
@@ -62,19 +78,28 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
         <input
           type="number"
           step="1"
+          min="0"
+          max="100"
           value={inputs.contentCostRatio * 100}
           onChange={(e) => set('contentCostRatio', Number(e.target.value) / 100)}
         />
       </label>
       <label>
         CPA(円)
-        <input type="number" step="10" value={inputs.cpa} onChange={(e) => set('cpa', Number(e.target.value))} />
+        <input
+          type="number"
+          step="10"
+          min="0"
+          value={inputs.cpa}
+          onChange={(e) => set('cpa', Number(e.target.value))}
+        />
       </label>
       <label>
-        DCF予測年数
+        売上予測年数
         <input
           type="number"
           step="1"
+          min="1"
           value={inputs.projectionYears}
           onChange={(e) => set('projectionYears', Number(e.target.value))}
         />
@@ -84,13 +109,20 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
         <legend>月次ARPU構成(円)</legend>
         <label>
           広告
-          <input type="number" step="10" value={inputs.arpuMonthly.ad} onChange={(e) => setArpu('ad', Number(e.target.value))} />
+          <input
+            type="number"
+            step="10"
+            min="0"
+            value={inputs.arpuMonthly.ad}
+            onChange={(e) => setArpu('ad', Number(e.target.value))}
+          />
         </label>
         <label>
           課金
           <input
             type="number"
             step="10"
+            min="0"
             value={inputs.arpuMonthly.paid}
             onChange={(e) => setArpu('paid', Number(e.target.value))}
           />
@@ -100,6 +132,7 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
           <input
             type="number"
             step="10"
+            min="0"
             value={inputs.arpuMonthly.commerce}
             onChange={(e) => setArpu('commerce', Number(e.target.value))}
           />
@@ -113,6 +146,7 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
           <input
             type="number"
             step="0.1"
+            min="0.1"
             value={inputs.evSalesMultiple.pessimistic}
             onChange={(e) => setMultiple('pessimistic', Number(e.target.value))}
           />
@@ -122,6 +156,7 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
           <input
             type="number"
             step="0.1"
+            min="0.1"
             value={inputs.evSalesMultiple.base}
             onChange={(e) => setMultiple('base', Number(e.target.value))}
           />
@@ -131,6 +166,7 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
           <input
             type="number"
             step="0.1"
+            min="0.1"
             value={inputs.evSalesMultiple.optimistic}
             onChange={(e) => setMultiple('optimistic', Number(e.target.value))}
           />

@@ -7,7 +7,10 @@ export interface ClimateTechFormProps {
   onChange: (next: ClimateTechInputs) => void
 }
 
-/** クライメートテックドライバー入力フォーム。出典: docs/engine-spec.md §2.6 */
+/**
+ * クライメートテックドライバー入力フォーム。出典: docs/engine-spec.md §2.6, §0.2.1
+ * min/max はエンジンのドメイン制約(§0.2.1)に対応する。
+ */
 export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
   const set = <K extends keyof ClimateTechInputs>(key: K, value: ClimateTechInputs[K]) =>
     onChange({ ...inputs, [key]: value })
@@ -47,6 +50,8 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="1"
+            min="0"
+            max="100"
             value={inputs.massProductionProb * 100}
             onChange={(e) => set('massProductionProb', Number(e.target.value) / 100)}
           />
@@ -56,6 +61,8 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="1"
+            min="0"
+            max="100"
             value={inputs.subsidyCoverage * 100}
             onChange={(e) => set('subsidyCoverage', Number(e.target.value) / 100)}
           />
@@ -65,27 +72,48 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="1000"
+            min="0"
             value={inputs.annualCapacityUnits}
             onChange={(e) => set('annualCapacityUnits', Number(e.target.value))}
           />
         </label>
         <label>
           フル稼働までの年数
-          <input type="number" step="1" value={inputs.rampYears} onChange={(e) => set('rampYears', Number(e.target.value))} />
+          <input
+            type="number"
+            step="1"
+            min="1"
+            value={inputs.rampYears}
+            onChange={(e) => set('rampYears', Number(e.target.value))}
+          />
         </label>
         <label>
           販売単価(円/unit)
-          <input type="number" step="100" value={inputs.unitPrice} onChange={(e) => set('unitPrice', Number(e.target.value))} />
+          <input
+            type="number"
+            step="100"
+            min="0"
+            value={inputs.unitPrice}
+            onChange={(e) => set('unitPrice', Number(e.target.value))}
+          />
         </label>
         <label>
           現在のユニットコスト(円/unit)
-          <input type="number" step="100" value={inputs.unitCost0} onChange={(e) => set('unitCost0', Number(e.target.value))} />
+          <input
+            type="number"
+            step="100"
+            min="0"
+            value={inputs.unitCost0}
+            onChange={(e) => set('unitCost0', Number(e.target.value))}
+          />
         </label>
         <label>
           ユニットコスト年次低減率(%)
           <input
             type="number"
             step="1"
+            min="0"
+            max="99.9"
             value={inputs.costDeclineRate * 100}
             onChange={(e) => set('costDeclineRate', Number(e.target.value) / 100)}
           />
@@ -95,6 +123,8 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="1"
+            min="0"
+            max="100"
             value={inputs.offtakeCoverage * 100}
             onChange={(e) => set('offtakeCoverage', Number(e.target.value) / 100)}
           />
@@ -104,6 +134,8 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="1"
+            min="0"
+            max="100"
             value={inputs.merchantRealization * 100}
             onChange={(e) => set('merchantRealization', Number(e.target.value) / 100)}
           />
@@ -113,6 +145,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="10"
+            min="0"
             value={inputs.fixedOpexAnnual}
             onChange={(e) => set('fixedOpexAnnual', Number(e.target.value))}
           />
@@ -122,6 +155,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="1000"
+            min="0"
             value={inputs.carbonCreditVolume}
             onChange={(e) => set('carbonCreditVolume', Number(e.target.value))}
           />
@@ -131,6 +165,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="100"
+            min="0"
             value={inputs.carbonCreditPrice}
             onChange={(e) => set('carbonCreditPrice', Number(e.target.value))}
           />
@@ -140,6 +175,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="1"
+            min="1"
             value={inputs.projectYears}
             onChange={(e) => set('projectYears', Number(e.target.value))}
           />
@@ -153,6 +189,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="0.5"
+            min="0.1"
             value={inputs.discountRate.pessimistic * 100}
             onChange={(e) => setDiscount('pessimistic', Number(e.target.value) / 100)}
           />
@@ -162,6 +199,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="0.5"
+            min="0.1"
             value={inputs.discountRate.base * 100}
             onChange={(e) => setDiscount('base', Number(e.target.value) / 100)}
           />
@@ -171,6 +209,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           <input
             type="number"
             step="0.5"
+            min="0.1"
             value={inputs.discountRate.optimistic * 100}
             onChange={(e) => setDiscount('optimistic', Number(e.target.value) / 100)}
           />
@@ -207,6 +246,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
                     <input
                       type="number"
                       step="100"
+                      min="0"
                       value={c.amount}
                       onChange={(e) => updateCapex(i, { amount: Number(e.target.value) })}
                     />

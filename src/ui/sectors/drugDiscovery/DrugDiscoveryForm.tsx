@@ -23,7 +23,10 @@ function createDefaultAsset(name: string): PipelineAsset {
   }
 }
 
-/** 創薬(パイプライン)入力フォーム。出典: docs/engine-spec.md §2.2 */
+/**
+ * 創薬(パイプライン)入力フォーム。出典: docs/engine-spec.md §2.2, §0.2.1
+ * min/max はエンジンのドメイン制約(§0.2.1)に対応する。
+ */
 export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) {
   const setDiscount = (key: 'pessimistic' | 'base' | 'optimistic', value: number) =>
     onChange({ ...inputs, discountRate: { ...inputs.discountRate, [key]: value } })
@@ -46,6 +49,7 @@ export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) 
           <input
             type="number"
             step="1"
+            min="1"
             value={inputs.modelHorizonYears}
             onChange={(e) => onChange({ ...inputs, modelHorizonYears: Number(e.target.value) })}
           />
@@ -57,6 +61,7 @@ export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) 
             <input
               type="number"
               step="0.5"
+              min="0.1"
               value={inputs.discountRate.pessimistic * 100}
               onChange={(e) => setDiscount('pessimistic', Number(e.target.value) / 100)}
             />
@@ -66,6 +71,7 @@ export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) 
             <input
               type="number"
               step="0.5"
+              min="0.1"
               value={inputs.discountRate.base * 100}
               onChange={(e) => setDiscount('base', Number(e.target.value) / 100)}
             />
@@ -75,6 +81,7 @@ export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) 
             <input
               type="number"
               step="0.5"
+              min="0.1"
               value={inputs.discountRate.optimistic * 100}
               onChange={(e) => setDiscount('optimistic', Number(e.target.value) / 100)}
             />

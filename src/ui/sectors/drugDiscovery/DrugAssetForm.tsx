@@ -101,6 +101,8 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
                 <input
                   type="number"
                   step="1"
+                  min="0"
+                  max="100"
                   value={asset.phaseSuccessProbs[p] * 100}
                   onChange={(e) => setPhaseField('phaseSuccessProbs', p, Number(e.target.value) / 100)}
                 />
@@ -109,6 +111,7 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
                 <input
                   type="number"
                   step="1"
+                  min="1"
                   value={asset.phaseDurations[p]}
                   onChange={(e) => setPhaseField('phaseDurations', p, Number(e.target.value))}
                 />
@@ -117,6 +120,7 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
                 <input
                   type="number"
                   step="100"
+                  min="0"
                   value={asset.developmentCosts[p]}
                   onChange={(e) => setPhaseField('developmentCosts', p, Number(e.target.value))}
                 />
@@ -133,21 +137,41 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
         </label>
         <label>
           ピーク売上(百万円)
-          <input type="number" step="100" value={asset.peakSales} onChange={(e) => set('peakSales', Number(e.target.value))} />
+          <input
+            type="number"
+            step="100"
+            min="0"
+            value={asset.peakSales}
+            onChange={(e) => set('peakSales', Number(e.target.value))}
+          />
         </label>
         <label>
           ピーク到達年数
-          <input type="number" step="1" value={asset.yearsToPeak} onChange={(e) => set('yearsToPeak', Number(e.target.value))} />
+          <input
+            type="number"
+            step="1"
+            min="1"
+            value={asset.yearsToPeak}
+            onChange={(e) => set('yearsToPeak', Number(e.target.value))}
+          />
         </label>
         <label>
           ピーク維持年数
-          <input type="number" step="1" value={asset.plateauYears} onChange={(e) => set('plateauYears', Number(e.target.value))} />
+          <input
+            type="number"
+            step="1"
+            min="0"
+            value={asset.plateauYears}
+            onChange={(e) => set('plateauYears', Number(e.target.value))}
+          />
         </label>
         <label>
           特許切れ後の年次減衰率(%)
           <input
             type="number"
             step="1"
+            min="0"
+            max="100"
             value={asset.declineRate * 100}
             onChange={(e) => set('declineRate', Number(e.target.value) / 100)}
           />
