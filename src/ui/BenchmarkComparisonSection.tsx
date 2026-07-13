@@ -36,9 +36,8 @@ export function BenchmarkComparisonSection<TInputs>({
         metrics.map((metric) => {
           const entries = benchmark.benchmarks.filter((b) => b.metric_id === metric.metricId)
           const industryStandard = entries.find((e) => e.reference_type === 'industry_standard')
-          const comps = entries
-            .filter((e) => e.reference_type === 'comp_company')
-            .map((c) => ({ name: c.company_name ?? '(不明)', value: c.value }))
+          const compEntries = entries.filter((e) => e.reference_type === 'comp_company')
+          const comps = compEntries.map((c) => ({ name: c.company_name ?? '(不明)', value: c.value }))
           const currentValue = metric.getValue(inputs, keyMetrics)
           if (currentValue === undefined) return null
           return (
@@ -52,9 +51,14 @@ export function BenchmarkComparisonSection<TInputs>({
               />
               {industryStandard && (
                 <p className="benchmark-comparison__source">
-                  出典: {industryStandard.source.name}(取得日: {industryStandard.source.retrieved_at})
+                  業界標準 出典: {industryStandard.source.name}(取得日: {industryStandard.source.retrieved_at})
                 </p>
               )}
+              {compEntries.map((c) => (
+                <p key={c.company_name ?? c.source.name} className="benchmark-comparison__source">
+                  {c.company_name ?? '(不明)'} 出典: {c.source.name}(取得日: {c.source.retrieved_at})
+                </p>
+              ))}
             </div>
           )
         })
