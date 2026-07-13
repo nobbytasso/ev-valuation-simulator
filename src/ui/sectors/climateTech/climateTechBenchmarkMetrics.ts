@@ -1,6 +1,6 @@
 /**
  * ClimateTechInputs / keyMetrics とベンチマーク metric_id の対応。
- * 出典: data/benchmarks/benchmark.schema.json (v1.1)
+ * 出典: data/benchmarks/benchmark.schema.json (v1.2)
  *
  * "capex_intensity"(比率0.6)は算出方法がengine-spec.md上未定義(CAPEXと何を
  * 対比した比率か—売上・生産能力等—が特定できない)。UI側で独自に定義すると

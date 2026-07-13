@@ -1,6 +1,6 @@
 /**
  * DrugDiscoveryInputs / keyMetrics とベンチマーク metric_id の対応。
- * 出典: data/benchmarks/benchmark.schema.json (v1.1)
+ * 出典: data/benchmarks/benchmark.schema.json (v1.2)
  *
  * ベンチマークは「1品目」単位の指標(フェーズ別成功確率・ロイヤリティ率等)だが、
  * シナリオはパイプライン(複数品目)を持ちうる。Phase 3時点では先頭の品目

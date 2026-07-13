@@ -1,6 +1,6 @@
 /**
  * MedicalDeviceInputs / keyMetrics とベンチマーク metric_id の対応。
- * 出典: data/benchmarks/benchmark.schema.json (v1.1)
+ * 出典: data/benchmarks/benchmark.schema.json (v1.2)
  *
  * "ev_sales_multiple" は比較対象外とする。評価モデルが市場浸透+DCF主体で
  * マルチプル指標を持たないため(engine-spec.md §2.3「EV/売上は参考値として

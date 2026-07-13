@@ -1,6 +1,6 @@
 # 計算エンジン仕様書(engine-spec)v0.4
 
-Phase 1 実装前の数式・型定義。`docs/requirements-rev4.md` §3・§7 を正とし、本書はそれを計算可能なレベルまで具体化したもの。**本書の「未確定事項(U-n)」は実装時に仮の妥当値+TODOコメントで進め、確定後に本書と実装を同時更新する。**
+Phase 1 実装前の数式・型定義。`docs/requirements-rev5.md` §3・§7 を正とし、本書はそれを計算可能なレベルまで具体化したもの。**本書の「未確定事項(U-n)」は実装時に仮の妥当値+TODOコメントで進め、確定後に本書と実装を同時更新する。**
 
 対応する実装: `src/engine/`(純粋関数、依存ゼロ)。リファレンス実装: `tools/reference/`(Python)。
 
@@ -258,22 +258,26 @@ interface TornadoItem {
 
 ### 1.5.1 創薬のドライバー設計(ネスト構造)【v0.4追加、B-1対応】
 
-創薬の感度対象ドライバーは品目配列(`assets`)の内部にあるため、`driverId` は**パス形式**で指定する。実装は Phase 4(`src/engine/sectors/drugDiscovery.ts` に `DRUG_DISCOVERY_SENSITIVITY_DRIVERS`(動的生成関数)+ `applyDrugDiscoveryDriver` + `drugDiscoveryBaseEv` を追加)。
+創薬の感度対象ドライバーは品目配列(`assets`)の内部にあるため、`driverId` は**パス形式**で指定する。Phase 3 末に実装済み(コミット 80bbc97。`src/engine/sectors/drugDiscovery.ts` に `DRUG_DISCOVERY_SENSITIVITY_DRIVERS`(動的生成関数)+ `applyDrugDiscoveryDriver` + `drugDiscoveryBaseEv` を追加)。
 
 ```
 driverId 形式:
   assets[<i>].peakSales                      // 相対±δ、下限0クランプ
   assets[<i>].launchYear                     // 相対±δ後に四捨五入で整数化、下限1
   assets[<i>].phaseSuccessProbs.<phase>      // 相対±δ、[0,1]クランプ(確率系、U-15準拠)
+                                              // 列挙は残フェーズ(currentPhase以降)のみ。完了フェーズの
+                                              // 確率は computeAssetRnpv が参照しないため感度ゼロとなり、
+                                              // 列挙対象外とする
   assets[<i>].commercialization.contributionMargin  // own時のみ。相対±δ、[0,1]クランプ
   assets[<i>].commercialization.royaltyRate         // license時のみ。相対±δ、[0,1]クランプ
   discountRate.base                          // ポイント変動(下記)
 ```
 
 - **確率系ドライバー**(phaseSuccessProbs / contributionMargin / royaltyRate)は他セクター同様、相対±δ(既定±20%)+定義域 [0,1] クランプ。
-- **割引率はポイント変動(加法)**: 乗算変動は割引率の意味論(11%の±20% = 8.8〜13.2%)がセクター間で不均一になるため、`r ± δ_r` の加法変動とする。`δ_r` 既定 0.02(±2%ポイント)、変更可、変動後は `max(r, 0.001)` でクランプ(→ U-20)。
+- **割引率はポイント変動(加法)**: 乗算変動は割引率の意味論(11%の±20% = 8.8〜13.2%)がセクター間で不均一になるため、`r ± δ_r` の加法変動とする。`δ_r` 既定 0.02(±2%ポイント)、変動後は `max(r, 0.001)` でクランプ(→ U-20)。**Stage 1 は固定値実装(`DELTA_R = 0.02`)。可変化は `DriverApplier` のシグネチャ拡張を要するため、実需の要望が発生した時点で再設計する。**
 - ドライバー列挙は品目数に比例して増える。エンジンは全ドライバーの `TornadoItem` を返し、表示上の件数制限(span降順で上位N件)はUI層の責務とする。
 - `evaluateDrugDiscovery` 同様、対象ドライバーの列挙・適用は純粋関数として実装する(パスのパースに正規表現を用いてよいが、入力オブジェクトの変更は不可・新オブジェクト返却)。
+- **不正なフェーズ名の扱い**: 存在しないフェーズ名を含む driverId(例: `assets[0].phaseSuccessProbs.bogusPhase`)は適用せず、入力を同一参照のまま返す(不明な driverId・範囲外の asset index と同じ扱い)。
 
 ---
 
@@ -643,7 +647,7 @@ EV_k = Σ_{t < m} −NetCapex(t)/(1+r_k)^t
 | U-17 | シナリオプリセットの具体値(全セクター) | Phase 3 で確定。仮値+TODO | 仮採用 |
 | U-18 | 創薬フェーズ成功確率の既定値と出典 | 仮値同梱(出典確認は Cowork/文献レビューで) | 仮採用 |
 | U-19 | マルチプル・割引率の既定値 | ダミー値。`benchmarks.dummy.json` と整合させる | 仮採用 |
-| U-20 | 創薬感度分析: 割引率のポイント変動幅 δ_r | ±0.02(2%ポイント)、変更可、下限 max(r, 0.001) | 仮採用 |
+| U-20 | 創薬感度分析: 割引率のポイント変動幅 δ_r | ±0.02(2%ポイント)固定(Stage 1)、下限 max(r, 0.001)。可変化は DriverApplier のシグネチャ拡張が必要なため実需発生時に再設計 | **確定** |
 
 ---
 

@@ -1,6 +1,6 @@
 /**
  * MediaTechInputs / keyMetrics とベンチマーク metric_id の対応。
- * 出典: data/benchmarks/benchmark.schema.json (v1.1)
+ * 出典: data/benchmarks/benchmark.schema.json (v1.2)
  *
  * "paid_conversion"(課金転換率)はMediaTechInputsに対応するドライバーが無い
  * (ブレンドARPUのみを扱うモデルのため、課金ユーザー比率という概念を持たない)。

@@ -1,6 +1,6 @@
 /**
  * EcD2cInputs / keyMetrics とベンチマーク metric_id の対応。
- * 出典: data/benchmarks/benchmark.schema.json (v1.1)
+ * 出典: data/benchmarks/benchmark.schema.json (v1.2)
  */
 import type { EcD2cInputs } from '../../../engine/index.ts'
 import type { BenchmarkMetricConfig } from '../../benchmarkMetricConfig.ts'

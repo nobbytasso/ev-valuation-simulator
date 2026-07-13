@@ -234,13 +234,14 @@ React \+ TypeScript \+ Vite / Zustand / Recharts / Framer Motion / SheetJS / fas
 
 ### バックログ(フェーズ未割当)【Rev.5追加】
 
-- **医療機器モデルへの implied EV/売上マルチプル追加**(DCF結果の妥当性チェック指標。エンジン+golden+Python参照実装の3点更新を伴うため独立バッチとし、**Phase 5 前後**に実施)【C-2裁定】
+- **医療機器モデルへの implied EV/売上マルチプル追加**(DCF結果の妥当性チェック指標。エンジン+golden+Python参照実装の3点更新を伴うため独立バッチとし、**Phase 5 前後**に実施)【C-2裁定】。実装時、医療機器・クライメートの golden テストに他4セクターと同じ keyMetrics キー集合比較を必須で追加する(docs/audit-phase3-v2.md 指摘11)
 
 ### 低優先レビュー指摘のトリアージ【docs/review-phase3.md、2026-07-13裁定】
 
 - **D-13**(basis/notes/as_ofの表示)・**D-14**(years/count単位のサフィックス表示): 単独実装せず**Phase 6のデザイン磨き込みに吸収**(上記フェーズ表参照)。ベンチマーク比較UIの表示密度・情報設計をテーマ磨き込みと合わせて一括検討する。
 - **D-15**(`EvRangeResult` の補助ラベル「簡易DCF」ハードコード): 対応不要のまま放置可。現状SaaSのみが `auxiliary` を返し他セクターは返さないため実害なし。他セクターが `auxiliary` を返すようになった時点で再評価する。
 - **D-16**(`cashflows` フィールドの用途): Phase 3時点で未使用だが削除せず、Phase 6のチャート実装で使用する前提として残置する(docs/engine-spec.md §0.2 SectorValuationResult定義のコメント参照)。
+- **B-2**(keyMetrics表示粒度の不統一): Phase 6 の表示密度検討に吸収。ただしメディアの paybackMonths(CAC回収の直接指標)は表示価値が高いため Phase 6 で最優先に拾う(docs/audit-phase3-v2.md §1 B-2、トリアージ漏れの解消)。
 
 ---
 

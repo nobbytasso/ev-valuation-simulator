@@ -1,6 +1,6 @@
 /**
  * SaasInputs / keyMetrics とベンチマーク metric_id の対応。
- * 出典: data/benchmarks/benchmark.schema.json (v1.1)
+ * 出典: data/benchmarks/benchmark.schema.json (v1.2)
  */
 import type { SaasInputs } from '../../../engine/index.ts'
 import type { BenchmarkMetricConfig } from '../../benchmarkMetricConfig.ts'
