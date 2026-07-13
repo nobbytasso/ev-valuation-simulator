@@ -65,7 +65,7 @@ def _asset_rnpv(asset: Dict[str, Any], discount_rate: float, horizon_years: int)
     plateau_years = asset["plateauYears"]
     decline_rate = asset["declineRate"]
 
-    for t in range(launch_year, horizon_years + 1):
+    for t in range(launch_year, launch_year + horizon_years):
         u = t - launch_year
         if u < years_to_peak:
             sales = peak_sales * (u + 1) / years_to_peak

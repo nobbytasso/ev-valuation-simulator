@@ -1,4 +1,4 @@
-# 計算エンジン仕様書(engine-spec)v0.2
+# 計算エンジン仕様書(engine-spec)v0.3
 
 Phase 1 実装前の数式・型定義。`docs/requirements-rev4.md` §3・§7 を正とし、本書はそれを計算可能なレベルまで具体化したもの。**本書の「未確定事項(U-n)」は実装時に仮の妥当値+TODOコメントで進め、確定後に本書と実装を同時更新する。**
 
@@ -328,6 +328,8 @@ S(t) = 0                                          (u < 0)
      = peakSales × (1 − declineRate)^(u − yearsToPeak − plateauYears + 1)   (以降、u < modelHorizonYears まで)
 ```
 
+**明確化(2026-07-13追記)**: `modelHorizonYears` は `launchYear` からの相対年数であり、評価対象年は `t ∈ [L, L + modelHorizonYears)`(= `u ∈ [0, modelHorizonYears)`)。launchYearの大小に関わらず常に modelHorizonYears 年分の売上を評価する。Python/TS二実装の独立クロスチェックで、Python参照実装が誤って絶対年 `t ∈ [L, modelHorizonYears]` として実装していたことが判明し(launchYearが遅いほど評価される売上年数が短くなる不具合)、Python側を修正・goldenを再生成した。TS側は本項の記述どおりに実装されている。
+
 **リスク調整後CF**:
 
 ```
@@ -564,7 +566,7 @@ EV_k = Σ_{t < m} −NetCapex(t)/(1+r_k)^t
 | U-3 | NRR/チャーン/CAC回収を評価式に組み込むか | 組み込まない(ベンチマーク対比指標のみ) | 仮採用 |
 | U-4 | 創薬のレンジ生成方法 | 割引率3点(12%/11%/10%) | **確定** |
 | U-5 | 創薬: launchYear入力とフェーズ期間合計の不整合 | launchYear を正とし、不整合は警告表示のみ | 仮採用 |
-| U-6 | 創薬の評価ホライズン | 上市後15年で打ち切り | **確定** |
+| U-6 | 創薬の評価ホライズン | 上市後15年で打ち切り(launchYear相対。§2.2に明確化注記あり) | **確定** |
 | U-7 | 医療機器の浸透カーブ形状 | 線形ランプ(ロジスティックは将来拡張) | 仮採用 |
 | U-8 | 医療機器: チャネルコスト・償還価格の分離 | operatingMargin に内包(償還下振れは価格レバーで表現) | 仮採用 |
 | U-9 | メディア: MAU成長の構造化(獲得−解約分解) | 成長率直接入力(churnは診断のみ) | 仮採用 |
@@ -583,3 +585,4 @@ EV_k = Σ_{t < m} −NetCapex(t)/(1+r_k)^t
 
 *v0.1 — 2026-07-13。Phase 1 実装開始前のレビュー用。*
 *v0.2 — 2026-07-13。レビュー反映: U-1/U-4/U-6/U-10/U-11/U-14 を確定。U-14 は「未消化プール無視(Exit時再正規化)」に変更し §1.4 を改定。*
+*v0.3 — 2026-07-13。Python(`tools/reference/`)/TypeScript(`src/engine/`)の独立クロスチェックで、創薬モデルの `modelHorizonYears` がPython参照実装で絶対年として誤実装されていたことを検出・修正(§2.2に明確化注記を追加)。golden fixtureを再生成。TSエンジンはこの時点でgolden全ケース一致・fast-checkプロパティ約60件Green。*
