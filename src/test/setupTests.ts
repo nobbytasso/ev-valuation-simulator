@@ -37,4 +37,15 @@ if (typeof window !== 'undefined') {
       writable: true,
     })
   }
+
+  // jsdomはResizeObserverを実装しない。Recharts(ResponsiveContainer)が参照するため
+  // テスト用にno-opポリフィルを与える(実描画サイズの検証はしない)。
+  if (!window.ResizeObserver) {
+    class ResizeObserverPolyfill {
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+    }
+    window.ResizeObserver = ResizeObserverPolyfill as unknown as typeof ResizeObserver
+  }
 }

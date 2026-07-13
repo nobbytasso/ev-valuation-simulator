@@ -10,7 +10,7 @@ import type {
   MedicalDeviceInputs,
   SaasInputs,
 } from '../engine/index.ts'
-import type { Scenario, SectorId } from './scenarioTypes.ts'
+import type { Scenario, ScenarioVcMethodInputs, SectorId } from './scenarioTypes.ts'
 
 function defaultSaasInputs(): SaasInputs {
   return {
@@ -134,11 +134,21 @@ function defaultClimateTechInputs(): ClimateTechInputs {
   }
 }
 
+function defaultVcMethodInputs(): ScenarioVcMethodInputs {
+  return {
+    targetMultiple: 10,
+    yearsToExit: 5,
+    investment: 300,
+    dilutionRetention: 0.7,
+    netDebtAtExit: 0,
+  }
+}
+
 /** 新規シナリオを、指定セクターの妥当なデフォルト入力値つきで生成する。 */
 export function createScenario(sector: SectorId, name: string): Scenario {
   const id = crypto.randomUUID()
   const now = new Date().toISOString()
-  const base = { id, name, createdAt: now, updatedAt: now }
+  const base = { id, name, createdAt: now, updatedAt: now, vcMethod: defaultVcMethodInputs() }
   switch (sector) {
     case 'saas_jp':
       return { ...base, sector, inputs: defaultSaasInputs() }

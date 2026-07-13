@@ -1,0 +1,28 @@
+.vc-method__inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.vc-method__inputs label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  gap: 0.25rem;
+}
+
+.vc-method__implied-irr {
+  margin-bottom: 0.75rem;
+}
+
+.vc-method__infeasible {
+  display: inline-block;
+  margin-left: 0.4rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-status-bad);
+  color: var(--color-accent-contrast);
+  font-size: 0.7rem;
+}

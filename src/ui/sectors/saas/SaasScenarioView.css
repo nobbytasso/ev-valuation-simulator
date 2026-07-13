@@ -1,0 +1,44 @@
+.saas-view section {
+  margin-bottom: 2rem;
+}
+
+.saas-view__presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.saas-view__presets button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  text-align: left;
+  max-width: 220px;
+}
+
+.saas-view__presets button span {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.saas-view__actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.saas-view__benchmark-item {
+  margin-bottom: 0.75rem;
+}
+
+.saas-view__benchmark-source {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin: 0.15rem 0 0;
+}

@@ -31,11 +31,24 @@ export const SECTOR_LABELS: Record<SectorId, string> = {
   climate_tech: 'クライメートテック',
 }
 
+/**
+ * VC法(共通オーバーレイ)の入力。出典: docs/engine-spec.md §1.2
+ * exitEnterpriseValue はセクターモデルのEVレンジ各点から都度接続するため、ここでは保持しない。
+ */
+export interface ScenarioVcMethodInputs {
+  targetMultiple: number // 目標倍率(> 0)。例: 10
+  yearsToExit: number // > 0
+  investment: number // 今回投資額(百万円)
+  dilutionRetention: number // Exit時までの持分残存率(0,1]。希薄化シムから接続、手入力も可
+  netDebtAtExit: number // 既定 0
+}
+
 interface ScenarioBase<TSector extends SectorId, TInputs> {
   id: string
   name: string
   sector: TSector
   inputs: TInputs
+  vcMethod: ScenarioVcMethodInputs
   createdAt: string // ISO8601
   updatedAt: string // ISO8601
 }
