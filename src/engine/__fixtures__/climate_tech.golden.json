@@ -1,0 +1,1111 @@
+{
+  "schemaVersion": "1.0",
+  "sector": "climate_tech",
+  "generatedAt": "2026-07-13",
+  "seed": 20260718,
+  "caseCount": 23,
+  "cases": [
+    {
+      "id": "mass-production-prob-zero",
+      "tags": [
+        "boundary",
+        "success-prob-0"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 2000.0
+          },
+          {
+            "yearIndex": 1,
+            "amount": 1500.0
+          }
+        ],
+        "subsidyCoverage": 0.2,
+        "massProductionYear": 4,
+        "massProductionProb": 0.0,
+        "annualCapacityUnits": 200000.0,
+        "rampYears": 2,
+        "unitPrice": 8000.0,
+        "unitCost0": 9000.0,
+        "costDeclineRate": 0.08,
+        "offtakeCoverage": 0.4,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 500.0,
+        "carbonCreditVolume": 100000.0,
+        "carbonCreditPrice": 5000.0,
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.1,
+          "optimistic": 0.08
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -2671.4285714285716,
+          "base": -2690.909090909091,
+          "optimistic": -2711.1111111111113
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "mass-production-prob-one",
+      "tags": [
+        "boundary",
+        "success-prob-1"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 2000.0
+          },
+          {
+            "yearIndex": 1,
+            "amount": 1500.0
+          }
+        ],
+        "subsidyCoverage": 0.2,
+        "massProductionYear": 4,
+        "massProductionProb": 1.0,
+        "annualCapacityUnits": 200000.0,
+        "rampYears": 2,
+        "unitPrice": 8000.0,
+        "unitCost0": 9000.0,
+        "costDeclineRate": 0.08,
+        "offtakeCoverage": 0.4,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 500.0,
+        "carbonCreditVolume": 100000.0,
+        "carbonCreditPrice": 5000.0,
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.1,
+          "optimistic": 0.08
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 910.8270775820515,
+          "base": 1721.4701591313524,
+          "optimistic": 2781.638285367464
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "discount-rate-upper-bound",
+      "tags": [
+        "boundary",
+        "discount-rate-upper-bound"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 2000.0
+          },
+          {
+            "yearIndex": 1,
+            "amount": 1500.0
+          }
+        ],
+        "subsidyCoverage": 0.2,
+        "massProductionYear": 4,
+        "massProductionProb": 0.6,
+        "annualCapacityUnits": 200000.0,
+        "rampYears": 2,
+        "unitPrice": 8000.0,
+        "unitCost0": 9000.0,
+        "costDeclineRate": 0.08,
+        "offtakeCoverage": 0.4,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 500.0,
+        "carbonCreditVolume": 100000.0,
+        "carbonCreditPrice": 5000.0,
+        "discountRate": {
+          "pessimistic": 0.5,
+          "base": 0.45,
+          "optimistic": 0.4
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -2245.242153263966,
+          "base": -2228.788478123081,
+          "optimistic": -2196.5774002130215
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-00",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 2,
+            "amount": 2136.742740526931
+          },
+          {
+            "yearIndex": 3,
+            "amount": 3080.8366037326264
+          }
+        ],
+        "subsidyCoverage": 0.4678625071821965,
+        "massProductionYear": 5,
+        "massProductionProb": 0.8545704624863326,
+        "annualCapacityUnits": 534982.1805783972,
+        "rampYears": 4,
+        "unitPrice": 37433.37929414405,
+        "unitCost0": 25598.911548891712,
+        "costDeclineRate": 0.07247999106332477,
+        "offtakeCoverage": 0.6845600345714925,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1749.0059745708547,
+        "carbonCreditVolume": 229748.67265949666,
+        "carbonCreditPrice": 5668.174675067977,
+        "discountRate": {
+          "pessimistic": 0.1030008890495504,
+          "base": 0.0830008890495504,
+          "optimistic": 0.0630008890495504
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 47592.02285220738,
+          "base": 59923.626598409835,
+          "optimistic": 76144.15003896416
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-01",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 2,
+            "amount": 1079.2242117991045
+          },
+          {
+            "yearIndex": 3,
+            "amount": 1517.237657092397
+          }
+        ],
+        "subsidyCoverage": 0.16501515821971519,
+        "massProductionYear": 8,
+        "massProductionProb": 0.6143936774899507,
+        "annualCapacityUnits": 562321.7516435586,
+        "rampYears": 4,
+        "unitPrice": 27035.220866480046,
+        "unitCost0": 31142.39994333266,
+        "costDeclineRate": 0.13292108972756772,
+        "offtakeCoverage": 0.459726063340658,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1466.463212239317,
+        "carbonCreditVolume": 295861.7624624512,
+        "carbonCreditPrice": 3415.807278653397,
+        "discountRate": {
+          "pessimistic": 0.11292554887047583,
+          "base": 0.09292554887047583,
+          "optimistic": 0.07292554887047582
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 16822.583938826254,
+          "base": 22063.76161547595,
+          "optimistic": 29090.294100843003
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-02",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 2912.8420264397537
+          },
+          {
+            "yearIndex": 3,
+            "amount": 4935.661945186462
+          },
+          {
+            "yearIndex": 4,
+            "amount": 1012.9635784474846
+          },
+          {
+            "yearIndex": 5,
+            "amount": 3365.7345872577885
+          }
+        ],
+        "subsidyCoverage": 0.09575948288512143,
+        "massProductionYear": 5,
+        "massProductionProb": 0.6324692707898574,
+        "annualCapacityUnits": 822287.9557018483,
+        "rampYears": 2,
+        "unitPrice": 11087.255052640976,
+        "unitCost0": 9754.748026166233,
+        "costDeclineRate": 0.1295405848338704,
+        "offtakeCoverage": 0.014795227608208084,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1663.8067211747984,
+        "carbonCreditVolume": 189859.31861284887,
+        "carbonCreditPrice": 5108.801110077179,
+        "discountRate": {
+          "pessimistic": 0.14086546908891862,
+          "base": 0.12086546908891863,
+          "optimistic": 0.10086546908891862
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 6140.159276868704,
+          "base": 8738.850319154923,
+          "optimistic": 12123.177240690997
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-03",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 2700.440795982525
+          },
+          {
+            "yearIndex": 1,
+            "amount": 3702.3019160290946
+          },
+          {
+            "yearIndex": 2,
+            "amount": 4294.010388052657
+          },
+          {
+            "yearIndex": 3,
+            "amount": 4945.540055973817
+          }
+        ],
+        "subsidyCoverage": 0.10354919203460722,
+        "massProductionYear": 3,
+        "massProductionProb": 0.5512789620268183,
+        "annualCapacityUnits": 355442.0438001809,
+        "rampYears": 3,
+        "unitPrice": 30819.13806744485,
+        "unitCost0": 26023.618488206062,
+        "costDeclineRate": 0.02550141532822597,
+        "offtakeCoverage": 0.1358732204584662,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1194.9838650014544,
+        "carbonCreditVolume": 264855.3020476934,
+        "carbonCreditPrice": 2868.7497953683624,
+        "discountRate": {
+          "pessimistic": 0.15407556677594555,
+          "base": 0.13407556677594556,
+          "optimistic": 0.11407556677594556
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -3294.3182384530755,
+          "base": -2265.7099992669364,
+          "optimistic": -911.0869006572948
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-04",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 3626.5058556379013
+          },
+          {
+            "yearIndex": 1,
+            "amount": 2530.1301896780824
+          },
+          {
+            "yearIndex": 4,
+            "amount": 2089.187387414985
+          }
+        ],
+        "subsidyCoverage": 0.37349702890190956,
+        "massProductionYear": 4,
+        "massProductionProb": 0.6610608220830829,
+        "annualCapacityUnits": 927022.7815956309,
+        "rampYears": 1,
+        "unitPrice": 23590.170855405388,
+        "unitCost0": 21696.652381251188,
+        "costDeclineRate": 0.09029559902032405,
+        "offtakeCoverage": 0.3400270284033206,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1482.5770582632736,
+        "carbonCreditVolume": 482420.6668065165,
+        "carbonCreditPrice": 4182.769170973469,
+        "discountRate": {
+          "pessimistic": 0.13775896811056398,
+          "base": 0.117758968110564,
+          "optimistic": 0.09775896811056399
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 34171.45775956911,
+          "base": 41848.32966309271,
+          "optimistic": 51650.07454503235
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-05",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 2,
+            "amount": 4085.9278304816276
+          },
+          {
+            "yearIndex": 3,
+            "amount": 2616.1998054735486
+          },
+          {
+            "yearIndex": 4,
+            "amount": 1215.216437020476
+          }
+        ],
+        "subsidyCoverage": 0.4698331148832764,
+        "massProductionYear": 7,
+        "massProductionProb": 0.2096543118959918,
+        "annualCapacityUnits": 169304.36919127958,
+        "rampYears": 4,
+        "unitPrice": 48366.569569005725,
+        "unitCost0": 54466.98332027724,
+        "costDeclineRate": 0.07678054061469325,
+        "offtakeCoverage": 0.48999863471089355,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 314.12809245711685,
+        "carbonCreditVolume": 272842.2670120146,
+        "carbonCreditPrice": 12638.254479969728,
+        "discountRate": {
+          "pessimistic": 0.12859416983021205,
+          "base": 0.10859416983021206,
+          "optimistic": 0.08859416983021205
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1386.2807226600785,
+          "base": 2372.155831058136,
+          "optimistic": 3697.1699847266855
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-06",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 3,
+            "amount": 3746.11669901676
+          },
+          {
+            "yearIndex": 8,
+            "amount": 3477.4132984635817
+          }
+        ],
+        "subsidyCoverage": 0.4918657160422935,
+        "massProductionYear": 8,
+        "massProductionProb": 0.8071002168418797,
+        "annualCapacityUnits": 76533.81602195691,
+        "rampYears": 2,
+        "unitPrice": 37490.49048198083,
+        "unitCost0": 31172.807630271436,
+        "costDeclineRate": 0.05095876944489006,
+        "offtakeCoverage": 0.05240379622954734,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1422.7700558989338,
+        "carbonCreditVolume": 349284.8283049764,
+        "carbonCreditPrice": 3268.876194264781,
+        "discountRate": {
+          "pessimistic": 0.1420564620065999,
+          "base": 0.1220564620065999,
+          "optimistic": 0.1020564620065999
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 461.8661736868564,
+          "base": 909.1835428197844,
+          "optimistic": 1524.2027211205825
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-07",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 1,
+            "amount": 2408.043692668104
+          },
+          {
+            "yearIndex": 7,
+            "amount": 3092.105803914767
+          }
+        ],
+        "subsidyCoverage": 0.2620246735173433,
+        "massProductionYear": 7,
+        "massProductionProb": 0.6130680090838199,
+        "annualCapacityUnits": 503345.2357443234,
+        "rampYears": 4,
+        "unitPrice": 4404.704205319222,
+        "unitCost0": 5610.572421657155,
+        "costDeclineRate": 0.11056884707349425,
+        "offtakeCoverage": 0.6920283127213488,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1171.8716532410556,
+        "carbonCreditVolume": 217429.91724450828,
+        "carbonCreditPrice": 12734.047502626536,
+        "discountRate": {
+          "pessimistic": 0.10384462485370871,
+          "base": 0.08384462485370871,
+          "optimistic": 0.0638446248537087
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 4688.633062729621,
+          "base": 6402.324509073875,
+          "optimistic": 8688.60039710169
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-08",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 2785.4335282932207
+          },
+          {
+            "yearIndex": 1,
+            "amount": 3243.7348476482525
+          },
+          {
+            "yearIndex": 2,
+            "amount": 2629.7630368670316
+          },
+          {
+            "yearIndex": 3,
+            "amount": 4840.7321209868505
+          }
+        ],
+        "subsidyCoverage": 0.14950672942520699,
+        "massProductionYear": 4,
+        "massProductionProb": 0.3076213962303444,
+        "annualCapacityUnits": 852279.3304481689,
+        "rampYears": 3,
+        "unitPrice": 7876.750096213871,
+        "unitCost0": 9503.38698138208,
+        "costDeclineRate": 0.14553654063985752,
+        "offtakeCoverage": 0.031282802041583756,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1419.8977934436778,
+        "carbonCreditVolume": 81780.47434368824,
+        "carbonCreditPrice": 13163.088925077705,
+        "discountRate": {
+          "pessimistic": 0.15529284869837537,
+          "base": 0.13529284869837538,
+          "optimistic": 0.11529284869837537
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -4895.632559010391,
+          "base": -4261.199335562284,
+          "optimistic": -3402.1878242315433
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-09",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 4,
+            "amount": 1964.3255092454465
+          },
+          {
+            "yearIndex": 6,
+            "amount": 3618.770763305287
+          }
+        ],
+        "subsidyCoverage": 0.3315990082844077,
+        "massProductionYear": 6,
+        "massProductionProb": 0.4625297472916477,
+        "annualCapacityUnits": 486859.4084106934,
+        "rampYears": 4,
+        "unitPrice": 23596.932862682166,
+        "unitCost0": 17348.64767499134,
+        "costDeclineRate": 0.06155126220417799,
+        "offtakeCoverage": 0.4115586350777749,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1245.0173837072539,
+        "carbonCreditVolume": 194928.73884022544,
+        "carbonCreditPrice": 10120.815721623148,
+        "discountRate": {
+          "pessimistic": 0.1165303859425596,
+          "base": 0.0965303859425596,
+          "optimistic": 0.07653038594255959
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 11194.522972649234,
+          "base": 14253.467047222048,
+          "optimistic": 18289.30833170831
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-10",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 4,
+            "amount": 614.8145754906132
+          },
+          {
+            "yearIndex": 5,
+            "amount": 2133.2546931920983
+          }
+        ],
+        "subsidyCoverage": 0.47497114084569453,
+        "massProductionYear": 7,
+        "massProductionProb": 0.7928922213229121,
+        "annualCapacityUnits": 145524.95915646988,
+        "rampYears": 1,
+        "unitPrice": 35503.93612419194,
+        "unitCost0": 39028.25595101953,
+        "costDeclineRate": 0.1396542134313983,
+        "offtakeCoverage": 0.3871066302221764,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 587.6964009025758,
+        "carbonCreditVolume": 341669.2763835408,
+        "carbonCreditPrice": 11276.623496807624,
+        "discountRate": {
+          "pessimistic": 0.1165962284118275,
+          "base": 0.0965962284118275,
+          "optimistic": 0.07659622841182749
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 19333.68010032761,
+          "base": 24229.580322213085,
+          "optimistic": 30629.37511336297
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-11",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 5,
+            "amount": 1455.5262448130711
+          },
+          {
+            "yearIndex": 6,
+            "amount": 3401.803809222998
+          }
+        ],
+        "subsidyCoverage": 0.44200236524207853,
+        "massProductionYear": 8,
+        "massProductionProb": 0.7200368448677903,
+        "annualCapacityUnits": 513288.80164593353,
+        "rampYears": 2,
+        "unitPrice": 21895.869828190833,
+        "unitCost0": 17536.12042518629,
+        "costDeclineRate": 0.1289049049591741,
+        "offtakeCoverage": 0.28848417770045043,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1963.53617889637,
+        "carbonCreditVolume": 275426.41821002436,
+        "carbonCreditPrice": 11267.84579351701,
+        "discountRate": {
+          "pessimistic": 0.10542077209923223,
+          "base": 0.08542077209923223,
+          "optimistic": 0.06542077209923222
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 23322.29848206936,
+          "base": 29966.374091730224,
+          "optimistic": 38813.04322136376
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-12",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 1409.2124268336001
+          },
+          {
+            "yearIndex": 2,
+            "amount": 4802.10914609702
+          },
+          {
+            "yearIndex": 4,
+            "amount": 1166.0714194803454
+          }
+        ],
+        "subsidyCoverage": 0.04434174526654305,
+        "massProductionYear": 5,
+        "massProductionProb": 0.20424112624918497,
+        "annualCapacityUnits": 725085.5595104822,
+        "rampYears": 1,
+        "unitPrice": 39764.45063277419,
+        "unitCost0": 24453.167308733224,
+        "costDeclineRate": 0.12286967713075386,
+        "offtakeCoverage": 0.37422022601230626,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1346.7558137417311,
+        "carbonCreditVolume": 80136.14334748182,
+        "carbonCreditPrice": 4090.4270042180583,
+        "discountRate": {
+          "pessimistic": 0.12554908060399364,
+          "base": 0.10554908060399364,
+          "optimistic": 0.08554908060399363
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 13651.159549446322,
+          "base": 17571.91219128274,
+          "optimistic": 22633.72001444818
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-13",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 3625.5609894642057
+          },
+          {
+            "yearIndex": 2,
+            "amount": 3259.2585316762143
+          },
+          {
+            "yearIndex": 3,
+            "amount": 2236.012476439949
+          },
+          {
+            "yearIndex": 4,
+            "amount": 2596.57966552566
+          }
+        ],
+        "subsidyCoverage": 0.2701611430098161,
+        "massProductionYear": 4,
+        "massProductionProb": 0.4687162226229393,
+        "annualCapacityUnits": 534163.4562440233,
+        "rampYears": 4,
+        "unitPrice": 26976.893551050645,
+        "unitCost0": 26233.448444122536,
+        "costDeclineRate": 0.05676116238829898,
+        "offtakeCoverage": 0.06333290809466688,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 237.88600563569534,
+        "carbonCreditVolume": 95042.3727221566,
+        "carbonCreditPrice": 4227.821308232325,
+        "discountRate": {
+          "pessimistic": 0.13002870620728904,
+          "base": 0.11002870620728905,
+          "optimistic": 0.09002870620728905
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 5797.719296945327,
+          "base": 8379.516424938964,
+          "optimistic": 11764.074821228018
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-14",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 1,
+            "amount": 960.7327699524776
+          },
+          {
+            "yearIndex": 6,
+            "amount": 1458.4030228302604
+          }
+        ],
+        "subsidyCoverage": 0.2492888225616226,
+        "massProductionYear": 7,
+        "massProductionProb": 0.311244840470282,
+        "annualCapacityUnits": 978262.181614311,
+        "rampYears": 1,
+        "unitPrice": 49794.802747620575,
+        "unitCost0": 54090.924505033916,
+        "costDeclineRate": 0.11716620542494377,
+        "offtakeCoverage": 0.16545802659670372,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 394.06212702777026,
+        "carbonCreditVolume": 434285.4695657504,
+        "carbonCreditPrice": 8071.804900807417,
+        "discountRate": {
+          "pessimistic": 0.14412683626158576,
+          "base": 0.12412683626158576,
+          "optimistic": 0.10412683626158575
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 29765.688098807936,
+          "base": 37039.93639564649,
+          "optimistic": 46456.16654019234
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-15",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 4676.749750323546
+          },
+          {
+            "yearIndex": 1,
+            "amount": 3252.5680150750236
+          },
+          {
+            "yearIndex": 8,
+            "amount": 3510.932432902869
+          }
+        ],
+        "subsidyCoverage": 0.030945050886378944,
+        "massProductionYear": 8,
+        "massProductionProb": 0.3865453320380363,
+        "annualCapacityUnits": 270053.9454372081,
+        "rampYears": 4,
+        "unitPrice": 10826.544814128418,
+        "unitCost0": 11547.02125176152,
+        "costDeclineRate": 0.1037994056636298,
+        "offtakeCoverage": 0.5183127915240879,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1862.4257666354586,
+        "carbonCreditVolume": 374679.3430617169,
+        "carbonCreditPrice": 4359.090027754511,
+        "discountRate": {
+          "pessimistic": 0.13905356575737704,
+          "base": 0.11905356575737705,
+          "optimistic": 0.09905356575737705
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -6421.225894352679,
+          "base": -6166.29609020546,
+          "optimistic": -5803.391167737926
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-16",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 2,
+            "amount": 3054.489395220936
+          },
+          {
+            "yearIndex": 3,
+            "amount": 2115.714255898539
+          },
+          {
+            "yearIndex": 4,
+            "amount": 3282.853002524595
+          }
+        ],
+        "subsidyCoverage": 0.39499743267021203,
+        "massProductionYear": 4,
+        "massProductionProb": 0.7807261026690906,
+        "annualCapacityUnits": 120907.83868705276,
+        "rampYears": 1,
+        "unitPrice": 44746.660914141416,
+        "unitCost0": 31952.53547665914,
+        "costDeclineRate": 0.08043093836399731,
+        "offtakeCoverage": 0.6740992302357617,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1633.409913032262,
+        "carbonCreditVolume": 101396.38871105843,
+        "carbonCreditPrice": 10362.452117131299,
+        "discountRate": {
+          "pessimistic": 0.10091376080520803,
+          "base": 0.08091376080520803,
+          "optimistic": 0.06091376080520802
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 10495.710978792746,
+          "base": 13419.39373693673,
+          "optimistic": 17261.49541110986
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-17",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 0,
+            "amount": 1916.8235291568456
+          },
+          {
+            "yearIndex": 2,
+            "amount": 3170.4826537041627
+          },
+          {
+            "yearIndex": 4,
+            "amount": 4289.182018980875
+          },
+          {
+            "yearIndex": 5,
+            "amount": 936.7943440759748
+          }
+        ],
+        "subsidyCoverage": 0.03068393066679803,
+        "massProductionYear": 5,
+        "massProductionProb": 0.33200930112336635,
+        "annualCapacityUnits": 944922.3250023443,
+        "rampYears": 1,
+        "unitPrice": 2436.0983637276186,
+        "unitCost0": 2412.4542498688247,
+        "costDeclineRate": 0.11401499365023311,
+        "offtakeCoverage": 0.7413858701788882,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1647.2442514608463,
+        "carbonCreditVolume": 256034.0027883911,
+        "carbonCreditPrice": 7539.148882404154,
+        "discountRate": {
+          "pessimistic": 0.10640620856641109,
+          "base": 0.08640620856641108,
+          "optimistic": 0.06640620856641108
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -4224.994461675828,
+          "base": -3831.998928634617,
+          "optimistic": -3252.3092241271024
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-18",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 1,
+            "amount": 1830.0812875431081
+          },
+          {
+            "yearIndex": 5,
+            "amount": 1235.467072253218
+          }
+        ],
+        "subsidyCoverage": 0.16017705222894374,
+        "massProductionYear": 5,
+        "massProductionProb": 0.6874470713037844,
+        "annualCapacityUnits": 953522.5409977462,
+        "rampYears": 3,
+        "unitPrice": 7394.746833733577,
+        "unitCost0": 5171.028408732815,
+        "costDeclineRate": 0.1355035193388764,
+        "offtakeCoverage": 0.30127473418371525,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1338.5803556800183,
+        "carbonCreditVolume": 237358.0388268246,
+        "carbonCreditPrice": 14194.045358981015,
+        "discountRate": {
+          "pessimistic": 0.1136885315694789,
+          "base": 0.0936885315694789,
+          "optimistic": 0.0736885315694789
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 21482.121832082645,
+          "base": 26687.69280286023,
+          "optimistic": 33431.49204684299
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-19",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "capexSchedule": [
+          {
+            "yearIndex": 1,
+            "amount": 1105.9737975797157
+          },
+          {
+            "yearIndex": 5,
+            "amount": 3109.64821874606
+          },
+          {
+            "yearIndex": 8,
+            "amount": 4074.6478325738794
+          }
+        ],
+        "subsidyCoverage": 0.25397241997880887,
+        "massProductionYear": 8,
+        "massProductionProb": 0.7593124404067568,
+        "annualCapacityUnits": 682601.3324449838,
+        "rampYears": 3,
+        "unitPrice": 5965.707933085333,
+        "unitCost0": 6688.984271007114,
+        "costDeclineRate": 0.10707992208396597,
+        "offtakeCoverage": 0.6347658006804334,
+        "merchantRealization": 1.0,
+        "fixedOpexAnnual": 1608.121310233544,
+        "carbonCreditVolume": 388171.16513024975,
+        "carbonCreditPrice": 1744.8684055504905,
+        "discountRate": {
+          "pessimistic": 0.1442961085491088,
+          "base": 0.1242961085491088,
+          "optimistic": 0.1042961085491088
+        },
+        "projectYears": 20
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -18.825067836635526,
+          "base": 490.40945863180286,
+          "optimistic": 1210.356257040045
+        },
+        "keyMetrics": {}
+      }
+    }
+  ]
+}

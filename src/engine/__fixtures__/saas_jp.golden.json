@@ -1,0 +1,901 @@
+{
+  "schemaVersion": "1.0",
+  "sector": "saas_jp",
+  "generatedAt": "2026-07-13",
+  "seed": 20260713,
+  "caseCount": 24,
+  "cases": [
+    {
+      "id": "zero-growth-current",
+      "tags": [
+        "boundary",
+        "zero-growth"
+      ],
+      "input": {
+        "arr": 1000.0,
+        "arrGrowth": 0.0,
+        "nrr": 1.0,
+        "grossMargin": 0.7,
+        "operatingMargin": 0.1,
+        "fcfMargin": 0.1,
+        "grossChurn": 0.1,
+        "cacPaybackMonths": 18.0,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 5.0,
+          "base": 8.0,
+          "optimistic": 12.0
+        },
+        "projectionYears": 5,
+        "growthDecayFactor": 0.85,
+        "discountRate": 0.12,
+        "terminalGrowth": 0.02
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 5000.0,
+          "base": 8000.0,
+          "optimistic": 12000.0
+        },
+        "auxiliary": 939.2530130674716,
+        "keyMetrics": {
+          "ruleOf40": 10.0
+        }
+      }
+    },
+    {
+      "id": "zero-growth-ntm",
+      "tags": [
+        "boundary",
+        "zero-growth"
+      ],
+      "input": {
+        "arr": 1000.0,
+        "arrGrowth": 0.0,
+        "nrr": 1.0,
+        "grossMargin": 0.7,
+        "operatingMargin": 0.1,
+        "fcfMargin": 0.1,
+        "grossChurn": 0.1,
+        "cacPaybackMonths": 18.0,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 5.0,
+          "base": 8.0,
+          "optimistic": 12.0
+        },
+        "projectionYears": 5,
+        "growthDecayFactor": 0.85,
+        "discountRate": 0.12,
+        "terminalGrowth": 0.02
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 5000.0,
+          "base": 8000.0,
+          "optimistic": 12000.0
+        },
+        "auxiliary": 939.2530130674716,
+        "keyMetrics": {
+          "ruleOf40": 10.0
+        }
+      }
+    },
+    {
+      "id": "arr-zero",
+      "tags": [
+        "boundary",
+        "zero-value"
+      ],
+      "input": {
+        "arr": 0.0,
+        "arrGrowth": 0.3,
+        "nrr": 1.1,
+        "grossMargin": 0.7,
+        "operatingMargin": -0.2,
+        "fcfMargin": -0.1,
+        "grossChurn": 0.15,
+        "cacPaybackMonths": 24.0,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 5.0,
+          "base": 8.0,
+          "optimistic": 12.0
+        },
+        "projectionYears": 5,
+        "growthDecayFactor": 0.85,
+        "discountRate": 0.12,
+        "terminalGrowth": 0.02
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 0.0,
+          "base": 0.0,
+          "optimistic": 0.0
+        },
+        "auxiliary": 0.0,
+        "keyMetrics": {
+          "ruleOf40": 9.999999999999998
+        }
+      }
+    },
+    {
+      "id": "discount-rate-upper-bound",
+      "tags": [
+        "boundary",
+        "discount-rate-upper-bound"
+      ],
+      "input": {
+        "arr": 800.0,
+        "arrGrowth": 0.4,
+        "nrr": 1.15,
+        "grossMargin": 0.75,
+        "operatingMargin": 0.0,
+        "fcfMargin": 0.05,
+        "grossChurn": 0.08,
+        "cacPaybackMonths": 15.0,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 5.0,
+          "base": 8.0,
+          "optimistic": 12.0
+        },
+        "projectionYears": 5,
+        "growthDecayFactor": 0.85,
+        "discountRate": 0.95,
+        "terminalGrowth": 0.02
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 5600.0,
+          "base": 8960.0,
+          "optimistic": 13440.0
+        },
+        "auxiliary": 80.66148497451977,
+        "keyMetrics": {
+          "ruleOf40": 40.0
+        }
+      }
+    },
+    {
+      "id": "random-00",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 3169.491603565961,
+        "arrGrowth": -0.0857282444123856,
+        "nrr": 1.20823030144716,
+        "grossMargin": 0.5248084765946637,
+        "operatingMargin": -0.13008302991065812,
+        "fcfMargin": 0.0029552848667800946,
+        "grossChurn": 0.20407327930305263,
+        "cacPaybackMonths": 25.929652039695345,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 6.958967285938048,
+          "base": 10.706103516827765,
+          "optimistic": 14.453239747717484
+        },
+        "projectionYears": 5,
+        "growthDecayFactor": 0.8326200520763355,
+        "discountRate": 0.148336692173486,
+        "terminalGrowth": 0.008675412447193788
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 22056.38838227085,
+          "base": 33932.90520349361,
+          "optimistic": 45809.422024716376
+        },
+        "auxiliary": 50.5853205806318,
+        "keyMetrics": {
+          "ruleOf40": -21.581127432304374
+        }
+      }
+    },
+    {
+      "id": "random-01",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 1755.1605925482052,
+        "arrGrowth": 0.7551633963961821,
+        "nrr": 1.1937664503388883,
+        "grossMargin": 0.6347832767807831,
+        "operatingMargin": -0.42934339614781314,
+        "fcfMargin": -0.09256082960389003,
+        "grossChurn": 0.27669305631493996,
+        "cacPaybackMonths": 28.607234325658634,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 7.987008699283286,
+          "base": 12.287705691205055,
+          "optimistic": 16.588402683126827
+        },
+        "projectionYears": 4,
+        "growthDecayFactor": 0.8634508663422906,
+        "discountRate": 0.15822168828893463,
+        "terminalGrowth": 0.016243411513002855
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 14018.482921321722,
+          "base": 21566.896802033418,
+          "optimistic": 29115.310682745116
+        },
+        "auxiliary": -6031.506112389412,
+        "keyMetrics": {
+          "ruleOf40": 32.5820000248369
+        }
+      }
+    },
+    {
+      "id": "random-02",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 4133.0454514755165,
+        "arrGrowth": 0.7031147067332952,
+        "nrr": 0.9157562903289401,
+        "grossMargin": 0.723469038640647,
+        "operatingMargin": 0.05815669060683182,
+        "fcfMargin": -0.06495980949189428,
+        "grossChurn": 0.052667620953697,
+        "cacPaybackMonths": 25.845894228881892,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 6.445147008243274,
+          "base": 9.91561078191273,
+          "optimistic": 13.386074555582185
+        },
+        "projectionYears": 3,
+        "growthDecayFactor": 0.8489570602936476,
+        "discountRate": 0.08702173327428711,
+        "terminalGrowth": 0.020608693941582858
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 26638.0855265109,
+          "base": 40981.670040786,
+          "optimistic": 55325.254555061096
+        },
+        "auxiliary": -15058.778915703027,
+        "keyMetrics": {
+          "ruleOf40": 76.1271397340127
+        }
+      }
+    },
+    {
+      "id": "random-03",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 565.9529948930829,
+        "arrGrowth": 0.6564233547848055,
+        "nrr": 0.8821376612503687,
+        "grossMargin": 0.4169945338403801,
+        "operatingMargin": -0.24604694275953187,
+        "fcfMargin": 0.08072959487983994,
+        "grossChurn": 0.18294312757067402,
+        "cacPaybackMonths": 13.163228755895581,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 4.913185452215714,
+          "base": 7.558746849562636,
+          "optimistic": 10.20430824690956
+        },
+        "projectionYears": 7,
+        "growthDecayFactor": 0.8862865473330203,
+        "discountRate": 0.09830088857981403,
+        "terminalGrowth": 0.014011650949856626
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 2780.632021146609,
+          "base": 4277.895417148629,
+          "optimistic": 5775.15881315065
+        },
+        "auxiliary": 5503.872016780753,
+        "keyMetrics": {
+          "ruleOf40": 41.03764120252736
+        }
+      }
+    },
+    {
+      "id": "random-04",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 465.1748119669939,
+        "arrGrowth": 0.04285494790022473,
+        "nrr": 1.2127786832257286,
+        "grossMargin": 0.8335741114463135,
+        "operatingMargin": -0.2653878879063979,
+        "fcfMargin": -0.04863212147118101,
+        "grossChurn": 0.171933033546295,
+        "cacPaybackMonths": 7.501178858691642,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 2.9976468745044884,
+          "base": 4.6117644223145975,
+          "optimistic": 6.225881970124707
+        },
+        "projectionYears": 5,
+        "growthDecayFactor": 0.7737705008051977,
+        "discountRate": 0.14857593582717815,
+        "terminalGrowth": 0.003752313652343684
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1454.1880385287354,
+          "base": 2237.212366967285,
+          "optimistic": 3020.2366954058352
+        },
+        "auxiliary": -172.87528886558573,
+        "keyMetrics": {
+          "ruleOf40": -22.253294000617316
+        }
+      }
+    },
+    {
+      "id": "random-05",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 4137.714897752848,
+        "arrGrowth": 0.7958920843227388,
+        "nrr": 1.351210545580511,
+        "grossMargin": 0.6938834110556296,
+        "operatingMargin": -0.2903112470284143,
+        "fcfMargin": -0.27420805211809357,
+        "grossChurn": 0.13964084807585378,
+        "cacPaybackMonths": 32.514735144107775,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 3.7275736056452367,
+          "base": 5.734728624069595,
+          "optimistic": 7.741883642493954
+        },
+        "projectionYears": 5,
+        "growthDecayFactor": 0.9080356890603247,
+        "discountRate": 0.08550622067664379,
+        "terminalGrowth": 0.008918993835632381
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 27699.187313409795,
+          "base": 42614.13432832276,
+          "optimistic": 57529.08134323573
+        },
+        "auxiliary": -150544.27783352206,
+        "keyMetrics": {
+          "ruleOf40": 50.55808372943245
+        }
+      }
+    },
+    {
+      "id": "random-06",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 2628.8130363950304,
+        "arrGrowth": -0.0783601695193356,
+        "nrr": 0.9688142639065586,
+        "grossMargin": 0.571693773826047,
+        "operatingMargin": -0.10437397404119053,
+        "fcfMargin": 0.2610384232589055,
+        "grossChurn": 0.06046458315551307,
+        "cacPaybackMonths": 25.919213094201577,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 7.243971809627022,
+          "base": 11.144572014810802,
+          "optimistic": 15.045172219994583
+        },
+        "projectionYears": 3,
+        "growthDecayFactor": 0.740842907369633,
+        "discountRate": 0.13659256409796244,
+        "terminalGrowth": 0.012444459674547674
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 17550.83109593342,
+          "base": 27001.278609128338,
+          "optimistic": 36451.726122323256
+        },
+        "auxiliary": 4572.356476563595,
+        "keyMetrics": {
+          "ruleOf40": -18.273414356052616
+        }
+      }
+    },
+    {
+      "id": "random-07",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 1660.094268426046,
+        "arrGrowth": 0.49425298015883595,
+        "nrr": 1.15634825467289,
+        "grossMargin": 0.7240081918503685,
+        "operatingMargin": 0.26659129664374426,
+        "fcfMargin": 0.04867674780870218,
+        "grossChurn": 0.02008617138417428,
+        "cacPaybackMonths": 26.30553270209706,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 6.519140802661244,
+          "base": 10.029447388709606,
+          "optimistic": 13.53975397475797
+        },
+        "projectionYears": 4,
+        "growthDecayFactor": 0.7792665716781649,
+        "discountRate": 0.10873166621741731,
+        "terminalGrowth": 0.005011740244173589
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 16171.385942157549,
+          "base": 24879.055295626997,
+          "optimistic": 33586.724649096446
+        },
+        "auxiliary": 2302.5286361771446,
+        "keyMetrics": {
+          "ruleOf40": 76.08442768025803
+        }
+      }
+    },
+    {
+      "id": "random-08",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 272.4589139494132,
+        "arrGrowth": 0.25157257541896877,
+        "nrr": 1.1350657962793176,
+        "grossMargin": 0.8291265365866753,
+        "operatingMargin": -0.20644188856562407,
+        "fcfMargin": -0.07652064708968326,
+        "grossChurn": 0.05253583937092061,
+        "cacPaybackMonths": 14.337270549840579,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 9.471315245084888,
+          "base": 14.57125422320752,
+          "optimistic": 19.67119320133015
+        },
+        "projectionYears": 3,
+        "growthDecayFactor": 0.8055690196582326,
+        "discountRate": 0.09622495613449204,
+        "terminalGrowth": 0.007578266996845747
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 2580.544265348349,
+          "base": 3970.0681005359215,
+          "optimistic": 5359.591935723494
+        },
+        "auxiliary": -392.5997980126406,
+        "keyMetrics": {
+          "ruleOf40": 4.513068685334471
+        }
+      }
+    },
+    {
+      "id": "random-09",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 1593.324792663177,
+        "arrGrowth": 0.7873826543141167,
+        "nrr": 1.1235129803569484,
+        "grossMargin": 0.6475222054840228,
+        "operatingMargin": -0.3046092756558767,
+        "fcfMargin": -0.11249268855871272,
+        "grossChurn": 0.02409364134338979,
+        "cacPaybackMonths": 14.63327449667304,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 7.000309808204291,
+          "base": 10.76970739723737,
+          "optimistic": 14.53910498627045
+        },
+        "projectionYears": 5,
+        "growthDecayFactor": 0.9456297993599392,
+        "discountRate": 0.12783612671445838,
+        "terminalGrowth": 0.014397351205132473
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 19936.049976592316,
+          "base": 30670.846117834335,
+          "optimistic": 41405.64225907635
+        },
+        "auxiliary": -16453.95342693258,
+        "keyMetrics": {
+          "ruleOf40": 48.277337865824
+        }
+      }
+    },
+    {
+      "id": "random-10",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 4170.285224301838,
+        "arrGrowth": 0.439641281916962,
+        "nrr": 0.9571274226465806,
+        "grossMargin": 0.6923814554729548,
+        "operatingMargin": -0.17823469528648794,
+        "fcfMargin": -0.017554489307984977,
+        "grossChurn": 0.08432030482247603,
+        "cacPaybackMonths": 7.020503492494598,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 8.587999091954702,
+          "base": 13.212306295314926,
+          "optimistic": 17.836613498675153
+        },
+        "projectionYears": 7,
+        "growthDecayFactor": 0.7227138051819598,
+        "discountRate": 0.08857818675687396,
+        "terminalGrowth": 0.015613961148148866
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 51559.896961109815,
+          "base": 79322.91840170741,
+          "optimistic": 107085.93984230503
+        },
+        "auxiliary": -2900.554066993024,
+        "keyMetrics": {
+          "ruleOf40": 26.140658663047407
+        }
+      }
+    },
+    {
+      "id": "random-11",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 1186.6881233355414,
+        "arrGrowth": 0.32959257105024325,
+        "nrr": 1.3762939952536826,
+        "grossMargin": 0.8026828910011272,
+        "operatingMargin": 0.26604011278642137,
+        "fcfMargin": -0.03593780474720798,
+        "grossChurn": 0.14901434094062202,
+        "cacPaybackMonths": 28.810989113656806,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 4.077130177816066,
+          "base": 6.2725079658708704,
+          "optimistic": 8.467885753925676
+        },
+        "projectionYears": 4,
+        "growthDecayFactor": 0.9038107592557528,
+        "discountRate": 0.12369351561331664,
+        "terminalGrowth": 0.01643166946212576
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 6432.943749741334,
+          "base": 9896.83653806359,
+          "optimistic": 13360.729326385848
+        },
+        "auxiliary": -937.6877646425872,
+        "keyMetrics": {
+          "ruleOf40": 59.563268383666454
+        }
+      }
+    },
+    {
+      "id": "random-12",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 1829.9134204117408,
+        "arrGrowth": 0.9286202173836104,
+        "nrr": 1.2427861172599122,
+        "grossMargin": 0.5278302691085359,
+        "operatingMargin": 0.1679977281403109,
+        "fcfMargin": -0.04069253443731791,
+        "grossChurn": 0.28214390949324547,
+        "cacPaybackMonths": 15.462551578635,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 6.049762268257116,
+          "base": 9.30732656654941,
+          "optimistic": 12.564890864841704
+        },
+        "projectionYears": 4,
+        "growthDecayFactor": 0.7290320531413176,
+        "discountRate": 0.11739280564151847,
+        "terminalGrowth": 0.023791708556815942
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 11070.541164984272,
+          "base": 17031.601792283494,
+          "optimistic": 22992.66241958272
+        },
+        "auxiliary": -4324.865596942073,
+        "keyMetrics": {
+          "ruleOf40": 109.66179455239214
+        }
+      }
+    },
+    {
+      "id": "random-13",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 3693.4695929206023,
+        "arrGrowth": 0.4626206264172616,
+        "nrr": 1.0247962712203325,
+        "grossMargin": 0.546323312378892,
+        "operatingMargin": -0.3773132562204182,
+        "fcfMargin": 0.007585104191646097,
+        "grossChurn": 0.003979003950570825,
+        "cacPaybackMonths": 20.872167395101112,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 4.443251493215139,
+          "base": 6.835771528023291,
+          "optimistic": 9.228291562831444
+        },
+        "projectionYears": 4,
+        "growthDecayFactor": 0.9250557473775484,
+        "discountRate": 0.09515984515776049,
+        "terminalGrowth": 0.01548249755790185
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 16411.014283889177,
+          "base": 25247.71428290643,
+          "optimistic": 34084.41428192368
+        },
+        "auxiliary": 1214.5785883712224,
+        "keyMetrics": {
+          "ruleOf40": 8.530737019684336
+        }
+      }
+    },
+    {
+      "id": "random-14",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 4542.250965786383,
+        "arrGrowth": 1.2271114437344708,
+        "nrr": 1.3663088989081573,
+        "grossMargin": 0.8647906697729939,
+        "operatingMargin": 0.000673334296245276,
+        "fcfMargin": 0.11055359046325208,
+        "grossChurn": 0.03976215905829293,
+        "cacPaybackMonths": 13.69204481367915,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 6.598272879388224,
+          "base": 10.151189045212652,
+          "optimistic": 13.704105211037081
+        },
+        "projectionYears": 6,
+        "growthDecayFactor": 0.7324034249875648,
+        "discountRate": 0.06405858565773628,
+        "terminalGrowth": 0.008380337061324936
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 66748.7823777538,
+          "base": 102690.43442731354,
+          "optimistic": 138632.0864768733
+        },
+        "auxiliary": 132122.46309550223,
+        "keyMetrics": {
+          "ruleOf40": 122.77847780307161
+        }
+      }
+    },
+    {
+      "id": "random-15",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 4237.656655407206,
+        "arrGrowth": 0.19057118596384603,
+        "nrr": 1.3974304442153844,
+        "grossMargin": 0.5484294823889584,
+        "operatingMargin": 0.07450634741268303,
+        "fcfMargin": 0.2225347075739415,
+        "grossChurn": 0.11130111102765944,
+        "cacPaybackMonths": 7.1772973369392306,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 8.517919865575658,
+          "base": 13.104492100885627,
+          "optimistic": 17.6910643361956
+        },
+        "projectionYears": 3,
+        "growthDecayFactor": 0.7070382341614397,
+        "discountRate": 0.10652836934300312,
+        "terminalGrowth": 0.0038222041293985497
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 36096.01980858194,
+          "base": 55532.338167049136,
+          "optimistic": 74968.65652551634
+        },
+        "auxiliary": 13151.36628697507,
+        "keyMetrics": {
+          "ruleOf40": 26.507753337652908
+        }
+      }
+    },
+    {
+      "id": "random-16",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 2157.803876837525,
+        "arrGrowth": 0.3532262904118412,
+        "nrr": 1.0955174627368458,
+        "grossMargin": 0.7308433464918664,
+        "operatingMargin": 0.19110073724223897,
+        "fcfMargin": -0.02722496447140671,
+        "grossChurn": 0.14581498823011216,
+        "cacPaybackMonths": 21.587492131845984,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 5.500974653046101,
+          "base": 8.463037927763231,
+          "optimistic": 11.425101202480363
+        },
+        "projectionYears": 5,
+        "growthDecayFactor": 0.9154180041610757,
+        "discountRate": 0.13012429170577391,
+        "terminalGrowth": 0.01883686346820588
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 11870.024432727836,
+          "base": 18261.576050350515,
+          "optimistic": 24653.127667973196
+        },
+        "auxiliary": -1544.7642707029115,
+        "keyMetrics": {
+          "ruleOf40": 54.43270276540802
+        }
+      }
+    },
+    {
+      "id": "random-17",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 2724.5296628240644,
+        "arrGrowth": -0.11301162459716863,
+        "nrr": 1.2219081176654687,
+        "grossMargin": 0.76169021208246,
+        "operatingMargin": 0.20564301452318745,
+        "fcfMargin": -0.10825683483060869,
+        "grossChurn": 0.2270697272989631,
+        "cacPaybackMonths": 31.69620328217946,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 5.865674822712064,
+          "base": 9.024115111864713,
+          "optimistic": 12.182555401017364
+        },
+        "projectionYears": 6,
+        "growthDecayFactor": 0.9391048648879394,
+        "discountRate": 0.12910473700723643,
+        "terminalGrowth": 0.007064360667503381
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 15981.205046959303,
+          "base": 24586.46930301431,
+          "optimistic": 33191.733559069326
+        },
+        "auxiliary": -1486.7072808360376,
+        "keyMetrics": {
+          "ruleOf40": 9.263138992601883
+        }
+      }
+    },
+    {
+      "id": "random-18",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 943.0581337383559,
+        "arrGrowth": 0.3841762157789715,
+        "nrr": 1.0716701690478327,
+        "grossMargin": 0.5946917406657489,
+        "operatingMargin": -0.48255860745822243,
+        "fcfMargin": -0.16237820425378643,
+        "grossChurn": 0.16084282409822281,
+        "cacPaybackMonths": 29.149518391299434,
+        "arrBasis": "current",
+        "evArrMultiple": {
+          "pessimistic": 7.824668986566445,
+          "base": 12.0379522870253,
+          "optimistic": 16.251235587484157
+        },
+        "projectionYears": 5,
+        "growthDecayFactor": 0.9281756306506521,
+        "discountRate": 0.15094596155007448,
+        "terminalGrowth": 0.013402024700462568
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 7379.117731591745,
+          "base": 11352.488817833453,
+          "optimistic": 15325.859904075161
+        },
+        "auxiliary": -3601.1536336927647,
+        "keyMetrics": {
+          "ruleOf40": -9.838239167925094
+        }
+      }
+    },
+    {
+      "id": "random-19",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "arr": 4605.906374259683,
+        "arrGrowth": 0.8560681511106991,
+        "nrr": 1.3331716239930413,
+        "grossMargin": 0.5511190612987587,
+        "operatingMargin": -0.2917600444641616,
+        "fcfMargin": 0.09462284979899183,
+        "grossChurn": 0.06472851115083311,
+        "cacPaybackMonths": 19.512395247236256,
+        "arrBasis": "ntm",
+        "evArrMultiple": {
+          "pessimistic": 8.962956655852189,
+          "base": 13.789164085926442,
+          "optimistic": 18.6153715160007
+        },
+        "projectionYears": 6,
+        "growthDecayFactor": 0.8610779512593354,
+        "discountRate": 0.1258237306710298,
+        "terminalGrowth": 0.018945281437726568
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 76623.20619385419,
+          "base": 117881.85568285258,
+          "optimistic": 159140.505171851
+        },
+        "auxiliary": 46518.24921001334,
+        "keyMetrics": {
+          "ruleOf40": 56.430810664653755
+        }
+      }
+    }
+  ]
+}

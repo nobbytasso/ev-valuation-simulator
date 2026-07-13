@@ -1,0 +1,2387 @@
+{
+  "schemaVersion": "1.0",
+  "sector": "drug_discovery",
+  "generatedAt": "2026-07-13",
+  "seed": 20260714,
+  "caseCount": 24,
+  "cases": [
+    {
+      "id": "success-prob-zero",
+      "tags": [
+        "boundary",
+        "success-prob-0"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-prob-zero",
+            "currentPhase": "preclinical",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5,
+              "phase1": 0.55,
+              "phase2": 0.0,
+              "phase3": 0.6,
+              "filing": 0.85
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 2,
+              "phase2": 2,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 400.0,
+              "phase1": 900.0,
+              "phase2": 2000.0,
+              "phase3": 5000.0,
+              "filing": 400.0
+            },
+            "launchYear": 10,
+            "peakSales": 3000.0,
+            "yearsToPeak": 3,
+            "plateauYears": 3,
+            "declineRate": 0.1,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.65
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -936.518271127115,
+          "base": -965.4625419448512,
+          "optimistic": -995.8149902825811
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "success-prob-one",
+      "tags": [
+        "boundary",
+        "success-prob-1"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-prob-one",
+            "currentPhase": "preclinical",
+            "phaseSuccessProbs": {
+              "preclinical": 1.0,
+              "phase1": 1.0,
+              "phase2": 1.0,
+              "phase3": 1.0,
+              "filing": 1.0
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 2,
+              "phase2": 2,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 400.0,
+              "phase1": 900.0,
+              "phase2": 2000.0,
+              "phase3": 5000.0,
+              "filing": 400.0
+            },
+            "launchYear": 10,
+            "peakSales": 3000.0,
+            "yearsToPeak": 3,
+            "plateauYears": 3,
+            "declineRate": 0.1,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.65
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -1889.5385177331636,
+          "base": -1853.572805226456,
+          "optimistic": -1799.0416322660067
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "peak-sales-zero",
+      "tags": [
+        "boundary",
+        "zero-value"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-peak-zero",
+            "currentPhase": "phase2",
+            "phaseSuccessProbs": {
+              "preclinical": 1.0,
+              "phase1": 1.0,
+              "phase2": 0.35,
+              "phase3": 0.6,
+              "filing": 0.85
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 2,
+              "phase2": 2,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 400.0,
+              "phase1": 900.0,
+              "phase2": 2000.0,
+              "phase3": 5000.0,
+              "filing": 400.0
+            },
+            "launchYear": 6,
+            "peakSales": 0.0,
+            "yearsToPeak": 3,
+            "plateauYears": 2,
+            "declineRate": 0.1,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.65
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -2849.5310573835486,
+          "base": -2914.401146420711,
+          "optimistic": -2981.848588147213
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "discount-rate-upper-bound",
+      "tags": [
+        "boundary",
+        "discount-rate-upper-bound"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-high-discount",
+            "currentPhase": "phase3",
+            "phaseSuccessProbs": {
+              "preclinical": 1.0,
+              "phase1": 1.0,
+              "phase2": 1.0,
+              "phase3": 0.6,
+              "filing": 0.85
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 2,
+              "phase2": 2,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 400.0,
+              "phase1": 900.0,
+              "phase2": 2000.0,
+              "phase3": 5000.0,
+              "filing": 400.0
+            },
+            "launchYear": 4,
+            "peakSales": 4000.0,
+            "yearsToPeak": 3,
+            "plateauYears": 4,
+            "declineRate": 0.1,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.65
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.5,
+          "base": 0.45,
+          "optimistic": 0.4
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -1854.3112430584772,
+          "base": -1869.271943711022,
+          "optimistic": -1856.0301510282318
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-00",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "preclinical",
+            "phaseSuccessProbs": {
+              "preclinical": 0.45739915327640357,
+              "phase1": 0.5099187536199864,
+              "phase2": 0.32265169052312836,
+              "phase3": 0.5933790535519192,
+              "filing": 0.7572799188085091
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 1,
+              "phase2": 3,
+              "phase3": 3,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 440.5221155697467,
+              "phase1": 1355.2457249011086,
+              "phase2": 1045.2948834941412,
+              "phase3": 5867.992101441774,
+              "filing": 237.68387372413665
+            },
+            "launchYear": 10,
+            "peakSales": 4411.587743676113,
+            "yearsToPeak": 4,
+            "plateauYears": 1,
+            "declineRate": 0.1984021159414952,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.7674596279548063
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -1133.1850637164507,
+          "base": -1150.5633758673944,
+          "optimistic": -1167.6493690564523
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-01",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "phase3",
+            "phaseSuccessProbs": {
+              "preclinical": 0.510303598054365,
+              "phase1": 0.6598154846495752,
+              "phase2": 0.3712084821084897,
+              "phase3": 0.5714562364957291,
+              "filing": 0.9390150045400338
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 2,
+              "phase2": 2,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 321.97820280915187,
+              "phase1": 978.1548053017298,
+              "phase2": 2666.838631480994,
+              "phase3": 4934.0924944045555,
+              "filing": 242.66738202781426
+            },
+            "launchYear": 3,
+            "peakSales": 4565.269067772924,
+            "yearsToPeak": 2,
+            "plateauYears": 1,
+            "declineRate": 0.12817901091994624,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.5492535182820671
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "preclinical",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5091173429459008,
+              "phase1": 0.5598504572770577,
+              "phase2": 0.402733234356733,
+              "phase3": 0.5577833878377921,
+              "filing": 0.8309693502583004
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 1,
+              "phase2": 3,
+              "phase3": 3,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 596.8311188452244,
+              "phase1": 1257.4919211649376,
+              "phase2": 1569.8912299617637,
+              "phase3": 5295.814085595135,
+              "filing": 205.78512901860086
+            },
+            "launchYear": 12,
+            "peakSales": 2066.3685635658476,
+            "yearsToPeak": 3,
+            "plateauYears": 2,
+            "declineRate": 0.1889953853548037,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.1888928368865408,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 533.1015369142466
+                },
+                {
+                  "phase": "phase1",
+                  "amount": 1000.9637239989909
+                },
+                {
+                  "phase": "launch",
+                  "amount": 1720.6502075200606
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-3",
+            "currentPhase": "phase2",
+            "phaseSuccessProbs": {
+              "preclinical": 0.44349740239542357,
+              "phase1": 0.6352637564889603,
+              "phase2": 0.34691978488703706,
+              "phase3": 0.578364833752221,
+              "filing": 0.7995417527399996
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 2,
+              "phase2": 1,
+              "phase3": 4,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 598.5980316267753,
+              "phase1": 557.2370360268333,
+              "phase2": 2144.506152748112,
+              "phase3": 7724.240615324258,
+              "filing": 246.86194313796392
+            },
+            "launchYear": 7,
+            "peakSales": 3246.071273869859,
+            "yearsToPeak": 3,
+            "plateauYears": 5,
+            "declineRate": 0.1628955993250759,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.586888409654084
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -3607.1918592129737,
+          "base": -3440.141169456583,
+          "optimistic": -3248.3960640231553
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-02",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "filing",
+            "phaseSuccessProbs": {
+              "preclinical": 0.47394615009081437,
+              "phase1": 0.6083304509563053,
+              "phase2": 0.3059550011370654,
+              "phase3": 0.5504482456016098,
+              "filing": 0.8317574868496501
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 1,
+              "phase2": 1,
+              "phase3": 4,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 218.46622748158487,
+              "phase1": 1314.518032087979,
+              "phase2": 2004.8061068130287,
+              "phase3": 7383.756574700217,
+              "filing": 420.00257804391345
+            },
+            "launchYear": 4,
+            "peakSales": 4431.138910514872,
+            "yearsToPeak": 2,
+            "plateauYears": 1,
+            "declineRate": 0.16500949139610133,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.7480153399607944
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "filing",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5988266136696999,
+              "phase1": 0.502285288704174,
+              "phase2": 0.44503657870515323,
+              "phase3": 0.6329408775195134,
+              "filing": 0.7794247695344063
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 3,
+              "phase2": 2,
+              "phase3": 4,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 273.8144018203,
+              "phase1": 535.7783029426771,
+              "phase2": 2534.554666724235,
+              "phase3": 7388.3442637179005,
+              "filing": 612.2434518546806
+            },
+            "launchYear": 2,
+            "peakSales": 1417.8713050433669,
+            "yearsToPeak": 3,
+            "plateauYears": 2,
+            "declineRate": 0.1765579689618858,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.12246469663425122,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 1913.4804907456344
+                },
+                {
+                  "phase": "launch",
+                  "amount": 1149.8847213869567
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-3",
+            "currentPhase": "phase1",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4703901237861705,
+              "phase1": 0.6820103852840584,
+              "phase2": 0.4223056318137241,
+              "phase3": 0.5336012752018088,
+              "filing": 0.773617076121137
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 2,
+              "phase2": 1,
+              "phase3": 4,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 593.1705477354178,
+              "phase1": 813.2739398509564,
+              "phase2": 1013.6788498600207,
+              "phase3": 6991.850945621555,
+              "filing": 743.5947803356868
+            },
+            "launchYear": 11,
+            "peakSales": 1616.0269256317054,
+            "yearsToPeak": 5,
+            "plateauYears": 1,
+            "declineRate": 0.17106738835268037,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.08049201552269225,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 1210.120745914762
+                },
+                {
+                  "phase": "phase2",
+                  "amount": 1362.4000976979373
+                },
+                {
+                  "phase": "launch",
+                  "amount": 951.0283253081091
+                }
+              ]
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 7975.087459338141,
+          "base": 8491.082250869644,
+          "optimistic": 9051.765012109701
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-03",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "phase1",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5030917649228409,
+              "phase1": 0.6045364401045298,
+              "phase2": 0.3033158696118021,
+              "phase3": 0.5228412851114053,
+              "filing": 0.8571257336113184
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 1,
+              "phase2": 1,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 264.2183433841433,
+              "phase1": 585.8260922309773,
+              "phase2": 2865.1181106475324,
+              "phase3": 3543.5184253452317,
+              "filing": 398.06164464891765
+            },
+            "launchYear": 7,
+            "peakSales": 683.6490556370303,
+            "yearsToPeak": 5,
+            "plateauYears": 2,
+            "declineRate": 0.07501081703957571,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.1083438976343297,
+              "milestones": [
+                {
+                  "phase": "phase3",
+                  "amount": 1188.6238965406346
+                },
+                {
+                  "phase": "filing",
+                  "amount": 1081.657129584216
+                },
+                {
+                  "phase": "launch",
+                  "amount": 991.9342276900499
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "phase2",
+            "phaseSuccessProbs": {
+              "preclinical": 0.46567940174477657,
+              "phase1": 0.647907207746402,
+              "phase2": 0.3378568480615122,
+              "phase3": 0.5051519089569987,
+              "filing": 0.852620196140473
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 3,
+              "phase2": 1,
+              "phase3": 3,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 542.9714222912173,
+              "phase1": 1042.0606740921933,
+              "phase2": 1135.275838557263,
+              "phase3": 5128.72972220738,
+              "filing": 372.12299616491316
+            },
+            "launchYear": 8,
+            "peakSales": 1363.5644320310935,
+            "yearsToPeak": 3,
+            "plateauYears": 2,
+            "declineRate": 0.10023643625593584,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.5187955530830709
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -4220.226288161004,
+          "base": -4278.342203071378,
+          "optimistic": -4336.378026208361
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-04",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "phase2",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4583269625474603,
+              "phase1": 0.6089963822870125,
+              "phase2": 0.31002797221457457,
+              "phase3": 0.5760059792863162,
+              "filing": 0.9435054389752104
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 3,
+              "phase2": 1,
+              "phase3": 2,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 371.56856392854274,
+              "phase1": 831.8765937952026,
+              "phase2": 2972.096076912697,
+              "phase3": 3662.381865839693,
+              "filing": 393.8612928292742
+            },
+            "launchYear": 4,
+            "peakSales": 1262.3397814873183,
+            "yearsToPeak": 4,
+            "plateauYears": 4,
+            "declineRate": 0.054189677159307746,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.6776187952305084
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "phase3",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5037474217739185,
+              "phase1": 0.504075708423567,
+              "phase2": 0.4439586784821197,
+              "phase3": 0.6373880565704921,
+              "filing": 0.8069577631681825
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 3,
+              "phase2": 2,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 402.8937651461098,
+              "phase1": 1456.0604899751434,
+              "phase2": 2742.0915729280446,
+              "phase3": 3292.0623394991267,
+              "filing": 363.6773686170172
+            },
+            "launchYear": 5,
+            "peakSales": 532.716996766669,
+            "yearsToPeak": 5,
+            "plateauYears": 5,
+            "declineRate": 0.1260070889731984,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.1502037112208936,
+              "milestones": [
+                {
+                  "phase": "phase3",
+                  "amount": 1929.892114858153
+                },
+                {
+                  "phase": "filing",
+                  "amount": 370.9243650979733
+                },
+                {
+                  "phase": "launch",
+                  "amount": 2634.5996361823613
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-3",
+            "currentPhase": "filing",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4906378637619202,
+              "phase1": 0.6165760855940126,
+              "phase2": 0.32873705185018154,
+              "phase3": 0.6302668028297721,
+              "filing": 0.8055078029967491
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 3,
+              "phase2": 3,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 337.4117795971019,
+              "phase1": 1298.8602294158504,
+              "phase2": 1979.403546522452,
+              "phase3": 7848.474332481592,
+              "filing": 677.2433849333167
+            },
+            "launchYear": 2,
+            "peakSales": 2881.2181652155523,
+            "yearsToPeak": 3,
+            "plateauYears": 5,
+            "declineRate": 0.14891201399182907,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.7453313464173432
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 3891.539847952416,
+          "base": 4416.5966135940635,
+          "optimistic": 4991.51660388697
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-05",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "filing",
+            "phaseSuccessProbs": {
+              "preclinical": 0.44470622258339865,
+              "phase1": 0.6964960030361711,
+              "phase2": 0.280600476628976,
+              "phase3": 0.610290200237015,
+              "filing": 0.7882513501050978
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 3,
+              "phase2": 1,
+              "phase3": 4,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 432.7557651744546,
+              "phase1": 709.7070225228019,
+              "phase2": 2188.9925788581904,
+              "phase3": 6046.2976524622645,
+              "filing": 793.1692667631978
+            },
+            "launchYear": 2,
+            "peakSales": 1668.4344803057986,
+            "yearsToPeak": 2,
+            "plateauYears": 2,
+            "declineRate": 0.07129613888654196,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.12783720674673762,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 865.1554305729861
+                },
+                {
+                  "phase": "launch",
+                  "amount": 538.4471141407275
+                }
+              ]
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1183.5225088620311,
+          "base": 1236.1994395397057,
+          "optimistic": 1293.0519104475172
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-06",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "phase3",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5552228706555428,
+              "phase1": 0.510571104792926,
+              "phase2": 0.3065942453405808,
+              "phase3": 0.5575365561111302,
+              "filing": 0.8183800887436959
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 1,
+              "phase2": 1,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 495.184971084509,
+              "phase1": 833.8375659216329,
+              "phase2": 1930.1084728110523,
+              "phase3": 5443.680778124015,
+              "filing": 499.43336213593284
+            },
+            "launchYear": 3,
+            "peakSales": 2955.860763461847,
+            "yearsToPeak": 5,
+            "plateauYears": 1,
+            "declineRate": 0.09766572183365049,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.19295852063814517,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 1494.2781184179426
+                },
+                {
+                  "phase": "phase3",
+                  "amount": 1084.9150284251978
+                },
+                {
+                  "phase": "launch",
+                  "amount": 2795.465163732755
+                }
+              ]
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -1465.8359340419945,
+          "base": -1418.531950130786,
+          "optimistic": -1364.9636216077527
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-07",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "phase2",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4720796256626684,
+              "phase1": 0.5933810118195456,
+              "phase2": 0.36814162682271373,
+              "phase3": 0.6783643238043469,
+              "filing": 0.7915497996677002
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 2,
+              "phase2": 1,
+              "phase3": 2,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 404.5456254558057,
+              "phase1": 1150.9842230441868,
+              "phase2": 2257.072331335232,
+              "phase3": 3846.0374661637284,
+              "filing": 716.9775467180544
+            },
+            "launchYear": 4,
+            "peakSales": 4895.761245240852,
+            "yearsToPeak": 2,
+            "plateauYears": 4,
+            "declineRate": 0.06352437884683584,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.19829450823726202,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 1441.716237085935
+                },
+                {
+                  "phase": "phase2",
+                  "amount": 256.9989860417328
+                },
+                {
+                  "phase": "launch",
+                  "amount": 857.5650415037462
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "phase2",
+            "phaseSuccessProbs": {
+              "preclinical": 0.40576033680399987,
+              "phase1": 0.6762673128165455,
+              "phase2": 0.3994155558411913,
+              "phase3": 0.5013367976098889,
+              "filing": 0.8208604548544223
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 3,
+              "phase2": 3,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 207.72122896562308,
+              "phase1": 1035.9990480168967,
+              "phase2": 2852.8043826423527,
+              "phase3": 6651.413576377351,
+              "filing": 326.4551665723459
+            },
+            "launchYear": 8,
+            "peakSales": 2269.5879102710737,
+            "yearsToPeak": 4,
+            "plateauYears": 0,
+            "declineRate": 0.09777498974664467,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.19375287953023101,
+              "milestones": [
+                {
+                  "phase": "phase2",
+                  "amount": 301.3767827883222
+                },
+                {
+                  "phase": "filing",
+                  "amount": 714.6064415291435
+                },
+                {
+                  "phase": "launch",
+                  "amount": 779.661368547037
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-3",
+            "currentPhase": "preclinical",
+            "phaseSuccessProbs": {
+              "preclinical": 0.42988809299247693,
+              "phase1": 0.5956988715031013,
+              "phase2": 0.3259737315672727,
+              "phase3": 0.5040645509327766,
+              "filing": 0.8551015664683066
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 2,
+              "phase2": 3,
+              "phase3": 2,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 262.8057500573608,
+              "phase1": 1230.7830119013438,
+              "phase2": 1438.3142064080882,
+              "phase3": 6457.952568437024,
+              "filing": 444.8803393387567
+            },
+            "launchYear": 10,
+            "peakSales": 1965.7093892521966,
+            "yearsToPeak": 3,
+            "plateauYears": 5,
+            "declineRate": 0.11087560615267082,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.1802428240834876,
+              "milestones": [
+                {
+                  "phase": "preclinical",
+                  "amount": 1354.6589570574695
+                },
+                {
+                  "phase": "filing",
+                  "amount": 255.5453438114381
+                },
+                {
+                  "phase": "launch",
+                  "amount": 2341.75508706907
+                }
+              ]
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -5112.1253994518565,
+          "base": -5193.90718968497,
+          "optimistic": -5275.207900177094
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-08",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "preclinical",
+            "phaseSuccessProbs": {
+              "preclinical": 0.49184433221751445,
+              "phase1": 0.5232143485336216,
+              "phase2": 0.2917959177704179,
+              "phase3": 0.5693612990167758,
+              "filing": 0.8589606943277046
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 1,
+              "phase2": 1,
+              "phase3": 3,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 466.8623379873908,
+              "phase1": 655.3207829557361,
+              "phase2": 1719.882364824341,
+              "phase3": 6220.337629846606,
+              "filing": 649.0677974655355
+            },
+            "launchYear": 10,
+            "peakSales": 1423.7736922230665,
+            "yearsToPeak": 3,
+            "plateauYears": 4,
+            "declineRate": 0.1647711740934135,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.7033771527270787
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -1223.767253582653,
+          "base": -1248.4246492664513,
+          "optimistic": -1273.6429090451597
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-09",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "preclinical",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5841267326522177,
+              "phase1": 0.5632937668431518,
+              "phase2": 0.3281192387087479,
+              "phase3": 0.6155528583180387,
+              "filing": 0.8759217160717963
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 1,
+              "phase2": 3,
+              "phase3": 3,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 556.259261848525,
+              "phase1": 957.8893574853244,
+              "phase2": 2742.7365104574264,
+              "phase3": 5654.603180984201,
+              "filing": 424.47250850494316
+            },
+            "launchYear": 11,
+            "peakSales": 1996.4634453062677,
+            "yearsToPeak": 2,
+            "plateauYears": 2,
+            "declineRate": 0.14610285939036877,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.10059839780385361,
+              "milestones": [
+                {
+                  "phase": "phase3",
+                  "amount": 1454.5947920543051
+                },
+                {
+                  "phase": "preclinical",
+                  "amount": 219.58858588521358
+                },
+                {
+                  "phase": "launch",
+                  "amount": 2879.788114039836
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "phase3",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5816492263926776,
+              "phase1": 0.6053307267974231,
+              "phase2": 0.2851223689284709,
+              "phase3": 0.6373824859883401,
+              "filing": 0.9104676084990135
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 2,
+              "phase2": 1,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 504.81739950923685,
+              "phase1": 618.3709817088535,
+              "phase2": 2189.746007452155,
+              "phase3": 6546.783150222067,
+              "filing": 539.8522605282794
+            },
+            "launchYear": 3,
+            "peakSales": 3026.2322398235387,
+            "yearsToPeak": 5,
+            "plateauYears": 2,
+            "declineRate": 0.16232819339956034,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.10164117986898073,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 370.3452765789642
+                },
+                {
+                  "phase": "phase3",
+                  "amount": 1956.3474821835277
+                },
+                {
+                  "phase": "launch",
+                  "amount": 788.9518095059573
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-3",
+            "currentPhase": "phase3",
+            "phaseSuccessProbs": {
+              "preclinical": 0.498397310470292,
+              "phase1": 0.521144201266965,
+              "phase2": 0.44109506087894756,
+              "phase3": 0.5171304896450908,
+              "filing": 0.8750364059009118
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 3,
+              "phase2": 2,
+              "phase3": 2,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 399.3669256968361,
+              "phase1": 1217.356826643589,
+              "phase2": 2472.4840296697594,
+              "phase3": 6903.737880748222,
+              "filing": 513.5522026426032
+            },
+            "launchYear": 4,
+            "peakSales": 862.196775761593,
+            "yearsToPeak": 3,
+            "plateauYears": 4,
+            "declineRate": 0.16960987850098563,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.7510133046465848
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -9540.177510154408,
+          "base": -9590.847124829379,
+          "optimistic": -9634.887652010966
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-10",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "preclinical",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4874286275188794,
+              "phase1": 0.6030316576144281,
+              "phase2": 0.2520927703333516,
+              "phase3": 0.69234109820228,
+              "filing": 0.9218470770407275
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 3,
+              "phase2": 2,
+              "phase3": 2,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 394.91549774439113,
+              "phase1": 926.0839532346172,
+              "phase2": 2707.5485835252252,
+              "phase3": 6969.657458859581,
+              "filing": 246.79231626289373
+            },
+            "launchYear": 12,
+            "peakSales": 3039.2382481703166,
+            "yearsToPeak": 2,
+            "plateauYears": 4,
+            "declineRate": 0.0721438716239655,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.7382777232067746
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -1014.7864086018299,
+          "base": -1061.291759716929,
+          "optimistic": -1110.64179944595
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-11",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "filing",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4504226719927611,
+              "phase1": 0.6463489998093666,
+              "phase2": 0.3424305846705923,
+              "phase3": 0.5761079343775413,
+              "filing": 0.8681091219438808
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 1,
+              "phase2": 2,
+              "phase3": 2,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 220.21244385315663,
+              "phase1": 729.6295100104476,
+              "phase2": 1738.8769556455838,
+              "phase3": 5543.774053535726,
+              "filing": 652.822957295305
+            },
+            "launchYear": 3,
+            "peakSales": 2113.7237730856114,
+            "yearsToPeak": 4,
+            "plateauYears": 0,
+            "declineRate": 0.12127085275356432,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.1251623532552131,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 542.1230015549253
+                },
+                {
+                  "phase": "launch",
+                  "amount": 929.3736381434194
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "preclinical",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5744828618945895,
+              "phase1": 0.6433534367576905,
+              "phase2": 0.3344001551221569,
+              "phase3": 0.5800859156601256,
+              "filing": 0.9456307632503211
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 3,
+              "phase2": 1,
+              "phase3": 4,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 229.84378288482685,
+              "phase1": 1249.6652135292527,
+              "phase2": 1204.4123506706237,
+              "phase3": 4967.02289241538,
+              "filing": 420.83155857898055
+            },
+            "launchYear": 12,
+            "peakSales": 2270.01029918475,
+            "yearsToPeak": 2,
+            "plateauYears": 5,
+            "declineRate": 0.14260080254690763,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.5377804119971735
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 118.26020389124642,
+          "base": 138.47590274553772,
+          "optimistic": 161.34750487622273
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-12",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "phase1",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4019542529708444,
+              "phase1": 0.5616872353382946,
+              "phase2": 0.32160828898609506,
+              "phase3": 0.5197979171301714,
+              "filing": 0.9319803135951509
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 2,
+              "phase2": 1,
+              "phase3": 4,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 300.37499741252634,
+              "phase1": 537.7437000775722,
+              "phase2": 1675.5375681358996,
+              "phase3": 3076.2314142001146,
+              "filing": 696.6201063258329
+            },
+            "launchYear": 10,
+            "peakSales": 663.3843538780643,
+            "yearsToPeak": 5,
+            "plateauYears": 3,
+            "declineRate": 0.1549331979719703,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.11540388109305488,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 1747.9741984946581
+                },
+                {
+                  "phase": "phase3",
+                  "amount": 1347.8355046814238
+                },
+                {
+                  "phase": "launch",
+                  "amount": 2468.4763226696004
+                }
+              ]
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -1204.699184712788,
+          "base": -1226.40003457435,
+          "optimistic": -1248.2157770022816
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-13",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "filing",
+            "phaseSuccessProbs": {
+              "preclinical": 0.47564759459963507,
+              "phase1": 0.5356241343606463,
+              "phase2": 0.32680085943167336,
+              "phase3": 0.5887127167980282,
+              "filing": 0.7702841173679312
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 2,
+              "phase2": 1,
+              "phase3": 4,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 592.7790675078206,
+              "phase1": 874.3468199197448,
+              "phase2": 1268.773294161879,
+              "phase3": 6000.25022598026,
+              "filing": 248.8922872097691
+            },
+            "launchYear": 1,
+            "peakSales": 1818.2729082314759,
+            "yearsToPeak": 3,
+            "plateauYears": 1,
+            "declineRate": 0.09139318101318117,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.6771679551175377
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "preclinical",
+            "phaseSuccessProbs": {
+              "preclinical": 0.593604499694186,
+              "phase1": 0.5392745178601492,
+              "phase2": 0.413274433891607,
+              "phase3": 0.675154090538614,
+              "filing": 0.9264889366237933
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 3,
+              "phase2": 1,
+              "phase3": 2,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 566.2911802930483,
+              "phase1": 1386.9010850503012,
+              "phase2": 2097.345918287674,
+              "phase3": 5463.658216368234,
+              "filing": 321.2768065807454
+            },
+            "launchYear": 12,
+            "peakSales": 666.8203297298057,
+            "yearsToPeak": 2,
+            "plateauYears": 1,
+            "declineRate": 0.16748975122388612,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.14340474930583996,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 673.3428699597379
+                },
+                {
+                  "phase": "phase2",
+                  "amount": 271.20635786880405
+                },
+                {
+                  "phase": "launch",
+                  "amount": 825.3812788228533
+                }
+              ]
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 2753.5054577401443,
+          "base": 2914.257926679379,
+          "optimistic": 3089.5240298526082
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-14",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "phase1",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4814969828594836,
+              "phase1": 0.5948866365414308,
+              "phase2": 0.2525646106474897,
+              "phase3": 0.5821182534440218,
+              "filing": 0.823406384268919
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 3,
+              "phase2": 1,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 513.8814386711317,
+              "phase1": 1128.3392118419197,
+              "phase2": 2894.9183469855734,
+              "phase3": 3203.293663021291,
+              "filing": 520.9762670962543
+            },
+            "launchYear": 10,
+            "peakSales": 647.857801030495,
+            "yearsToPeak": 2,
+            "plateauYears": 5,
+            "declineRate": 0.15988737882600124,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.128776258571999,
+              "milestones": [
+                {
+                  "phase": "phase3",
+                  "amount": 1201.1723408759444
+                },
+                {
+                  "phase": "phase1",
+                  "amount": 392.121891431289
+                },
+                {
+                  "phase": "launch",
+                  "amount": 2477.316226793947
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "phase1",
+            "phaseSuccessProbs": {
+              "preclinical": 0.41268063450747833,
+              "phase1": 0.6879932436166658,
+              "phase2": 0.4132168031034107,
+              "phase3": 0.5091600933114329,
+              "filing": 0.9431395357101606
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 3,
+              "phase2": 1,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 449.4682555963229,
+              "phase1": 1292.6230590311964,
+              "phase2": 1508.134635453514,
+              "phase3": 4775.919140082243,
+              "filing": 702.2052458225353
+            },
+            "launchYear": 10,
+            "peakSales": 2819.6248559771525,
+            "yearsToPeak": 3,
+            "plateauYears": 4,
+            "declineRate": 0.12672313497359938,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.16417076344603973,
+              "milestones": [
+                {
+                  "phase": "phase3",
+                  "amount": 454.41811001375737
+                },
+                {
+                  "phase": "filing",
+                  "amount": 1249.9321903458933
+                },
+                {
+                  "phase": "launch",
+                  "amount": 2772.69091967955
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-3",
+            "currentPhase": "filing",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4735082012015485,
+              "phase1": 0.514196830664963,
+              "phase2": 0.26142647849249984,
+              "phase3": 0.6136823175966161,
+              "filing": 0.8907440695714324
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 3,
+              "phase2": 3,
+              "phase3": 4,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 413.01872200445916,
+              "phase1": 816.9998760609285,
+              "phase2": 1440.4282012420538,
+              "phase3": 3810.006485492994,
+              "filing": 742.04304386383
+            },
+            "launchYear": 2,
+            "peakSales": 3968.1229928180514,
+            "yearsToPeak": 2,
+            "plateauYears": 4,
+            "declineRate": 0.07552788737526155,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.6711396296363971
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 7146.609223644912,
+          "base": 7747.081456371214,
+          "optimistic": 8407.078347024799
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-15",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "phase1",
+            "phaseSuccessProbs": {
+              "preclinical": 0.47535575128845875,
+              "phase1": 0.5296673978137924,
+              "phase2": 0.3385024578279651,
+              "phase3": 0.5617885006254897,
+              "filing": 0.7542941451743798
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 1,
+              "phase2": 1,
+              "phase3": 4,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 363.9990900641777,
+              "phase1": 1401.3689510411077,
+              "phase2": 2467.353472727676,
+              "phase3": 7885.77197307312,
+              "filing": 263.38883196651767
+            },
+            "launchYear": 6,
+            "peakSales": 4869.270941048815,
+            "yearsToPeak": 4,
+            "plateauYears": 0,
+            "declineRate": 0.14635397190198196,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.12696412695562814,
+              "milestones": [
+                {
+                  "phase": "phase1",
+                  "amount": 1068.1596673983795
+                },
+                {
+                  "phase": "phase3",
+                  "amount": 730.0442995034642
+                },
+                {
+                  "phase": "launch",
+                  "amount": 1628.0434317845904
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "phase2",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5455025784995535,
+              "phase1": 0.5837843324089829,
+              "phase2": 0.30435817375616175,
+              "phase3": 0.5391569183803658,
+              "filing": 0.7841227341776715
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 3,
+              "phase2": 2,
+              "phase3": 3,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 596.1473315164042,
+              "phase1": 1073.561784504239,
+              "phase2": 2714.4736417482372,
+              "phase3": 3175.896642423744,
+              "filing": 620.6956605211687
+            },
+            "launchYear": 7,
+            "peakSales": 3909.001614678814,
+            "yearsToPeak": 4,
+            "plateauYears": 0,
+            "declineRate": 0.1093785992564474,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.14926289973490142,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 520.2092649261405
+                },
+                {
+                  "phase": "phase3",
+                  "amount": 1945.0437439956686
+                },
+                {
+                  "phase": "launch",
+                  "amount": 2562.824949760431
+                }
+              ]
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -4288.714692872728,
+          "base": -4344.436155164276,
+          "optimistic": -4399.892557002762
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-16",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "filing",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5697857275052401,
+              "phase1": 0.5255452222654765,
+              "phase2": 0.41929706496990193,
+              "phase3": 0.5379677732159983,
+              "filing": 0.780609338963883
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 2,
+              "phase2": 1,
+              "phase3": 3,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 369.39329349700336,
+              "phase1": 1163.3599917180572,
+              "phase2": 1060.154182599622,
+              "phase3": 7901.674708711022,
+              "filing": 387.86173270020566
+            },
+            "launchYear": 1,
+            "peakSales": 4352.593862177286,
+            "yearsToPeak": 4,
+            "plateauYears": 0,
+            "declineRate": 0.07177019337145642,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.16595058585276776,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 829.3985613666244
+                },
+                {
+                  "phase": "launch",
+                  "amount": 2969.287618428542
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "phase1",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5324449812555576,
+              "phase1": 0.6127898572787399,
+              "phase2": 0.34405359097431226,
+              "phase3": 0.5910868650535809,
+              "filing": 0.8521515604338795
+            },
+            "phaseDurations": {
+              "preclinical": 1,
+              "phase1": 2,
+              "phase2": 1,
+              "phase3": 4,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 410.9201245587334,
+              "phase1": 1322.0737584488015,
+              "phase2": 1870.6562313683544,
+              "phase3": 7911.9884423948815,
+              "filing": 608.0853228463664
+            },
+            "launchYear": 9,
+            "peakSales": 1011.1173584471312,
+            "yearsToPeak": 3,
+            "plateauYears": 4,
+            "declineRate": 0.1332029204114068,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.5681979397405641
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 2155.1551537211053,
+          "base": 2251.3037885567637,
+          "optimistic": 2357.664029925396
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-17",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "phase2",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5739004126422051,
+              "phase1": 0.6260683942431917,
+              "phase2": 0.2637617522569009,
+              "phase3": 0.5121530731171698,
+              "filing": 0.7528642858549539
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 3,
+              "phase2": 1,
+              "phase3": 4,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 371.85089711310934,
+              "phase1": 893.6892432451588,
+              "phase2": 2966.0331267089377,
+              "phase3": 7745.166351516392,
+              "filing": 449.1575190510002
+            },
+            "launchYear": 7,
+            "peakSales": 3444.3092476722013,
+            "yearsToPeak": 5,
+            "plateauYears": 2,
+            "declineRate": 0.10564207462185064,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.5879244744868277
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "phase3",
+            "phaseSuccessProbs": {
+              "preclinical": 0.41937853995523633,
+              "phase1": 0.6487537378209344,
+              "phase2": 0.39203373439137806,
+              "phase3": 0.642683754405263,
+              "filing": 0.888351461376385
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 1,
+              "phase2": 2,
+              "phase3": 4,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 464.1002383870371,
+              "phase1": 657.3847261299237,
+              "phase2": 2207.7469327938006,
+              "phase3": 6884.953996672044,
+              "filing": 373.8573478012586
+            },
+            "launchYear": 6,
+            "peakSales": 3938.310905288418,
+            "yearsToPeak": 4,
+            "plateauYears": 5,
+            "declineRate": 0.12642904981577724,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.14743141217022218,
+              "milestones": [
+                {
+                  "phase": "phase3",
+                  "amount": 619.2674942087365
+                },
+                {
+                  "phase": "filing",
+                  "amount": 668.1689751610254
+                },
+                {
+                  "phase": "launch",
+                  "amount": 1693.1556201425153
+                }
+              ]
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -7104.081080957674,
+          "base": -7117.626655722257,
+          "optimistic": -7120.8396334919435
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-18",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "filing",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5701764075032206,
+              "phase1": 0.6084242662167352,
+              "phase2": 0.2994053059967926,
+              "phase3": 0.5162639181876115,
+              "filing": 0.8993130275788717
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 1,
+              "phase2": 1,
+              "phase3": 3,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 241.62668036553129,
+              "phase1": 1144.3327315646998,
+              "phase2": 2251.17973674503,
+              "phase3": 3019.645722040417,
+              "filing": 602.7782325186964
+            },
+            "launchYear": 2,
+            "peakSales": 4706.1994507951695,
+            "yearsToPeak": 3,
+            "plateauYears": 0,
+            "declineRate": 0.06709524417062374,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.11284260025649206,
+              "milestones": [
+                {
+                  "phase": "filing",
+                  "amount": 1584.7679181699084
+                },
+                {
+                  "phase": "launch",
+                  "amount": 625.3521069450247
+                }
+              ]
+            }
+          },
+          {
+            "name": "asset-2",
+            "currentPhase": "phase2",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4894907575302653,
+              "phase1": 0.6881498713103024,
+              "phase2": 0.35814260413041765,
+              "phase3": 0.6137271968587529,
+              "filing": 0.9215146443209352
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 1,
+              "phase2": 3,
+              "phase3": 2,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 208.88452377026948,
+              "phase1": 1466.8246785617544,
+              "phase2": 2206.327069240352,
+              "phase3": 7433.887252524435,
+              "filing": 742.2031656479304
+            },
+            "launchYear": 6,
+            "peakSales": 4205.063530032028,
+            "yearsToPeak": 3,
+            "plateauYears": 5,
+            "declineRate": 0.19883832081342884,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.6971302897333683
+            }
+          },
+          {
+            "name": "asset-3",
+            "currentPhase": "phase1",
+            "phaseSuccessProbs": {
+              "preclinical": 0.5057263052772109,
+              "phase1": 0.5752913608485469,
+              "phase2": 0.3590506321354887,
+              "phase3": 0.6455565829285485,
+              "filing": 0.9480613805166574
+            },
+            "phaseDurations": {
+              "preclinical": 2,
+              "phase1": 3,
+              "phase2": 2,
+              "phase3": 3,
+              "filing": 2
+            },
+            "developmentCosts": {
+              "preclinical": 431.9429632764031,
+              "phase1": 540.359688047711,
+              "phase2": 2909.8839825291698,
+              "phase3": 3254.3637644954897,
+              "filing": 622.1758842690949
+            },
+            "launchYear": 10,
+            "peakSales": 3543.476436642756,
+            "yearsToPeak": 2,
+            "plateauYears": 2,
+            "declineRate": 0.07812454360154103,
+            "commercialization": {
+              "type": "own",
+              "contributionMargin": 0.576602690553279
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -168.2876173961863,
+          "base": -10.234504545028813,
+          "optimistic": 171.82237350703645
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-19",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "assets": [
+          {
+            "name": "asset-1",
+            "currentPhase": "phase3",
+            "phaseSuccessProbs": {
+              "preclinical": 0.4980196702131927,
+              "phase1": 0.649850488178793,
+              "phase2": 0.29973557532414075,
+              "phase3": 0.6002698002859087,
+              "filing": 0.9180276663316606
+            },
+            "phaseDurations": {
+              "preclinical": 3,
+              "phase1": 3,
+              "phase2": 3,
+              "phase3": 2,
+              "filing": 1
+            },
+            "developmentCosts": {
+              "preclinical": 546.6344124631472,
+              "phase1": 1452.1344423323033,
+              "phase2": 1242.643714124421,
+              "phase3": 5539.409698719272,
+              "filing": 469.23144366418853
+            },
+            "launchYear": 5,
+            "peakSales": 4378.236740693123,
+            "yearsToPeak": 4,
+            "plateauYears": 4,
+            "declineRate": 0.05064228691435522,
+            "commercialization": {
+              "type": "license",
+              "royaltyRate": 0.15620242439172305,
+              "milestones": [
+                {
+                  "phase": "phase3",
+                  "amount": 1285.3088790605518
+                },
+                {
+                  "phase": "filing",
+                  "amount": 552.5408067200715
+                },
+                {
+                  "phase": "launch",
+                  "amount": 2416.984532548574
+                }
+              ]
+            }
+          }
+        ],
+        "discountRate": {
+          "pessimistic": 0.12,
+          "base": 0.11,
+          "optimistic": 0.1
+        },
+        "modelHorizonYears": 15
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": -1763.2221927077887,
+          "base": -1670.9925323889108,
+          "optimistic": -1566.8024227104004
+        },
+        "keyMetrics": {}
+      }
+    }
+  ]
+}

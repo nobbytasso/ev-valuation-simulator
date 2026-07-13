@@ -1,0 +1,805 @@
+{
+  "schemaVersion": "1.0",
+  "sector": "medical_device",
+  "generatedAt": "2026-07-13",
+  "seed": 20260715,
+  "caseCount": 24,
+  "cases": [
+    {
+      "id": "zero-growth",
+      "tags": [
+        "boundary",
+        "zero-growth"
+      ],
+      "input": {
+        "annualProcedures": 5000.0,
+        "procedureGrowth": 0.0,
+        "deviceClass": "II",
+        "launchYear": 2,
+        "approvalDelayYears": 0,
+        "pricePerProcedure": 150000.0,
+        "peakPenetration": 0.3,
+        "yearsToPeak": 4,
+        "recurringRatio": 0.2,
+        "operatingMargin": 0.15,
+        "discountRate": {
+          "pessimistic": 0.14,
+          "base": 0.12,
+          "optimistic": 0.1
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.02
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 234.9480334620289,
+          "base": 292.30992479985355,
+          "optimistic": 379.0507919823748
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "peak-penetration-zero",
+      "tags": [
+        "boundary",
+        "zero-value"
+      ],
+      "input": {
+        "annualProcedures": 5000.0,
+        "procedureGrowth": 0.05,
+        "deviceClass": "II",
+        "launchYear": 2,
+        "approvalDelayYears": 0,
+        "pricePerProcedure": 150000.0,
+        "peakPenetration": 0.0,
+        "yearsToPeak": 4,
+        "recurringRatio": 0.2,
+        "operatingMargin": 0.15,
+        "discountRate": {
+          "pessimistic": 0.14,
+          "base": 0.12,
+          "optimistic": 0.1
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.02
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 0.0,
+          "base": 0.0,
+          "optimistic": 0.0
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "annual-procedures-zero",
+      "tags": [
+        "boundary",
+        "zero-value"
+      ],
+      "input": {
+        "annualProcedures": 0.0,
+        "procedureGrowth": 0.05,
+        "deviceClass": "II",
+        "launchYear": 2,
+        "approvalDelayYears": 0,
+        "pricePerProcedure": 150000.0,
+        "peakPenetration": 0.3,
+        "yearsToPeak": 4,
+        "recurringRatio": 0.2,
+        "operatingMargin": 0.15,
+        "discountRate": {
+          "pessimistic": 0.14,
+          "base": 0.12,
+          "optimistic": 0.1
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.02
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 0.0,
+          "base": 0.0,
+          "optimistic": 0.0
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "discount-rate-upper-bound",
+      "tags": [
+        "boundary",
+        "discount-rate-upper-bound"
+      ],
+      "input": {
+        "annualProcedures": 5000.0,
+        "procedureGrowth": 0.05,
+        "deviceClass": "II",
+        "launchYear": 2,
+        "approvalDelayYears": 0,
+        "pricePerProcedure": 150000.0,
+        "peakPenetration": 0.3,
+        "yearsToPeak": 4,
+        "recurringRatio": 0.2,
+        "operatingMargin": 0.15,
+        "discountRate": {
+          "pessimistic": 0.9,
+          "base": 0.85,
+          "optimistic": 0.8
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.02
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 14.584387128888437,
+          "base": 16.271055377575216,
+          "optimistic": 18.260533968846584
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-00",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 12212.253071067775,
+        "procedureGrowth": 0.24680454175973937,
+        "deviceClass": "II",
+        "launchYear": 2,
+        "approvalDelayYears": 1,
+        "pricePerProcedure": 256096.0055568468,
+        "peakPenetration": 0.42309803416056313,
+        "yearsToPeak": 4,
+        "recurringRatio": 0.3195406478771807,
+        "operatingMargin": 0.3032880223763103,
+        "discountRate": {
+          "pessimistic": 0.1235754069307502,
+          "base": 0.1035754069307502,
+          "optimistic": 0.08357540693075019
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.011202423515475166
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 23272.13477099894,
+          "base": 31327.10026420549,
+          "optimistic": 44397.41404460679
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-01",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 12353.951756615865,
+        "procedureGrowth": 0.1334608094635829,
+        "deviceClass": "I",
+        "launchYear": 1,
+        "approvalDelayYears": 2,
+        "pricePerProcedure": 235689.9661748151,
+        "peakPenetration": 0.2644234933563907,
+        "yearsToPeak": 4,
+        "recurringRatio": 0.35242168498930165,
+        "operatingMargin": 0.26011659649308666,
+        "discountRate": {
+          "pessimistic": 0.16255201116478693,
+          "base": 0.14255201116478694,
+          "optimistic": 0.12255201116478694
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.011465329072731893
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 3285.971250334032,
+          "base": 4101.800470291972,
+          "optimistic": 5256.378975498297
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-02",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 1548.3127233649757,
+        "procedureGrowth": 0.20110974048739982,
+        "deviceClass": "III",
+        "launchYear": 1,
+        "approvalDelayYears": 0,
+        "pricePerProcedure": 316145.7171200309,
+        "peakPenetration": 0.5868445206254943,
+        "yearsToPeak": 5,
+        "recurringRatio": 0.08198142529189661,
+        "operatingMargin": 0.30587986205817863,
+        "discountRate": {
+          "pessimistic": 0.1605966719742461,
+          "base": 0.1405966719742461,
+          "optimistic": 0.1205966719742461
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.01657464647402554
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1908.5146794449975,
+          "base": 2388.9581983232492,
+          "optimistic": 3081.440749679169
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-03",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 15667.837818636652,
+        "procedureGrowth": -0.025855624895886768,
+        "deviceClass": "III",
+        "launchYear": 2,
+        "approvalDelayYears": 0,
+        "pricePerProcedure": 426775.5953800354,
+        "peakPenetration": 0.32616844149894586,
+        "yearsToPeak": 3,
+        "recurringRatio": 0.16118153321284706,
+        "operatingMargin": 0.22322959114138718,
+        "discountRate": {
+          "pessimistic": 0.12274591694487495,
+          "base": 0.10274591694487495,
+          "optimistic": 0.08274591694487494
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.014779013611108179
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 3282.614308583573,
+          "base": 4113.803310044967,
+          "optimistic": 5432.149911739899
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-04",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 10882.38374053987,
+        "procedureGrowth": 0.10806961289295285,
+        "deviceClass": "I",
+        "launchYear": 2,
+        "approvalDelayYears": 2,
+        "pricePerProcedure": 129018.85832359603,
+        "peakPenetration": 0.2731262263930665,
+        "yearsToPeak": 4,
+        "recurringRatio": 0.299344653141755,
+        "operatingMargin": 0.19989160623017094,
+        "discountRate": {
+          "pessimistic": 0.12292599334925966,
+          "base": 0.10292599334925966,
+          "optimistic": 0.08292599334925965
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.01276202779329839
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1424.0327389031686,
+          "base": 1910.8979379643197,
+          "optimistic": 2704.149469506277
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-05",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 18982.885831697204,
+        "procedureGrowth": 0.24552738438339838,
+        "deviceClass": "II",
+        "launchYear": 1,
+        "approvalDelayYears": 2,
+        "pricePerProcedure": 103070.8169802028,
+        "peakPenetration": 0.19380726454677885,
+        "yearsToPeak": 3,
+        "recurringRatio": 0.36060211083052934,
+        "operatingMargin": 0.06570117684259705,
+        "discountRate": {
+          "pessimistic": 0.1523427863727995,
+          "base": 0.1323427863727995,
+          "optimistic": 0.1123427863727995
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.018985166584135436
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1122.3977049974962,
+          "base": 1447.452198387156,
+          "optimistic": 1933.0477918551592
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-06",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 6194.515885286004,
+        "procedureGrowth": 0.03705538831648131,
+        "deviceClass": "II",
+        "launchYear": 1,
+        "approvalDelayYears": 2,
+        "pricePerProcedure": 322961.06769336667,
+        "peakPenetration": 0.4313013367032993,
+        "yearsToPeak": 5,
+        "recurringRatio": 0.4019555061958745,
+        "operatingMargin": 0.250297251382947,
+        "discountRate": {
+          "pessimistic": 0.12134557925824398,
+          "base": 0.10134557925824397,
+          "optimistic": 0.08134557925824397
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.010814531813769207
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 2748.189186029561,
+          "base": 3613.5658183764663,
+          "optimistic": 5006.609478351756
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-07",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 8354.854665396335,
+        "procedureGrowth": 0.16300027332611772,
+        "deviceClass": "III",
+        "launchYear": 2,
+        "approvalDelayYears": 2,
+        "pricePerProcedure": 156150.55487072916,
+        "peakPenetration": 0.3853545722625449,
+        "yearsToPeak": 4,
+        "recurringRatio": 0.3423609657957689,
+        "operatingMargin": 0.3116803868439104,
+        "discountRate": {
+          "pessimistic": 0.12491623974062042,
+          "base": 0.10491623974062042,
+          "optimistic": 0.08491623974062042
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.011039591835495344
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 4643.857475671135,
+          "base": 6228.950876283442,
+          "optimistic": 8778.017058545669
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-08",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 10937.204097609078,
+        "procedureGrowth": 0.15537119928826504,
+        "deviceClass": "I",
+        "launchYear": 2,
+        "approvalDelayYears": 2,
+        "pricePerProcedure": 372699.914318706,
+        "peakPenetration": 0.16038402692122342,
+        "yearsToPeak": 2,
+        "recurringRatio": 0.14210913596210023,
+        "operatingMargin": 0.12582302921709887,
+        "discountRate": {
+          "pessimistic": 0.16021304493354604,
+          "base": 0.14021304493354605,
+          "optimistic": 0.12021304493354605
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.01671921584563836
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1256.2819712595808,
+          "base": 1586.8007784715883,
+          "optimistic": 2063.707719634129
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-09",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 18353.57543864913,
+        "procedureGrowth": 0.027380716186168733,
+        "deviceClass": "III",
+        "launchYear": 2,
+        "approvalDelayYears": 1,
+        "pricePerProcedure": 150396.46303037668,
+        "peakPenetration": 0.2844447793168755,
+        "yearsToPeak": 5,
+        "recurringRatio": 0.24170427083609136,
+        "operatingMargin": 0.2846762608769254,
+        "discountRate": {
+          "pessimistic": 0.16492308423787683,
+          "base": 0.14492308423787684,
+          "optimistic": 0.12492308423787683
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.019334764298885355
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1313.8339698280124,
+          "base": 1627.8257881799573,
+          "optimistic": 2073.170012290782
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-10",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 5035.7979759360915,
+        "procedureGrowth": 0.19037761802381725,
+        "deviceClass": "III",
+        "launchYear": 2,
+        "approvalDelayYears": 1,
+        "pricePerProcedure": 304150.469962746,
+        "peakPenetration": 0.5340761667978097,
+        "yearsToPeak": 4,
+        "recurringRatio": 0.3871987419793287,
+        "operatingMargin": 0.12478105302841293,
+        "discountRate": {
+          "pessimistic": 0.15270408871109142,
+          "base": 0.13270408871109143,
+          "optimistic": 0.11270408871109143
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.017144198823115846
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 3089.494003289289,
+          "base": 3961.2675062713442,
+          "optimistic": 5251.877044541763
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-11",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 16104.304131593208,
+        "procedureGrowth": 0.17474879435606766,
+        "deviceClass": "IV",
+        "launchYear": 2,
+        "approvalDelayYears": 1,
+        "pricePerProcedure": 345674.9524136485,
+        "peakPenetration": 0.12350899781100619,
+        "yearsToPeak": 4,
+        "recurringRatio": 0.301119960419806,
+        "operatingMargin": 0.3358814889636536,
+        "discountRate": {
+          "pessimistic": 0.13094163482094284,
+          "base": 0.11094163482094284,
+          "optimistic": 0.09094163482094283
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.016698314343206136
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 7127.424787263556,
+          "base": 9453.971819425497,
+          "optimistic": 13172.849151166753
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-12",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 1464.2626635288793,
+        "procedureGrowth": 0.10668785365315377,
+        "deviceClass": "II",
+        "launchYear": 2,
+        "approvalDelayYears": 3,
+        "pricePerProcedure": 290913.3418701221,
+        "peakPenetration": 0.15707493174051748,
+        "yearsToPeak": 5,
+        "recurringRatio": 0.03775875009501545,
+        "operatingMargin": 0.32685339626086274,
+        "discountRate": {
+          "pessimistic": 0.16361253002318973,
+          "base": 0.14361253002318974,
+          "optimistic": 0.12361253002318974
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.017719785291525358
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 156.28310181807242,
+          "base": 201.75599956019002,
+          "optimistic": 267.9071941275773
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-13",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 804.6312657745004,
+        "procedureGrowth": -0.04755619091749809,
+        "deviceClass": "II",
+        "launchYear": 2,
+        "approvalDelayYears": 1,
+        "pricePerProcedure": 241218.47698671647,
+        "peakPenetration": 0.25915833433191005,
+        "yearsToPeak": 6,
+        "recurringRatio": 0.07388806307173851,
+        "operatingMargin": 0.2544049632344809,
+        "discountRate": {
+          "pessimistic": 0.15501881258192593,
+          "base": 0.13501881258192594,
+          "optimistic": 0.11501881258192594
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.01742411755664708
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 34.189846050807816,
+          "base": 42.44672254310308,
+          "optimistic": 54.338819356099116
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-14",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 797.9966229305877,
+        "procedureGrowth": 0.12479694142599705,
+        "deviceClass": "IV",
+        "launchYear": 2,
+        "approvalDelayYears": 1,
+        "pricePerProcedure": 52346.674782941554,
+        "peakPenetration": 0.3087358377237467,
+        "yearsToPeak": 5,
+        "recurringRatio": 0.3772445589076547,
+        "operatingMargin": 0.24206905650931293,
+        "discountRate": {
+          "pessimistic": 0.1374134042306417,
+          "base": 0.1174134042306417,
+          "optimistic": 0.0974134042306417
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.0185034809050321
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 66.12861827947503,
+          "base": 86.70366371781296,
+          "optimistic": 118.86726056014601
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-15",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 8179.203036772467,
+        "procedureGrowth": 0.11100627816853147,
+        "deviceClass": "IV",
+        "launchYear": 1,
+        "approvalDelayYears": 3,
+        "pricePerProcedure": 64479.20992535203,
+        "peakPenetration": 0.5625692636065995,
+        "yearsToPeak": 2,
+        "recurringRatio": 0.05447128709206517,
+        "operatingMargin": 0.16639548856471437,
+        "discountRate": {
+          "pessimistic": 0.15969088163623607,
+          "base": 0.13969088163623608,
+          "optimistic": 0.11969088163623608
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.014306911929216177
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 486.937819535366,
+          "base": 609.9169934319577,
+          "optimistic": 785.7271997533971
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-16",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 12138.129684052177,
+        "procedureGrowth": 0.23851560056795712,
+        "deviceClass": "I",
+        "launchYear": 2,
+        "approvalDelayYears": 3,
+        "pricePerProcedure": 110785.64901475977,
+        "peakPenetration": 0.2635358918501991,
+        "yearsToPeak": 5,
+        "recurringRatio": 0.45933586659560904,
+        "operatingMargin": 0.06476916202905877,
+        "discountRate": {
+          "pessimistic": 0.14430636092504023,
+          "base": 0.12430636092504024,
+          "optimistic": 0.10430636092504024
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.018316060957915
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1085.2839836334645,
+          "base": 1454.265267292542,
+          "optimistic": 2026.5379993835495
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-17",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 9502.13913428269,
+        "procedureGrowth": 0.012844754515903181,
+        "deviceClass": "III",
+        "launchYear": 2,
+        "approvalDelayYears": 0,
+        "pricePerProcedure": 467953.97315375006,
+        "peakPenetration": 0.1193888361163338,
+        "yearsToPeak": 2,
+        "recurringRatio": 0.08409408477791047,
+        "operatingMargin": 0.19863848970267933,
+        "discountRate": {
+          "pessimistic": 0.12473379835437616,
+          "base": 0.10473379835437616,
+          "optimistic": 0.08473379835437615
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.010090707245857073
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 882.0992235067447,
+          "base": 1098.2066848808133,
+          "optimistic": 1432.132360981712
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-18",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 14849.946551303074,
+        "procedureGrowth": 0.05770657003624158,
+        "deviceClass": "IV",
+        "launchYear": 3,
+        "approvalDelayYears": 0,
+        "pricePerProcedure": 160904.77367280037,
+        "peakPenetration": 0.5563924092612876,
+        "yearsToPeak": 5,
+        "recurringRatio": 0.46213107185354474,
+        "operatingMargin": 0.24914726600975623,
+        "discountRate": {
+          "pessimistic": 0.12360615068516284,
+          "base": 0.10360615068516284,
+          "optimistic": 0.08360615068516283
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.011953176715647069
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 5438.8234649541555,
+          "base": 7161.619415581144,
+          "optimistic": 9926.215548036615
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-19",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualProcedures": 9470.187786123737,
+        "procedureGrowth": 0.16259448511912789,
+        "deviceClass": "I",
+        "launchYear": 3,
+        "approvalDelayYears": 3,
+        "pricePerProcedure": 198041.81978610178,
+        "peakPenetration": 0.5626952301616128,
+        "yearsToPeak": 6,
+        "recurringRatio": 0.10601528470935484,
+        "operatingMargin": 0.2947927835875945,
+        "discountRate": {
+          "pessimistic": 0.1477631705406514,
+          "base": 0.12776317054065142,
+          "optimistic": 0.10776317054065142
+        },
+        "projectionYears": 10,
+        "terminalGrowth": 0.019608309641900093
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 3595.8405194312636,
+          "base": 4839.0494353128415,
+          "optimistic": 6762.188964129191
+        },
+        "keyMetrics": {}
+      }
+    }
+  ]
+}

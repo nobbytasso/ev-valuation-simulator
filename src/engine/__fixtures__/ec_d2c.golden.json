@@ -1,0 +1,863 @@
+{
+  "schemaVersion": "1.0",
+  "sector": "ec_d2c",
+  "generatedAt": "2026-07-13",
+  "seed": 20260717,
+  "caseCount": 23,
+  "cases": [
+    {
+      "id": "zero-growth",
+      "tags": [
+        "boundary",
+        "zero-growth"
+      ],
+      "input": {
+        "annualRevenue": 2000.0,
+        "revenueGrowth": 0.0,
+        "grossMargin": 0.45,
+        "f2Rate": 0.35,
+        "aov": 8000.0,
+        "purchaseFrequency": 2.5,
+        "cac": 4000.0,
+        "adCostRatio": 0.15,
+        "logisticsCostRatio": 0.1,
+        "inventoryTurnover": 6.0,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 1.5,
+          "base": 2.5,
+          "optimistic": 4.0
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 3000.0,
+          "base": 5000.0,
+          "optimistic": 8000.0
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.20000000000000004,
+          "ltv": 13846.153846153846,
+          "ltvCacRatio": 3.4615384615384612
+        }
+      }
+    },
+    {
+      "id": "annual-revenue-zero",
+      "tags": [
+        "boundary",
+        "zero-value"
+      ],
+      "input": {
+        "annualRevenue": 0.0,
+        "revenueGrowth": 0.25,
+        "grossMargin": 0.45,
+        "f2Rate": 0.35,
+        "aov": 8000.0,
+        "purchaseFrequency": 2.5,
+        "cac": 4000.0,
+        "adCostRatio": 0.15,
+        "logisticsCostRatio": 0.1,
+        "inventoryTurnover": 6.0,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 1.5,
+          "base": 2.5,
+          "optimistic": 4.0
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 0.0,
+          "base": 0.0,
+          "optimistic": 0.0
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.20000000000000004,
+          "ltv": 13846.153846153846,
+          "ltvCacRatio": 3.4615384615384612
+        }
+      }
+    },
+    {
+      "id": "f2-rate-near-one",
+      "tags": [
+        "boundary",
+        "lifetime-cap"
+      ],
+      "input": {
+        "annualRevenue": 2000.0,
+        "revenueGrowth": 0.25,
+        "grossMargin": 0.45,
+        "f2Rate": 0.999,
+        "aov": 8000.0,
+        "purchaseFrequency": 2.5,
+        "cac": 4000.0,
+        "adCostRatio": 0.15,
+        "logisticsCostRatio": 0.1,
+        "inventoryTurnover": 6.0,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 1.5,
+          "base": 2.5,
+          "optimistic": 4.0
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 3750.0,
+          "base": 6250.0,
+          "optimistic": 10000.0
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.20000000000000004,
+          "ltv": 90000.0,
+          "ltvCacRatio": 22.5
+        }
+      }
+    },
+    {
+      "id": "random-00",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 5049.776373422836,
+        "revenueGrowth": 0.095494421603073,
+        "grossMargin": 0.25562843601197444,
+        "f2Rate": 0.5158955189506502,
+        "aov": 13504.195094750712,
+        "purchaseFrequency": 5.2786610835818815,
+        "cac": 9565.745335035805,
+        "adCostRatio": 0.05664413422870972,
+        "logisticsCostRatio": 0.18137821209893623,
+        "inventoryTurnover": 5.245000934983687,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 3.5104252859033322,
+          "base": 5.014893265576189,
+          "optimistic": 6.519361245249046
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 4964.222213282373,
+          "base": 7091.746018974818,
+          "optimistic": 9219.269824667263
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.017606089684328474,
+          "ltv": 37641.12048727471,
+          "ltvCacRatio": 3.9349908625947987
+        }
+      }
+    },
+    {
+      "id": "random-01",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 7921.706085104734,
+        "revenueGrowth": 0.10518229539559604,
+        "grossMargin": 0.6480797005483492,
+        "f2Rate": 0.14487572376816635,
+        "aov": 27671.17424022523,
+        "purchaseFrequency": 3.659489818045166,
+        "cac": 13249.661180964365,
+        "adCostRatio": 0.10475164116969744,
+        "logisticsCostRatio": 0.24406037494131527,
+        "inventoryTurnover": 3.727815590616577,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 4.673626410326314,
+          "base": 6.67660915760902,
+          "optimistic": 8.679591904891726
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 26517.651353406007,
+          "base": 37882.3590762943,
+          "optimistic": 49247.06679918259
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.2992676844373364,
+          "ltv": 76744.50951878795,
+          "ltvCacRatio": 5.792186567687172
+        }
+      }
+    },
+    {
+      "id": "random-02",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 3726.7476573972444,
+        "revenueGrowth": 0.29415317230719973,
+        "grossMargin": 0.3735308107386408,
+        "f2Rate": 0.33878566185308034,
+        "aov": 11555.362686473836,
+        "purchaseFrequency": 1.8367489420882253,
+        "cac": 3972.1856453816217,
+        "adCostRatio": 0.2916289088835178,
+        "logisticsCostRatio": 0.1447896880736308,
+        "inventoryTurnover": 7.869605257057731,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 6.988912968163187,
+          "base": 9.984161383090267,
+          "optimistic": 12.979409798017349
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 12590.753781200077,
+          "base": 17986.79111600011,
+          "optimistic": 23382.828450800145
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": -0.06288778621850777,
+          "ltv": 11989.954845027343,
+          "ltvCacRatio": 3.0184779653911233
+        }
+      }
+    },
+    {
+      "id": "random-03",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 81.28031057297387,
+        "revenueGrowth": 0.7939752786651022,
+        "grossMargin": 0.22248250008070064,
+        "f2Rate": 0.5209556818199412,
+        "aov": 23523.14310599266,
+        "purchaseFrequency": 2.5539189382665186,
+        "cac": 8621.713123179448,
+        "adCostRatio": 0.12386765483058619,
+        "logisticsCostRatio": 0.22845685128608567,
+        "inventoryTurnover": 10.698032550332439,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 6.71343281739968,
+          "base": 9.59061831057097,
+          "optimistic": 12.467803803742262
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 217.79219494617456,
+          "base": 311.13170706596367,
+          "optimistic": 404.4712191857528
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": -0.12984200603597124,
+          "ltv": 27901.18327733958,
+          "ltvCacRatio": 3.236153056673544
+        }
+      }
+    },
+    {
+      "id": "random-04",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 1559.5438505596367,
+        "revenueGrowth": 0.031287849890886454,
+        "grossMargin": 0.4096494500155595,
+        "f2Rate": 0.16942813349596197,
+        "aov": 4353.54266434594,
+        "purchaseFrequency": 5.800036294891919,
+        "cac": 13288.880611145136,
+        "adCostRatio": 0.2810696611823846,
+        "logisticsCostRatio": 0.1383078624254313,
+        "inventoryTurnover": 10.515415802374397,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 3.1409198472967654,
+          "base": 4.487028353281094,
+          "optimistic": 5.833136859265422
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 2069.4108494728544,
+          "base": 2956.301213532649,
+          "optimistic": 3843.191577592444
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": -0.009728073592256359,
+          "ltv": 12453.994679115985,
+          "ltvCacRatio": 0.9371740964149421
+        }
+      }
+    },
+    {
+      "id": "random-05",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 5498.471822294921,
+        "revenueGrowth": 0.47352830098184784,
+        "grossMargin": 0.25824864247952434,
+        "f2Rate": 0.1763853435774002,
+        "aov": 16909.971019791326,
+        "purchaseFrequency": 3.764518899042524,
+        "cac": 12506.525663063278,
+        "adCostRatio": 0.1811285151112007,
+        "logisticsCostRatio": 0.0901191600809804,
+        "inventoryTurnover": 11.824147264617292,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 0.7183481022323811,
+          "base": 1.0262115746176874,
+          "optimistic": 1.3340750470029936
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 5820.166836613012,
+          "base": 8314.524052304303,
+          "optimistic": 10808.881267995594
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": -0.012999032712656775,
+          "ltv": 19960.266062194518,
+          "ltvCacRatio": 1.5959880945309286
+        }
+      }
+    },
+    {
+      "id": "random-06",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 7678.775894365196,
+        "revenueGrowth": 0.5926384486453863,
+        "grossMargin": 0.5611934281364019,
+        "f2Rate": 0.4216111570754292,
+        "aov": 18779.645047127564,
+        "purchaseFrequency": 2.1172079302870195,
+        "cac": 6707.7733004656,
+        "adCostRatio": 0.14631579128589062,
+        "logisticsCostRatio": 0.24985889583451354,
+        "inventoryTurnover": 9.508993947221047,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 4.757742862641093,
+          "base": 6.7967755180587055,
+          "optimistic": 8.835808173476318
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 32652.97320026328,
+          "base": 46647.104571804695,
+          "optimistic": 60641.2359433461
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.16501874101599778,
+          "ltv": 38578.34220910891,
+          "ltvCacRatio": 5.751288912287944
+        }
+      }
+    },
+    {
+      "id": "random-07",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 4191.614686902946,
+        "revenueGrowth": -0.024644210693281154,
+        "grossMargin": 0.38769132083381885,
+        "f2Rate": 0.476989005205953,
+        "aov": 22012.22638260381,
+        "purchaseFrequency": 2.9259632478975295,
+        "cac": 6148.049634804347,
+        "adCostRatio": 0.10719377931296627,
+        "logisticsCostRatio": 0.09300761933524355,
+        "inventoryTurnover": 10.096893635282033,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 5.991787773006045,
+          "base": 8.559696818580065,
+          "optimistic": 11.127605864154084
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 9497.01055259487,
+          "base": 13567.157932278384,
+          "optimistic": 17637.3053119619
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.18748992218560906,
+          "ltv": 47742.823258653945,
+          "ltvCacRatio": 7.765523392716281
+        }
+      }
+    },
+    {
+      "id": "random-08",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 164.0261470761434,
+        "revenueGrowth": 0.25557455153471975,
+        "grossMargin": 0.6664420638139474,
+        "f2Rate": 0.27877717585515766,
+        "aov": 3704.588988559819,
+        "purchaseFrequency": 4.176426495879446,
+        "cac": 2511.0958585118105,
+        "adCostRatio": 0.19451885169315858,
+        "logisticsCostRatio": 0.08906560181228645,
+        "inventoryTurnover": 10.54798413864697,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 0.9888932923247539,
+          "base": 1.4127047033210771,
+          "optimistic": 1.8365161143174003
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 203.65966230691524,
+          "base": 290.94237472416467,
+          "optimistic": 378.22508714141406
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.3828576103085024,
+          "ltv": 14296.766109231397,
+          "ltvCacRatio": 5.693437015066526
+        }
+      }
+    },
+    {
+      "id": "random-09",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 6900.529890049098,
+        "revenueGrowth": 0.49329501977430357,
+        "grossMargin": 0.3671580290678197,
+        "f2Rate": 0.5782541182494861,
+        "aov": 19792.658032389714,
+        "purchaseFrequency": 1.0621145457164185,
+        "cac": 12207.365902046451,
+        "adCostRatio": 0.25453407270370004,
+        "logisticsCostRatio": 0.08614137705890082,
+        "inventoryTurnover": 11.297337695722241,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 2.362365751362462,
+          "base": 3.374808216232089,
+          "optimistic": 4.387250681101715
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 24343.061476526374,
+          "base": 34775.8021093234,
+          "optimistic": 45208.542742120415
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.02648257930521883,
+          "ltv": 18301.119513257116,
+          "ltvCacRatio": 1.499186610781373
+        }
+      }
+    },
+    {
+      "id": "random-10",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 9025.480149513178,
+        "revenueGrowth": -0.04898326814998273,
+        "grossMargin": 0.6627075801046173,
+        "f2Rate": 0.13374067958166502,
+        "aov": 21600.383601000864,
+        "purchaseFrequency": 1.4117461976938641,
+        "cac": 13645.722202000132,
+        "adCostRatio": 0.18580495878607806,
+        "logisticsCostRatio": 0.19733250541319008,
+        "inventoryTurnover": 2.170218903773848,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 2.4180498694859907,
+          "base": 3.4543569564085583,
+          "optimistic": 4.490664043331126
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 20755.047260714433,
+          "base": 29650.06751530633,
+          "optimistic": 38545.08776989824
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.27957011590534914,
+          "ltv": 23328.7843366073,
+          "ltvCacRatio": 1.7096042255050352
+        }
+      }
+    },
+    {
+      "id": "random-11",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 3674.194408177905,
+        "revenueGrowth": 0.7599307068469626,
+        "grossMargin": 0.39613926046702974,
+        "f2Rate": 0.5023437157712922,
+        "aov": 29359.326822636245,
+        "purchaseFrequency": 3.295885078775379,
+        "cac": 7755.924015125599,
+        "adCostRatio": 0.11451431585915132,
+        "logisticsCostRatio": 0.20146120562482728,
+        "inventoryTurnover": 6.528749438737566,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 5.210648413528437,
+          "base": 7.443783447897768,
+          "optimistic": 9.676918482267098
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 13347.420951531905,
+          "base": 19067.74421647415,
+          "optimistic": 24788.067481416394
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.08016373898305112,
+          "ltv": 77025.8585284212,
+          "ltvCacRatio": 9.931229132493486
+        }
+      }
+    },
+    {
+      "id": "random-12",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 1194.4664430908708,
+        "revenueGrowth": 0.16687257844588002,
+        "grossMargin": 0.5661771592614537,
+        "f2Rate": 0.18868965207956945,
+        "aov": 17637.899509339593,
+        "purchaseFrequency": 5.535716454761657,
+        "cac": 11431.08514079554,
+        "adCostRatio": 0.18286593158599312,
+        "logisticsCostRatio": 0.1622821400468354,
+        "inventoryTurnover": 8.020500731603875,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 1.8960432638040141,
+          "base": 2.7086332340057346,
+          "optimistic": 3.521223204207455
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 2642.686402911509,
+          "base": 3775.266289873585,
+          "optimistic": 4907.84617683566
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.22102908762862522,
+          "ltv": 68137.47421903865,
+          "ltvCacRatio": 5.960717935331261
+        }
+      }
+    },
+    {
+      "id": "random-13",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 333.6801210381819,
+        "revenueGrowth": 0.6717786107779189,
+        "grossMargin": 0.20622363398182497,
+        "f2Rate": 0.2445733246014169,
+        "aov": 22915.311540208724,
+        "purchaseFrequency": 3.72435698799804,
+        "cac": 6757.696265794822,
+        "adCostRatio": 0.05457779049941265,
+        "logisticsCostRatio": 0.15940918883060878,
+        "inventoryTurnover": 8.1506030911925,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 2.591386666470623,
+          "base": 3.7019809521008904,
+          "optimistic": 4.812575237731157
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 298.1122031929024,
+          "base": 425.8745759898606,
+          "optimistic": 553.6369487868187
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": -0.007763345348196449,
+          "ltv": 23298.243903952938,
+          "ltvCacRatio": 3.4476607097422813
+        }
+      }
+    },
+    {
+      "id": "random-14",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 3102.1847688908374,
+        "revenueGrowth": 0.6854179208155671,
+        "grossMargin": 0.48956581351989614,
+        "f2Rate": 0.14255331392301612,
+        "aov": 13797.240950054327,
+        "purchaseFrequency": 4.392366332825404,
+        "cac": 7401.500530958185,
+        "adCostRatio": 0.2032895864318361,
+        "logisticsCostRatio": 0.20146366418250783,
+        "inventoryTurnover": 5.112146655654095,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 5.019114274181011,
+          "base": 7.170163248830017,
+          "optimistic": 9.321212223479021
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 12847.346447483429,
+          "base": 18353.35206783347,
+          "optimistic": 23859.357688183514
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.08481256290555222,
+          "ltv": 34601.48675222671,
+          "ltvCacRatio": 4.674928632038788
+        }
+      }
+    },
+    {
+      "id": "random-15",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 4447.478788859231,
+        "revenueGrowth": 0.7974418904749828,
+        "grossMargin": 0.5307018218189354,
+        "f2Rate": 0.20913513410493362,
+        "aov": 14499.604879434708,
+        "purchaseFrequency": 1.1963430543216433,
+        "cac": 4239.839895717998,
+        "adCostRatio": 0.17131941699566106,
+        "logisticsCostRatio": 0.21240630785293274,
+        "inventoryTurnover": 11.09997308201446,
+        "multipleBasis": "grossProfit",
+        "evMultiple": {
+          "pessimistic": 6.311791089798889,
+          "base": 9.016844413998413,
+          "optimistic": 11.721897738197937
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 26777.617826028836,
+          "base": 38253.739751469766,
+          "optimistic": 49729.861676910696
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.14697609697034164,
+          "ltv": 11640.193403300846,
+          "ltvCacRatio": 2.745432301596292
+        }
+      }
+    },
+    {
+      "id": "random-16",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 1816.5865275414283,
+        "revenueGrowth": 0.24520755835652794,
+        "grossMargin": 0.6337533920365309,
+        "f2Rate": 0.42017835211341537,
+        "aov": 29678.4580509346,
+        "purchaseFrequency": 2.9733874945903915,
+        "cac": 4708.811113218324,
+        "adCostRatio": 0.1189797868984331,
+        "logisticsCostRatio": 0.09276748865699912,
+        "inventoryTurnover": 8.273238952230063,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 2.2073278878517724,
+          "base": 3.1533255540739606,
+          "optimistic": 4.099323220296149
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 4993.035886092305,
+          "base": 7132.908408703294,
+          "optimistic": 9272.780931314282
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.42200611648109865,
+          "ltv": 96453.66065296967,
+          "ltvCacRatio": 20.483654649516538
+        }
+      }
+    },
+    {
+      "id": "random-17",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 1737.9932875620682,
+        "revenueGrowth": 0.017128107154325847,
+        "grossMargin": 0.4815931384418288,
+        "f2Rate": 0.3628985079525292,
+        "aov": 2789.3078124968133,
+        "purchaseFrequency": 1.4909996635114056,
+        "cac": 1587.6352296837094,
+        "adCostRatio": 0.167893900002131,
+        "logisticsCostRatio": 0.0698167995562617,
+        "inventoryTurnover": 5.988354633497913,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 2.782885705855478,
+          "base": 3.9755510083649686,
+          "optimistic": 5.16821631087446
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 4919.479108096523,
+          "base": 7027.827297280747,
+          "optimistic": 9136.175486464972
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.24388243888343614,
+          "ltv": 3143.733023248418,
+          "ltvCacRatio": 1.9801355906386104
+        }
+      }
+    },
+    {
+      "id": "random-18",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 1339.689441095074,
+        "revenueGrowth": 0.5130703126174281,
+        "grossMargin": 0.4849911026791694,
+        "f2Rate": 0.329815215285872,
+        "aov": 6409.345650183077,
+        "purchaseFrequency": 4.867157062576183,
+        "cac": 11868.544697410141,
+        "adCostRatio": 0.06727726217778791,
+        "logisticsCostRatio": 0.2090736355929953,
+        "inventoryTurnover": 9.839667753687998,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 2.697856958923064,
+          "base": 3.8540813698900918,
+          "optimistic": 5.010305780857119
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 5468.675628663943,
+          "base": 7812.393755234206,
+          "optimistic": 10156.111881804467
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": 0.2086402049083862,
+          "ltv": 22575.026149849473,
+          "ltvCacRatio": 1.902088817576397
+        }
+      }
+    },
+    {
+      "id": "random-19",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "annualRevenue": 1021.7893964469519,
+        "revenueGrowth": 0.4684329761614492,
+        "grossMargin": 0.23948279078366236,
+        "f2Rate": 0.10026632848668493,
+        "aov": 24412.69105845915,
+        "purchaseFrequency": 5.110066871769613,
+        "cac": 2454.300243007865,
+        "adCostRatio": 0.08801530931102534,
+        "logisticsCostRatio": 0.24038822879386118,
+        "inventoryTurnover": 9.408105871678877,
+        "multipleBasis": "revenue",
+        "evMultiple": {
+          "pessimistic": 2.15945571387541,
+          "base": 3.0849367341077283,
+          "optimistic": 4.010417754340047
+        },
+        "maxLifetimeYears": 10
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 3240.110505160511,
+          "base": 4628.729293086444,
+          "optimistic": 6017.348081012377
+        },
+        "keyMetrics": {
+          "contributionMarginRatio": -0.08892074732122418,
+          "ltv": 33204.93048640778,
+          "ltvCacRatio": 13.529286231791067
+        }
+      }
+    }
+  ]
+}

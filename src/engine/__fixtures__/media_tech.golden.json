@@ -1,0 +1,904 @@
+{
+  "schemaVersion": "1.0",
+  "sector": "media_tech",
+  "generatedAt": "2026-07-13",
+  "seed": 20260716,
+  "caseCount": 23,
+  "cases": [
+    {
+      "id": "zero-growth",
+      "tags": [
+        "boundary",
+        "zero-growth"
+      ],
+      "input": {
+        "mau": 2000000.0,
+        "mauGrowth": 0.0,
+        "growthDecayFactor": 0.85,
+        "dauMauRatio": 0.4,
+        "arpuMonthly": {
+          "ad": 100.0,
+          "paid": 50.0,
+          "commerce": 20.0
+        },
+        "monthlyChurn": 0.05,
+        "contentCostRatio": 0.3,
+        "cpa": 800.0,
+        "evSalesMultiple": {
+          "pessimistic": 3.0,
+          "base": 5.0,
+          "optimistic": 8.0
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 12240.0,
+          "base": 20400.0,
+          "optimistic": 32640.0
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 20.0,
+          "ltv": 2379.9999999999995,
+          "ltvCpaRatio": 2.9749999999999996,
+          "paybackMonths": 6.722689075630253
+        }
+      }
+    },
+    {
+      "id": "mau-zero",
+      "tags": [
+        "boundary",
+        "zero-value"
+      ],
+      "input": {
+        "mau": 0.0,
+        "mauGrowth": 0.3,
+        "growthDecayFactor": 0.85,
+        "dauMauRatio": 0.4,
+        "arpuMonthly": {
+          "ad": 100.0,
+          "paid": 50.0,
+          "commerce": 20.0
+        },
+        "monthlyChurn": 0.05,
+        "contentCostRatio": 0.3,
+        "cpa": 800.0,
+        "evSalesMultiple": {
+          "pessimistic": 3.0,
+          "base": 5.0,
+          "optimistic": 8.0
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 0.0,
+          "base": 0.0,
+          "optimistic": 0.0
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 20.0,
+          "ltv": 2379.9999999999995,
+          "ltvCpaRatio": 2.9749999999999996,
+          "paybackMonths": 6.722689075630253
+        }
+      }
+    },
+    {
+      "id": "churn-zero",
+      "tags": [
+        "boundary",
+        "zero-value"
+      ],
+      "input": {
+        "mau": 2000000.0,
+        "mauGrowth": 0.3,
+        "growthDecayFactor": 0.85,
+        "dauMauRatio": 0.4,
+        "arpuMonthly": {
+          "ad": 100.0,
+          "paid": 50.0,
+          "commerce": 20.0
+        },
+        "monthlyChurn": 0.0,
+        "contentCostRatio": 0.3,
+        "cpa": 800.0,
+        "evSalesMultiple": {
+          "pessimistic": 3.0,
+          "base": 5.0,
+          "optimistic": 8.0
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 15912.0,
+          "base": 26520.0,
+          "optimistic": 42432.0
+        },
+        "keyMetrics": {}
+      }
+    },
+    {
+      "id": "random-00",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 14551630.437412092,
+        "mauGrowth": 0.025312415779364356,
+        "growthDecayFactor": 0.7672765823578532,
+        "dauMauRatio": 0.41037478106635894,
+        "arpuMonthly": {
+          "ad": 63.036802568925076,
+          "paid": 459.39754560509635,
+          "commerce": 161.25915562015314
+        },
+        "monthlyChurn": 0.12187249478857004,
+        "contentCostRatio": 0.2355665192040209,
+        "cpa": 4991.141680919001,
+        "evSalesMultiple": {
+          "pessimistic": 2.4111312262793723,
+          "base": 3.709432655814419,
+          "optimistic": 5.007734085349465
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 295142.2746227184,
+          "base": 454065.0378811052,
+          "optimistic": 612987.8011394921
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 8.205296869772344,
+          "ltv": 4288.401626713858,
+          "ltvCpaRatio": 0.8592025433996996,
+          "paybackMonths": 9.54989825484636
+        }
+      }
+    },
+    {
+      "id": "random-01",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 37873828.71556005,
+        "mauGrowth": 0.34297887425828055,
+        "growthDecayFactor": 0.7635102592231563,
+        "dauMauRatio": 0.5190580990447793,
+        "arpuMonthly": {
+          "ad": 190.05002173031932,
+          "paid": 421.6210791387232,
+          "commerce": 137.1644414178499
+        },
+        "monthlyChurn": 0.07472168979151336,
+        "contentCostRatio": 0.21400925491982267,
+        "cpa": 3085.538598541698,
+        "evSalesMultiple": {
+          "pessimistic": 4.6423017432996945,
+          "base": 7.14200268199953,
+          "optimistic": 9.641703620699367
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 2121824.46574347,
+          "base": 3264345.331913031,
+          "optimistic": 4406866.198082592
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 13.382994988338401,
+          "ltv": 7876.933825597743,
+          "ltvCpaRatio": 2.5528553845738884,
+          "paybackMonths": 5.242363147245896
+        }
+      }
+    },
+    {
+      "id": "random-02",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 32325062.74178182,
+        "mauGrowth": 0.07047299631086668,
+        "growthDecayFactor": 0.7502099823458025,
+        "dauMauRatio": 0.23253926815875492,
+        "arpuMonthly": {
+          "ad": 254.29408833759615,
+          "paid": 437.97675411807074,
+          "commerce": 333.1469536346734
+        },
+        "monthlyChurn": 0.07513044031293402,
+        "contentCostRatio": 0.13079913438183463,
+        "cpa": 2808.615122008739,
+        "evSalesMultiple": {
+          "pessimistic": 3.2140693187359344,
+          "base": 4.944722028824514,
+          "optimistic": 6.675374738913094
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1368524.0319846324,
+          "base": 2105421.5876686648,
+          "optimistic": 2842319.1433526976
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 13.310184205427129,
+          "ltv": 11863.287800118951,
+          "ltvCpaRatio": 4.22389230448715,
+          "paybackMonths": 3.1511656183296566
+        }
+      }
+    },
+    {
+      "id": "random-03",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 48418984.581102185,
+        "mauGrowth": 0.7883759610001481,
+        "growthDecayFactor": 0.7392942756828959,
+        "dauMauRatio": 0.6639140935587451,
+        "arpuMonthly": {
+          "ad": 366.98767490978486,
+          "paid": 33.045257592171694,
+          "commerce": 277.62855619264485
+        },
+        "monthlyChurn": 0.13727863142261917,
+        "contentCostRatio": 0.37928764154846417,
+        "cpa": 4894.671602996332,
+        "evSalesMultiple": {
+          "pessimistic": 3.171256534694282,
+          "base": 4.878856207221972,
+          "optimistic": 6.586455879749662
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 2233057.6108876816,
+          "base": 3435473.24751951,
+          "optimistic": 4637888.884151339
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 7.28445490486753,
+          "ltv": 3064.0811065814414,
+          "ltvCpaRatio": 0.62600340842187,
+          "paybackMonths": 11.636446075000382
+        }
+      }
+    },
+    {
+      "id": "random-04",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 31410514.96692702,
+        "mauGrowth": 0.8881089870534534,
+        "growthDecayFactor": 0.8567071280178237,
+        "dauMauRatio": 0.6531152670550504,
+        "arpuMonthly": {
+          "ad": 10.785956169115318,
+          "paid": 472.00680342080994,
+          "commerce": 233.41985986393183
+        },
+        "monthlyChurn": 0.1057659395573469,
+        "contentCostRatio": 0.33084235590043953,
+        "cpa": 3785.8684527669584,
+        "evSalesMultiple": {
+          "pessimistic": 1.9559001199192532,
+          "base": 3.0090771075680816,
+          "optimistic": 4.06225409521691
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 996946.8471654739,
+          "base": 1533764.380254575,
+          "optimistic": 2070581.9133436764
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 9.4548396599625,
+          "ltv": 4531.318410387316,
+          "ltvCpaRatio": 1.1969032909940478,
+          "paybackMonths": 7.899418216245443
+        }
+      }
+    },
+    {
+      "id": "random-05",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 25519596.24816409,
+        "mauGrowth": 0.5268016021669844,
+        "growthDecayFactor": 0.8203163379128853,
+        "dauMauRatio": 0.4628143311772252,
+        "arpuMonthly": {
+          "ad": 61.759748237730896,
+          "paid": 228.86471255668235,
+          "commerce": 389.35473370401155
+        },
+        "monthlyChurn": 0.014665716716721205,
+        "contentCostRatio": 0.17654377708160254,
+        "cpa": 129.3251121121602,
+        "evSalesMultiple": {
+          "pessimistic": 4.121188667794632,
+          "base": 6.340290258145588,
+          "optimistic": 8.559391848496544
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1310254.8432907525,
+          "base": 2015776.681985773,
+          "optimistic": 2721298.5206807936
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 68.1862345574863,
+          "ltv": 38179.72963614905,
+          "ltvCpaRatio": 295.2228613035092,
+          "paybackMonths": 0.2309652926484789
+        }
+      }
+    },
+    {
+      "id": "random-06",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 48402622.70230006,
+        "mauGrowth": 0.45755600874177427,
+        "growthDecayFactor": 0.940296724388175,
+        "dauMauRatio": 0.3978612983701437,
+        "arpuMonthly": {
+          "ad": 237.5144328467122,
+          "paid": 44.25987506324669,
+          "commerce": 291.9084611446046
+        },
+        "monthlyChurn": 0.04131028564801604,
+        "contentCostRatio": 0.22780423925847806,
+        "cpa": 1461.7046378350888,
+        "evSalesMultiple": {
+          "pessimistic": 2.921362326811576,
+          "base": 4.4944035797101165,
+          "optimistic": 6.067444832608658
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1418837.3842126862,
+          "base": 2182826.744942594,
+          "optimistic": 2946816.105672502
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 24.207046364203144,
+          "ltv": 10723.61024198502,
+          "ltvCpaRatio": 7.336372865223726,
+          "paybackMonths": 3.2995932470868135
+        }
+      }
+    },
+    {
+      "id": "random-07",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 14345406.258705359,
+        "mauGrowth": 0.8506870938911517,
+        "growthDecayFactor": 0.7294130565564292,
+        "dauMauRatio": 0.6830621160072063,
+        "arpuMonthly": {
+          "ad": 434.5209493138253,
+          "paid": 52.65046395880441,
+          "commerce": 235.56428177579647
+        },
+        "monthlyChurn": 0.0538653926627783,
+        "contentCostRatio": 0.5680817393288238,
+        "cpa": 3957.113835530191,
+        "evSalesMultiple": {
+          "pessimistic": 7.779735109827339,
+          "base": 11.968823245888213,
+          "optimistic": 16.157911381949088
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1791312.7160822626,
+          "base": 2755865.7170496345,
+          "optimistic": 3720418.7180170068
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 18.564795512778527,
+          "ltv": 5795.237515199596,
+          "ltvCpaRatio": 1.4645111958026664,
+          "paybackMonths": 12.676444923047223
+        }
+      }
+    },
+    {
+      "id": "random-08",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 49413259.95759446,
+        "mauGrowth": 0.51404497674057,
+        "growthDecayFactor": 0.7843147361048752,
+        "dauMauRatio": 0.5694596424323721,
+        "arpuMonthly": {
+          "ad": 461.8062426194397,
+          "paid": 53.272059164148565,
+          "commerce": 114.92990394622265
+        },
+        "monthlyChurn": 0.13515718655811484,
+        "contentCostRatio": 0.485032482489288,
+        "cpa": 916.0453683662884,
+        "evSalesMultiple": {
+          "pessimistic": 5.714347817035696,
+          "base": 8.79130433390107,
+          "optimistic": 11.868260850766447
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 3232037.616124051,
+          "base": 4972365.56326777,
+          "optimistic": 6712693.510411492
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 7.398792661091834,
+          "ltv": 2400.4181351951916,
+          "ltvCpaRatio": 2.6204140297943894,
+          "paybackMonths": 2.8235204730881325
+        }
+      }
+    },
+    {
+      "id": "random-09",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 19971572.537995704,
+        "mauGrowth": -0.0809523042131392,
+        "growthDecayFactor": 0.7677212913890465,
+        "dauMauRatio": 0.3636487432998836,
+        "arpuMonthly": {
+          "ad": 321.66510442643994,
+          "paid": 432.9987585431014,
+          "commerce": 398.5815906727776
+        },
+        "monthlyChurn": 0.1389815803697756,
+        "contentCostRatio": 0.3985165590345888,
+        "cpa": 1285.01494304618,
+        "evSalesMultiple": {
+          "pessimistic": 3.4387550142517043,
+          "base": 5.290392329618006,
+          "optimistic": 7.1420296449843095
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 873483.1799551635,
+          "base": 1343820.2768540976,
+          "optimistic": 1814157.3737530322
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 7.195198078330893,
+          "ltv": 4991.007023297231,
+          "ltvCpaRatio": 3.8840069917520545,
+          "paybackMonths": 1.852519342424041
+        }
+      }
+    },
+    {
+      "id": "random-10",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 23040215.55998497,
+        "mauGrowth": 0.8698191267811757,
+        "growthDecayFactor": 0.8622896717995181,
+        "dauMauRatio": 0.34554045856360227,
+        "arpuMonthly": {
+          "ad": 166.00964723120794,
+          "paid": 1.847169301274043,
+          "commerce": 34.859755357250556
+        },
+        "monthlyChurn": 0.10996137054314471,
+        "contentCostRatio": 0.12338155207240761,
+        "cpa": 3276.071583776191,
+        "evSalesMultiple": {
+          "pessimistic": 6.18684861682419,
+          "base": 9.518228641267985,
+          "optimistic": 12.84960866571178
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 648374.7967533356,
+          "base": 997499.687312824,
+          "optimistic": 1346624.5778723124
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 9.094102729536619,
+          "ltv": 1616.0683132760219,
+          "ltvCpaRatio": 0.4932945669682979,
+          "paybackMonths": 18.435440684918515
+        }
+      }
+    },
+    {
+      "id": "random-11",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 36582729.02147628,
+        "mauGrowth": 0.02395088876957957,
+        "growthDecayFactor": 0.8078384077099094,
+        "dauMauRatio": 0.5660176569128746,
+        "arpuMonthly": {
+          "ad": 133.0328263123604,
+          "paid": 39.832675866791014,
+          "commerce": 198.90822534537978
+        },
+        "monthlyChurn": 0.04854877299573347,
+        "contentCostRatio": 0.5238145963967543,
+        "cpa": 4652.168858844634,
+        "evSalesMultiple": {
+          "pessimistic": 3.023330362279133,
+          "base": 4.651277480429435,
+          "optimistic": 6.279224598579738
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 505243.54637940443,
+          "base": 777297.7636606222,
+          "optimistic": 1049351.98094184
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 20.59784291742824,
+          "ltv": 3646.5025080223936,
+          "ltvCpaRatio": 0.7838284934756221,
+          "paybackMonths": 26.27850746544576
+        }
+      }
+    },
+    {
+      "id": "random-12",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 1103378.7902983406,
+        "mauGrowth": 0.8234362934229049,
+        "growthDecayFactor": 0.9432322733535499,
+        "dauMauRatio": 0.6222286498803142,
+        "arpuMonthly": {
+          "ad": 155.39673611872428,
+          "paid": 448.32186429420295,
+          "commerce": 162.40220398346972
+        },
+        "monthlyChurn": 0.028672863134313557,
+        "contentCostRatio": 0.2568663424030182,
+        "cpa": 816.471464836382,
+        "evSalesMultiple": {
+          "pessimistic": 3.3986125462676564,
+          "base": 5.228634686565625,
+          "optimistic": 7.0586568268635945
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 62863.04075681589,
+          "base": 96712.37039510137,
+          "optimistic": 130561.70003338686
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 34.87618223948044,
+          "ltv": 19856.062258774018,
+          "ltvCpaRatio": 24.319358500487343,
+          "paybackMonths": 1.4340913737005667
+        }
+      }
+    },
+    {
+      "id": "random-13",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 27616879.300712097,
+        "mauGrowth": 0.558523779339881,
+        "growthDecayFactor": 0.8329079388059666,
+        "dauMauRatio": 0.2629964541245379,
+        "arpuMonthly": {
+          "ad": 4.901280670980279,
+          "paid": 2.818223126392627,
+          "commerce": 301.8246410298701
+        },
+        "monthlyChurn": 0.1383244412802953,
+        "contentCostRatio": 0.46862065415113496,
+        "cpa": 4600.891201299871,
+        "evSalesMultiple": {
+          "pessimistic": 6.067138815142943,
+          "base": 9.334059715604528,
+          "optimistic": 12.600980616066114
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 970009.0944186933,
+          "base": 1492321.6837210667,
+          "optimistic": 2014634.27302344
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 7.2293803665083205,
+          "ltv": 1189.127269679983,
+          "ltvCpaRatio": 0.2584558551056421,
+          "paybackMonths": 27.971431962929834
+        }
+      }
+    },
+    {
+      "id": "random-14",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 3805622.982667232,
+        "mauGrowth": -0.03756499213750606,
+        "growthDecayFactor": 0.7408229704789552,
+        "dauMauRatio": 0.2231017099131326,
+        "arpuMonthly": {
+          "ad": 94.73192658268236,
+          "paid": 141.29817495512182,
+          "commerce": 496.28934008162776
+        },
+        "monthlyChurn": 0.10242285423978328,
+        "contentCostRatio": 0.5239873518712593,
+        "cpa": 1111.3038475614703,
+        "evSalesMultiple": {
+          "pessimistic": 2.065780972492328,
+          "base": 3.17812457306512,
+          "optimistic": 4.290468173637913
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 66491.05989436497,
+          "base": 102293.93829902302,
+          "optimistic": 138096.8167036811
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 9.763445936186164,
+          "ltv": 3403.47200113493,
+          "ltvCpaRatio": 3.06259355495183,
+          "paybackMonths": 3.187966591387844
+        }
+      }
+    },
+    {
+      "id": "random-15",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 24111515.41610741,
+        "mauGrowth": 0.19905870445505772,
+        "growthDecayFactor": 0.8692055422117158,
+        "dauMauRatio": 0.3763621492937632,
+        "arpuMonthly": {
+          "ad": 386.54484745015196,
+          "paid": 71.40290890230865,
+          "commerce": 336.92218673207077
+        },
+        "monthlyChurn": 0.14402921509077543,
+        "contentCostRatio": 0.4167893092042536,
+        "cpa": 3444.6451836307506,
+        "evSalesMultiple": {
+          "pessimistic": 4.2582974372831774,
+          "base": 6.551226826589504,
+          "optimistic": 8.844156215895831
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 1174297.853837032,
+          "base": 1806612.0828262032,
+          "optimistic": 2438926.3118153745
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 6.943035823459448,
+          "ltv": 3218.629278142859,
+          "ltvCpaRatio": 0.9343863029603344,
+          "paybackMonths": 7.430583904603948
+        }
+      }
+    },
+    {
+      "id": "random-16",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 3837760.764532474,
+        "mauGrowth": 0.9936682362491384,
+        "growthDecayFactor": 0.8568550205482249,
+        "dauMauRatio": 0.5049928148933548,
+        "arpuMonthly": {
+          "ad": 251.59254153539536,
+          "paid": 419.64064702595164,
+          "commerce": 109.83953097932702
+        },
+        "monthlyChurn": 0.10087836071100936,
+        "contentCostRatio": 0.465126356266389,
+        "cpa": 3248.7752999998916,
+        "evSalesMultiple": {
+          "pessimistic": 4.511868811562729,
+          "base": 6.941336633173428,
+          "optimistic": 9.370804454784128
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 323563.8297574567,
+          "base": 497790.5073191642,
+          "optimistic": 672017.1848808717
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 9.91292872873642,
+          "ltv": 4141.375896446811,
+          "ltvCpaRatio": 1.274749871573743,
+          "paybackMonths": 7.776371623790326
+        }
+      }
+    },
+    {
+      "id": "random-17",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 23178933.743237786,
+        "mauGrowth": 0.011312710284911612,
+        "growthDecayFactor": 0.9301364247329258,
+        "dauMauRatio": 0.3678502689174197,
+        "arpuMonthly": {
+          "ad": 74.95448467897964,
+          "paid": 65.13315269957926,
+          "commerce": 304.1250389088089
+        },
+        "monthlyChurn": 0.14007237655701765,
+        "contentCostRatio": 0.21555160950441635,
+        "cpa": 1401.1907957813182,
+        "evSalesMultiple": {
+          "pessimistic": 5.489365979286978,
+          "base": 8.445178429672273,
+          "optimistic": 11.40099088005757
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 685919.7370881487,
+          "base": 1055261.133981767,
+          "optimistic": 1424602.530875386
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 7.139166369415753,
+          "ltv": 2487.727612799637,
+          "ltvCpaRatio": 1.7754381632320493,
+          "paybackMonths": 4.021072948223354
+        }
+      }
+    },
+    {
+      "id": "random-18",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 29308173.543430246,
+        "mauGrowth": 0.04450811578350275,
+        "growthDecayFactor": 0.7982891556271934,
+        "dauMauRatio": 0.6132649014363207,
+        "arpuMonthly": {
+          "ad": 441.50749322750164,
+          "paid": 400.244015721828,
+          "commerce": 396.682543164617
+        },
+        "monthlyChurn": 0.0030468551214975826,
+        "contentCostRatio": 0.2913258242182519,
+        "cpa": 2515.0919551596967,
+        "evSalesMultiple": {
+          "pessimistic": 5.079512786792652,
+          "base": 7.814635056604079,
+          "optimistic": 10.549757326415508
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 2310876.6383678857,
+          "base": 3555194.8282582853,
+          "optimistic": 4799513.018148686
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 328.20726950367185,
+          "ltv": 288049.873113272,
+          "ltvCpaRatio": 114.528565256765,
+          "paybackMonths": 2.8657240992048942
+        }
+      }
+    },
+    {
+      "id": "random-19",
+      "tags": [
+        "random"
+      ],
+      "input": {
+        "mau": 22153871.40653669,
+        "mauGrowth": 0.10188893499959212,
+        "growthDecayFactor": 0.7935140310575306,
+        "dauMauRatio": 0.5309534536028908,
+        "arpuMonthly": {
+          "ad": 376.9661473915154,
+          "paid": 226.40568422502548,
+          "commerce": 167.6028197577365
+        },
+        "monthlyChurn": 0.10332117356549118,
+        "contentCostRatio": 0.280471357523863,
+        "cpa": 772.7529540461302,
+        "evSalesMultiple": {
+          "pessimistic": 3.21834270248326,
+          "base": 4.951296465358861,
+          "optimistic": 6.684250228234463
+        },
+        "projectionYears": 3
+      },
+      "expected": {
+        "ev": {
+          "pessimistic": 726843.7920131146,
+          "base": 1118221.2184817146,
+          "optimistic": 1509598.644950315
+        },
+        "keyMetrics": {
+          "avgLifetimeMonths": 9.678558280855567,
+          "ltv": 5369.067395805569,
+          "ltvCpaRatio": 6.947973951692014,
+          "paybackMonths": 1.3930043992894625
+        }
+      }
+    }
+  ]
+}
