@@ -1,0 +1,33 @@
+/* Phase 2骨格用の最小限のレイアウト。装飾の磨き込みはPhase 6。 */
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg-elevated);
+}
+
+.app-header__brand {
+  font-family: var(--font-heading);
+  font-weight: 600;
+}
+
+.app-header__nav {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+}
+
+.app-header__nav a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+}
+
+.app-header__nav a.active {
+  color: var(--color-accent);
+}
+
+.app-main {
+  padding: 1.5rem;
+}
