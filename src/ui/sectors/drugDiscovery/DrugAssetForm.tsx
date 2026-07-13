@@ -18,8 +18,6 @@ const PHASE_LABELS: Record<Phase, string> = {
   filing: '申請',
 }
 
-const MILESTONE_PHASE_OPTIONS: (Phase | 'launch')[] = [...PHASE_ORDER, 'launch']
-
 /**
  * パイプライン品目1件分の入力フォーム。出典: docs/engine-spec.md §2.2
  * フェーズ確率・所要年数・開発費は5フェーズ全て常時表示する(現フェーズより前のフェーズは
@@ -27,6 +25,10 @@ const MILESTONE_PHASE_OPTIONS: (Phase | 'launch')[] = [...PHASE_ORDER, 'launch']
  */
 export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAssetFormProps) {
   const set = <K extends keyof PipelineAsset>(key: K, value: PipelineAsset[K]) => onChange({ ...asset, [key]: value })
+  // マイルストーンは残フェーズ(現フェーズ以降)+上市時のみ選択可(C-6)。
+  // 現フェーズより前を選択すると、エンジンは「既に到達済み」としてt=0・確率1で計上する
+  // 未定義動作(TODOコメント参照)に陥るため、UI側で意味論の穴を塞ぐ。
+  const milestonePhaseOptions: (Phase | 'launch')[] = [...PHASE_ORDER.slice(PHASE_ORDER.indexOf(asset.currentPhase)), 'launch']
   const setPhaseField = (
     field: 'phaseSuccessProbs' | 'phaseDurations' | 'developmentCosts',
     phase: Phase,
@@ -228,7 +230,7 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
               <label>
                 発生タイミング
                 <select value={m.phase} onChange={(e) => updateMilestone(i, { phase: e.target.value as Phase | 'launch' })}>
-                  {MILESTONE_PHASE_OPTIONS.map((p) => (
+                  {milestonePhaseOptions.map((p) => (
                     <option key={p} value={p}>
                       {p === 'launch' ? '上市時' : `${PHASE_LABELS[p]}完了時`}
                     </option>
