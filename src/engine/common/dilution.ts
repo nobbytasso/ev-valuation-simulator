@@ -9,7 +9,8 @@
  */
 import type { Cashflow } from './npv.ts'
 import { irrBisection, moic } from './npv.ts'
-import type { Money, Ratio, YearIndex } from '../types.ts'
+import { atLeast, collectIssues, inRange, nonNegativeInteger } from './validation.ts'
+import type { Money, Ratio, ValidationIssue, YearIndex } from '../types.ts'
 
 export interface CapTableHolder {
   id: string
@@ -163,4 +164,72 @@ export function simulateDilution(inputs: DilutionInputs): DilutionResult {
     fundIrr: irrBisection(fundCashflows),
     fundMoic: moic(fundCashflows),
   }
+}
+
+/**
+ * DilutionInputs のドメイン検証(Phase 4追加、§4.5)。違反は全件列挙する(§0.2と同じ規約)。
+ * `simulateDilution` 自体は従来どおり検証を行わない(呼び出し側が事前に検証する契約)。
+ */
+export function validateDilutionInputs(inputs: DilutionInputs): ValidationIssue[] {
+  const checks: (ValidationIssue | null)[] = []
+
+  inputs.initialCapTable.forEach((holder, i) => {
+    checks.push(inRange(holder.ownership, `initialCapTable[${i}].ownership`, 0, 1))
+  })
+  const ownershipSum = inputs.initialCapTable.reduce((sum, h) => sum + h.ownership, 0)
+  if (Math.abs(ownershipSum - 1) > 1e-9) {
+    checks.push({
+      field: 'initialCapTable',
+      code: 'OWNERSHIP_SUM_NOT_ONE',
+      message: `initialCapTable の ownership 合計は 1 である必要があります(実際: ${ownershipSum})`,
+    })
+  }
+  const poolCount = inputs.initialCapTable.filter((h) => h.isPool).length
+  if (poolCount > 1) {
+    checks.push({
+      field: 'initialCapTable',
+      code: 'MULTIPLE_POOLS',
+      message: `initialCapTable の isPool は高々1件である必要があります(実際: ${poolCount}件)`,
+    })
+  }
+
+  inputs.rounds.forEach((round, i) => {
+    const prefix = `rounds[${i}]`
+    checks.push(atLeast(round.preMoneyValuation, `${prefix}.preMoneyValuation`, 0, { exclusive: true }))
+    checks.push(atLeast(round.amountRaised, `${prefix}.amountRaised`, 0))
+    checks.push(inRange(round.optionPoolPostPct, `${prefix}.optionPoolPostPct`, 0, 1, { maxExclusive: true }))
+    checks.push(atLeast(round.fundInvestment, `${prefix}.fundInvestment`, 0))
+    if (round.fundInvestment > round.amountRaised) {
+      checks.push({
+        field: `${prefix}.fundInvestment`,
+        code: 'OUT_OF_DOMAIN',
+        message: `${prefix}.fundInvestment は amountRaised 以下である必要があります(実際: ${round.fundInvestment} > ${round.amountRaised})`,
+      })
+    }
+    checks.push(nonNegativeInteger(round.yearIndex, `${prefix}.yearIndex`))
+
+    const post = round.preMoneyValuation + round.amountRaised
+    if (post > 0) {
+      const n = round.amountRaised / post
+      if (n + round.optionPoolPostPct >= 1) {
+        checks.push({
+          field: `${prefix}.optionPoolPostPct`,
+          code: 'DILUTION_COLLAPSE',
+          message: `${prefix}: amountRaised/(preMoneyValuation+amountRaised) + optionPoolPostPct が1以上のため希釈係数が0以下になります`,
+        })
+      }
+    }
+  })
+
+  const maxRoundYear = inputs.rounds.reduce((max, r) => Math.max(max, r.yearIndex), 0)
+  if (inputs.exit.yearIndex < maxRoundYear) {
+    checks.push({
+      field: 'exit.yearIndex',
+      code: 'OUT_OF_DOMAIN',
+      message: `exit.yearIndex は全ラウンドのyearIndex以上である必要があります(実際: ${inputs.exit.yearIndex} < ${maxRoundYear})`,
+    })
+  }
+  checks.push(atLeast(inputs.exit.equityValue, 'exit.equityValue', 0))
+
+  return collectIssues(...checks)
 }

@@ -1,7 +1,7 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'vitest'
 import { irrClosedFormSingle } from './npv.ts'
-import { simulateDilution } from './dilution.ts'
+import { simulateDilution, validateDilutionInputs } from './dilution.ts'
 import type { CapTableHolder, DilutionInputs, FundingRound } from './dilution.ts'
 
 const initialCapTable: CapTableHolder[] = [{ id: 'founders', name: 'Founders', ownership: 1 }]
@@ -122,6 +122,78 @@ describe('simulateDilution', () => {
         },
       ),
       { numRuns: 200 },
+    )
+  })
+})
+
+describe('validateDilutionInputs(Phase 4, §4.5)', () => {
+  it('P16: 検証を通過した任意の入力に対し、全ラウンド後の全保有者ownershipは[0,1]の範囲内', () => {
+    fc.assert(
+      fc.property(fc.array(roundArb, { minLength: 0, maxLength: 5 }), (specs) => {
+        const rounds = buildRounds(specs)
+        const inputs: DilutionInputs = {
+          initialCapTable,
+          rounds,
+          exit: { yearIndex: rounds.length, equityValue: 10000 },
+        }
+        expect(validateDilutionInputs(inputs)).toEqual([])
+        const result = simulateDilution(inputs)
+        for (const snapshot of result.rounds) {
+          for (const holder of snapshot.capTableAfter) {
+            expect(holder.ownership).toBeGreaterThanOrEqual(-1e-9)
+            expect(holder.ownership).toBeLessThanOrEqual(1 + 1e-9)
+          }
+        }
+      }),
+      { numRuns: 200 },
+    )
+  })
+
+  function buildValidInputs(): DilutionInputs {
+    const rounds = buildRounds([
+      { preMoneyValuation: 1000, amountRaisedRatio: 0.25, optionPoolPostPct: 0.1, fundShare: 0.5 },
+    ])
+    return {
+      initialCapTable: [{ id: 'founders', name: 'Founders', ownership: 1 }],
+      rounds,
+      exit: { yearIndex: 1, equityValue: 10000 },
+    }
+  }
+
+  const domainViolations: ((i: DilutionInputs) => DilutionInputs)[] = [
+    (i) => ({ ...i, initialCapTable: [{ ...i.initialCapTable[0], ownership: 1.5 }] }),
+    (i) => ({ ...i, initialCapTable: [{ ...i.initialCapTable[0], ownership: 0.5 }] }), // Σ ≠ 1
+    (i) => ({
+      ...i,
+      initialCapTable: [
+        { id: 'a', name: 'A', ownership: 0.5, isPool: true },
+        { id: 'b', name: 'B', ownership: 0.5, isPool: true },
+      ],
+    }),
+    (i) => ({ ...i, rounds: [{ ...i.rounds[0], preMoneyValuation: 0 }] }),
+    (i) => ({ ...i, rounds: [{ ...i.rounds[0], amountRaised: -1 }] }),
+    (i) => ({ ...i, rounds: [{ ...i.rounds[0], optionPoolPostPct: -0.1 }] }),
+    (i) => ({ ...i, rounds: [{ ...i.rounds[0], optionPoolPostPct: 1 }] }),
+    (i) => ({ ...i, rounds: [{ ...i.rounds[0], fundInvestment: i.rounds[0].amountRaised + 1 }] }),
+    (i) => ({ ...i, rounds: [{ ...i.rounds[0], fundInvestment: -1 }] }),
+    (i) => ({ ...i, rounds: [{ ...i.rounds[0], yearIndex: 0.5 }] }),
+    (i) => ({ ...i, rounds: [{ ...i.rounds[0], yearIndex: -1 }] }),
+    // n + optionPoolPostPct ≥ 1(希釈係数 k ≤ 0)
+    (i) => ({
+      ...i,
+      rounds: [{ ...i.rounds[0], amountRaised: i.rounds[0].preMoneyValuation * 9, optionPoolPostPct: 0.5 }],
+    }),
+    (i) => ({ ...i, exit: { ...i.exit, yearIndex: -1 } }),
+    (i) => ({ ...i, exit: { ...i.exit, equityValue: -1 } }),
+  ]
+
+  it('P17: ドメイン外入力 → 該当fieldのValidationIssueが列挙される(§0.2.1と同型)', () => {
+    fc.assert(
+      fc.property(fc.constantFrom(...domainViolations), (corrupt) => {
+        const issues = validateDilutionInputs(corrupt(buildValidInputs()))
+        expect(issues.length).toBeGreaterThan(0)
+      }),
+      { numRuns: 50 },
     )
   })
 })
