@@ -1,0 +1,41 @@
+/**
+ * ライトモード = ギャルゲー風ポップ トークン。
+ * 出典: docs/requirements-rev4.md §5。白+パステル、ラブリーピンクアクセント。
+ * Phase 2時点では骨格値のみ。装飾モチーフ(ハート/スパークル)はPhase 6(theme-effects/)で追加。
+ */
+:root[data-theme='light'] {
+  /* 色: 白基調 + パステル。アクセントはラブリーピンク。文字は濃色シェードでAA確保 */
+  --color-bg: #fffbfd;
+  --color-bg-elevated: #ffffff;
+  --color-surface: #fff5fa;
+  --color-border: #f4d9e8;
+  --color-text: #3a2933;
+  --color-text-muted: #8a7480;
+  --color-accent: #ff8fc7;
+  --color-accent-contrast: #ffffff;
+  --color-warning: #d98a2b;
+  --color-status-good: #2ba88f;
+  --color-status-caution: #d98a2b;
+  --color-status-bad: #d94f6e;
+
+  /* 角丸: 大きめ、ふんわり */
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  /* 影: ソフトシャドウ */
+  --shadow-glow: none;
+  --shadow-panel: 0 4px 16px rgba(255, 143, 199, 0.18);
+
+  /* フォント: 見出しは丸ゴシック、本文は標準ゴシック(実際のWebフォント読込はPhase 6) */
+  --font-heading: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', system-ui, sans-serif;
+  --font-body: 'Hiragino Sans', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', monospace;
+
+  /* モーション: ゆるいイージング */
+  --motion-duration-fast: 180ms;
+  --motion-duration-base: 320ms;
+  --motion-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  color-scheme: light;
+}

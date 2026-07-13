@@ -1,0 +1,37 @@
+/**
+ * トークンを実際のスタイルに適用する共通ベース。テーマ固有の分岐はここに書かない
+ * (色・角丸・影・フォント・モーションは必ずトークン参照のみ)。
+ */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  transition:
+    background-color var(--motion-duration-base) var(--motion-easing),
+    color var(--motion-duration-base) var(--motion-easing);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+}
+
+code,
+pre,
+.tabular-numbers {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
