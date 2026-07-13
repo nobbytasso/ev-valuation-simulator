@@ -223,7 +223,7 @@ React \+ TypeScript \+ Vite / Zustand / Recharts / Framer Motion / SheetJS / fas
 | 1 | 計算エンジン(6セクター+VC法+希薄化)+ リファレンス実装 \+ golden自動生成 \+ プロパティテスト | Claude Code | golden一致・全テストGreen(**完了**) |
 | 2 | UI骨格(ルーティング/Zustand/StorageAdapter/テーマ基盤(FUI・ポップの2トークンセット: 色/角丸/影/フォント/モーション)/シナリオCRUD) | Claude Code | 保存・復元・テーマ切替がE2Eで動作(**完了**) |
 | 3 | セクター別フォーム+結果ビュー(SaaS→EC/D2C→メディア→医療機器→創薬→クライメート)+ ベンチマーク基準線表示 | Claude Code | セクター毎受入(**完了、レビュー: docs/review-phase3.md**) |
-| 4 | 感度分析トルネード \+ 資本政策シミュレーター(**シナリオ結果ビューへの期待IRR/MOIC表示を含む**【Rev.5明確化】) | Claude Code | 受入 |
+| 4 | 感度分析トルネード \+ 資本政策シミュレーター(**シナリオ結果ビューへの期待IRR/MOIC表示を含む**【Rev.5明確化】) | Claude Code | 受入(**完了、報告: docs/logs/phase4-completion-report-20260714.md**) |
 | 5 | ポートフォリオ管理 \+ Excelエクスポート \+ **シナリオ並列比較ビュー(表+チャート)**【Rev.5割当】 | Claude Code | 出力Excel検収 |
 | 6 | デュアルテーマ磨き込み(ダーク: S.A.C./PSYCHO-PASS様式のワイヤーフレーム・円形ゲージ・判定色/スキャン演出、ライト: パステル/角丸/ハート・スパークル演出)+ **金額表示単位切替(百万円/億円)**【Rev.5割当】+ **ベンチマークのbasis/notes/as_of表示・years/count単位のサフィックス表示**【docs/review-phase3.md D-13/D-14、本節参照】 | Claude Code | 両テーマのデザインレビュー |
 | 7 | GitHub Pagesデプロイ(Actions)+ ダミーデータ組込み | Claude Code | 本番URL動作確認 |
@@ -235,6 +235,7 @@ React \+ TypeScript \+ Vite / Zustand / Recharts / Framer Motion / SheetJS / fas
 ### バックログ(フェーズ未割当)【Rev.5追加】
 
 - **医療機器モデルへの implied EV/売上マルチプル追加**(DCF結果の妥当性チェック指標。エンジン+golden+Python参照実装の3点更新を伴うため独立バッチとし、**Phase 5 前後**に実施)【C-2裁定】。実装時、医療機器・クライメートの golden テストに他4セクターと同じ keyMetrics キー集合比較を必須で追加する(docs/audit-phase3-v2.md 指摘11)
+- **資本政策シミュレーターから `vcMethod.dilutionRetention` へのワンクリック反映**(Phase 4, P4-6裁定)。Phase 4 では非連動(参考値として「初回出資時持分→Exit実効持分の残存率」を資本政策セクションに表示するに留めた)。ファンドが複数ラウンドに出資した場合の「残存率」の定義(どの出資分を基準にするか)の裁定とセットで実施する(`docs/phase4-spec.md` §8 P4-6)
 
 ### 低優先レビュー指摘のトリアージ【docs/review-phase3.md、2026-07-13裁定】
 
