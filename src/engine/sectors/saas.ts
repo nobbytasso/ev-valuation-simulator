@@ -94,8 +94,12 @@ export function evaluateSaas(inputs: SaasInputs): EngineResult<SectorValuationRe
   return { ok: true, value: { ev, auxiliary, keyMetrics, cashflows } }
 }
 
-/** 感度分析の対象ドライバー(§1.5)。 */
-export const SAAS_SENSITIVITY_DRIVERS = ['arrGrowth', 'evArrMultiple.base', 'discountRate', 'fcfMargin'] as const
+/**
+ * 感度分析の対象ドライバー(§1.5)。base EV(マルチプル評価)に影響し得るものに限る。
+ * discountRate・fcfMargin は auxiliary(簡易DCF)にのみ影響し base EV には無関係のため
+ * 対象外(Phase 4確定、U-21。恒常的にspan=0となり誤解を招くため削除)。
+ */
+export const SAAS_SENSITIVITY_DRIVERS = ['arrGrowth', 'evArrMultiple.base'] as const
 
 /**
  * ドライバーを相対変動させ、定義域端にクランプする(§1.5, U-15)。
@@ -111,14 +115,6 @@ export function applySaasDriver(inputs: SaasInputs, driverId: string, multiplier
     case 'evArrMultiple.base': {
       const value = Math.max(inputs.evArrMultiple.base * multiplier, 1e-9)
       return { ...inputs, evArrMultiple: { ...inputs.evArrMultiple, base: value } }
-    }
-    case 'discountRate': {
-      const value = Math.max(inputs.discountRate * multiplier, inputs.terminalGrowth + 1e-6)
-      return { ...inputs, discountRate: value }
-    }
-    case 'fcfMargin': {
-      const value = Math.min(Math.max(inputs.fcfMargin * multiplier, -1), 1)
-      return { ...inputs, fcfMargin: value }
     }
     default:
       return inputs

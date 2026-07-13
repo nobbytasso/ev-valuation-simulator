@@ -224,7 +224,9 @@ describe('SaaS プロパティ', () => {
       saasBaseEv,
     )
     expect(itemsWithDelta.length).toBe(SAAS_SENSITIVITY_DRIVERS.length)
-    expect(itemsWithDelta.every((item) => item.span >= 0)).toBe(true)
+    // Phase 4(U-21)で base EV に無関係な構造的span=0ドライバーを削除済みのため、
+    // 残る全ドライバーは span > 0 となるべき(監査 §2-5 の再発防止)。
+    expect(itemsWithDelta.every((item) => item.span > 0)).toBe(true)
   })
 
   const domainViolations: ((i: SaasInputs) => SaasInputs)[] = [

@@ -256,6 +256,10 @@ interface TornadoItem {
 - 変動は相対(乗算)。変動後の値がドライバーの定義域を出る場合は**定義域端にクランプ**する(例: 確率は [0,1])(→ U-15)。
 - `evAtHigh < evAtLow` となるドライバー(割引率等)もそのまま返す(方向はUI側で表現)。
 
+**感度対象ドライバーの選定基準(Phase 4確定、U-21)**: `driverIds` は base EV(`baseEv` が返す値)に影響し得るドライバーに限る。auxiliary(SaaS簡易DCF)や keyMetrics のみに影響するドライバーは、トルネードチャート上で恒常的に span=0 となり誤解を招くため列挙しない。これに伴い SaaS の `discountRate`/`fcfMargin`、メディアの `monthlyChurn`/`cpa`、EC/D2C の `f2Rate`/`aov` を各 `SENSITIVITY_DRIVERS` から削除した。
+
+**消費側契約(Phase 4追加)**: セクターID→(driverIds取得/applier/baseEv/表示ラベル)の対応はUI層のレジストリ(`src/ui/sensitivity/sensitivityRegistry.ts`)が保持する(ベンチマークのUIマッピング表と同じ配置規約)。ドライバー毎の変動幅は、呼び出し側が `buildTornado` をドライバー単位で呼び分けて実現する(`SensitivityConfig` は単一 δ のまま)。
+
 ### 1.5.1 創薬のドライバー設計(ネスト構造)【v0.4追加、B-1対応】
 
 創薬の感度対象ドライバーは品目配列(`assets`)の内部にあるため、`driverId` は**パス形式**で指定する。Phase 3 末に実装済み(コミット 80bbc97。`src/engine/sectors/drugDiscovery.ts` に `DRUG_DISCOVERY_SENSITIVITY_DRIVERS`(動的生成関数)+ `applyDrugDiscoveryDriver` + `drugDiscoveryBaseEv` を追加)。
@@ -648,6 +652,7 @@ EV_k = Σ_{t < m} −NetCapex(t)/(1+r_k)^t
 | U-18 | 創薬フェーズ成功確率の既定値と出典 | 仮値同梱(出典確認は Cowork/文献レビューで) | 仮採用 |
 | U-19 | マルチプル・割引率の既定値 | ダミー値。`benchmarks.dummy.json` と整合させる | 仮採用 |
 | U-20 | 創薬感度分析: 割引率のポイント変動幅 δ_r | ±0.02(2%ポイント)固定(Stage 1)、下限 max(r, 0.001)。可変化は DriverApplier のシグネチャ拡張が必要なため実需発生時に再設計 | **確定** |
+| U-21 | 感度分析: EVに影響しないドライバーの扱い | base EVに影響するドライバーに限る(構造的span=0の6件を削除。Phase 4, P4-1裁定) | **確定** |
 
 ---
 
@@ -655,3 +660,4 @@ EV_k = Σ_{t < m} −NetCapex(t)/(1+r_k)^t
 *v0.2 — 2026-07-13。レビュー反映: U-1/U-4/U-6/U-10/U-11/U-14 を確定。U-14 は「未消化プール無視(Exit時再正規化)」に変更し §1.4 を改定。*
 *v0.3 — 2026-07-13。Python(`tools/reference/`)/TypeScript(`src/engine/`)の独立クロスチェックで、創薬モデルの `modelHorizonYears` がPython参照実装で絶対年として誤実装されていたことを検出・修正(§2.2に明確化注記を追加)。golden fixtureを再生成。TSエンジンはこの時点でgolden全ケース一致・fast-checkプロパティ約60件Green。*
 *v0.4 — 2026-07-13。Phase 3レビュー(docs/review-phase3.md)の裁定反映: (1) §1.5.1 創薬の感度分析ドライバー設計を追加(ネストdriverIdパス形式・確率±δクランプ・割引率ポイント変動、U-20新設)【B-1】 (2) §0.2.1 セクター別ドメイン制約一覧を追加(D-2実装の前提。EC f2Rate∈[0,1)、確率系[0,1]、メディアの発散ケースのキー省略挙動を定義) (3) §2.4 paybackMonthsのガード条件を明確化(cpa=0でも出力。Python参照実装の乖離をD-3で修正予定)【B-4/D-3】*
+*v0.5 — 2026-07-14。Phase 4-B C2: §1.5 に感度対象ドライバーの選定基準(base EVに無関係な構造的span=0ドライバーの除外、U-21新設・確定)と消費側契約(UI層レジストリ)を追記。SaaS `discountRate`/`fcfMargin`、メディア `monthlyChurn`/`cpa`、EC/D2C `f2Rate`/`aov` を各 `SENSITIVITY_DRIVERS` から削除(`docs/phase4-spec.md` §6 C2、P4-1裁定)。*

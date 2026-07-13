@@ -82,7 +82,12 @@ export function evaluateEcD2c(inputs: EcD2cInputs): EngineResult<SectorValuation
   return { ok: true, value: { ev, keyMetrics } }
 }
 
-export const EC_D2C_SENSITIVITY_DRIVERS = ['revenueGrowth', 'evMultiple.base', 'f2Rate', 'aov'] as const
+/**
+ * 感度分析の対象ドライバー(§1.5)。base EV(マルチプル評価)に影響し得るものに限る。
+ * f2Rate・aov は keyMetrics(LTV系)にのみ影響し base EV には無関係のため
+ * 対象外(Phase 4確定、U-21。恒常的にspan=0となり誤解を招くため削除)。
+ */
+export const EC_D2C_SENSITIVITY_DRIVERS = ['revenueGrowth', 'evMultiple.base'] as const
 
 export function applyEcD2cDriver(inputs: EcD2cInputs, driverId: string, multiplier: number): EcD2cInputs {
   switch (driverId) {
@@ -93,14 +98,6 @@ export function applyEcD2cDriver(inputs: EcD2cInputs, driverId: string, multipli
     case 'evMultiple.base': {
       const value = Math.max(inputs.evMultiple.base * multiplier, 1e-9)
       return { ...inputs, evMultiple: { ...inputs.evMultiple, base: value } }
-    }
-    case 'f2Rate': {
-      const value = Math.min(Math.max(inputs.f2Rate * multiplier, 0), 0.999)
-      return { ...inputs, f2Rate: value }
-    }
-    case 'aov': {
-      const value = Math.max(inputs.aov * multiplier, 0)
-      return { ...inputs, aov: value }
     }
     default:
       return inputs

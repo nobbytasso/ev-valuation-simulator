@@ -138,6 +138,18 @@ describe('EcD2c プロパティ', () => {
     for (const item of items) expect(item.span).toBeCloseTo(0, 6)
   })
 
+  it('感度分析: δ=0.2で全ドライバーspan>0(Phase 4でbase EVに無関係な構造的span=0ドライバーを削除済み、U-21)', () => {
+    const inputs = buildInputs()
+    const items = buildTornado(
+      inputs,
+      { delta: 0.2, driverIds: [...EC_D2C_SENSITIVITY_DRIVERS] },
+      applyEcD2cDriver,
+      ecD2cBaseEv,
+    )
+    expect(items.length).toBe(EC_D2C_SENSITIVITY_DRIVERS.length)
+    expect(items.every((item) => item.span > 0)).toBe(true)
+  })
+
   const domainViolations: ((i: EcD2cInputs) => EcD2cInputs)[] = [
     (i) => ({ ...i, annualRevenue: -1 }),
     (i) => ({ ...i, revenueGrowth: -1 }),

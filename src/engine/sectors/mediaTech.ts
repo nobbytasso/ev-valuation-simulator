@@ -99,7 +99,12 @@ export function evaluateMediaTech(inputs: MediaTechInputs): EngineResult<SectorV
   return { ok: true, value: { ev, keyMetrics } }
 }
 
-export const MEDIA_TECH_SENSITIVITY_DRIVERS = ['mauGrowth', 'evSalesMultiple.base', 'monthlyChurn', 'cpa'] as const
+/**
+ * 感度分析の対象ドライバー(§1.5)。base EV(マルチプル評価)に影響し得るものに限る。
+ * monthlyChurn・cpa は keyMetrics(LTV系)にのみ影響し base EV には無関係のため
+ * 対象外(Phase 4確定、U-21。恒常的にspan=0となり誤解を招くため削除)。
+ */
+export const MEDIA_TECH_SENSITIVITY_DRIVERS = ['mauGrowth', 'evSalesMultiple.base'] as const
 
 export function applyMediaTechDriver(inputs: MediaTechInputs, driverId: string, multiplier: number): MediaTechInputs {
   switch (driverId) {
@@ -110,14 +115,6 @@ export function applyMediaTechDriver(inputs: MediaTechInputs, driverId: string, 
     case 'evSalesMultiple.base': {
       const value = Math.max(inputs.evSalesMultiple.base * multiplier, 1e-9)
       return { ...inputs, evSalesMultiple: { ...inputs.evSalesMultiple, base: value } }
-    }
-    case 'monthlyChurn': {
-      const value = Math.min(Math.max(inputs.monthlyChurn * multiplier, 0), 1)
-      return { ...inputs, monthlyChurn: value }
-    }
-    case 'cpa': {
-      const value = Math.max(inputs.cpa * multiplier, 0)
-      return { ...inputs, cpa: value }
     }
     default:
       return inputs

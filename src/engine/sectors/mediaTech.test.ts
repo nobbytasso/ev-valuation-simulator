@@ -133,6 +133,18 @@ describe('MediaTech プロパティ', () => {
     for (const item of items) expect(item.span).toBeCloseTo(0, 6)
   })
 
+  it('感度分析: δ=0.2で全ドライバーspan>0(Phase 4でbase EVに無関係な構造的span=0ドライバーを削除済み、U-21)', () => {
+    const inputs = buildInputs()
+    const items = buildTornado(
+      inputs,
+      { delta: 0.2, driverIds: [...MEDIA_TECH_SENSITIVITY_DRIVERS] },
+      applyMediaTechDriver,
+      mediaTechBaseEv,
+    )
+    expect(items.length).toBe(MEDIA_TECH_SENSITIVITY_DRIVERS.length)
+    expect(items.every((item) => item.span > 0)).toBe(true)
+  })
+
   const domainViolations: ((i: MediaTechInputs) => MediaTechInputs)[] = [
     (i) => ({ ...i, mau: -1 }),
     (i) => ({ ...i, mauGrowth: -1 }),
