@@ -7,5 +7,12 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: 'node',
+    setupFiles: ['./src/test/setupTests.ts'],
+    environmentOptions: {
+      // jsdomの既定オリジンは about:blank(opaque origin)で localStorage が使用不可のため明示指定。
+      jsdom: {
+        url: 'http://localhost/',
+      },
+    },
   },
 })
