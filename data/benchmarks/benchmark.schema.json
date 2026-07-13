@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VC Valuation Simulator Benchmark Data (v1.1 - simplified)",
+  "description": "セクター別ベンチマーク。分布方式を廃止し、業界標準値(単一値)と比較対象企業(Comps)の対比に簡易化。Cowork収集プロジェクトと本体実装の契約。",
+  "type": "object",
+  "required": ["schema_version", "sector", "sector_label_ja", "data_status", "as_of", "benchmarks"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "1.1" },
+    "sector": {
+      "type": "string",
+      "enum": ["saas_jp", "drug_discovery", "medical_device", "media_tech", "ec_d2c", "climate_tech"]
+    },
+    "sector_label_ja": { "type": "string" },
+    "data_status": {
+      "type": "string",
+      "enum": ["dummy", "production"],
+      "description": "dummyの場合、UIに常時バッジを表示すること"
+    },
+    "as_of": { "type": "string", "format": "date", "description": "データ基準日" },
+    "benchmarks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["metric_id", "label_ja", "unit", "reference_type", "value", "source"],
+        "properties": {
+          "metric_id": { "type": "string", "description": "エンジン側ドライバーIDと一致 (例: arr_growth_yoy)" },
+          "label_ja": { "type": "string" },
+          "unit": { "type": "string", "enum": ["percent", "ratio", "x_multiple", "jpy_mn", "usd_mn", "months", "years", "count"] },
+          "reference_type": {
+            "type": "string",
+            "enum": ["industry_standard", "comp_company"],
+            "description": "industry_standard: 業界標準値(指標につき1件) / comp_company: 比較対象企業(0〜3社程度)"
+          },
+          "company_name": {
+            "type": ["string", "null"],
+            "description": "reference_type=comp_company のとき必須。企業名"
+          },
+          "value": { "type": "number", "description": "基準値(UIでは基準線として重畳表示)" },
+          "basis": { "type": ["string", "null"], "description": "値の根拠・算出基準の短い説明 (例: 直近通期実績)" },
+          "source": {
+            "type": "object",
+            "required": ["name", "retrieved_at"],
+            "properties": {
+              "name": { "type": "string", "description": "出典名。ダミー時は 'DUMMY'" },
+              "url": { "type": ["string", "null"] },
+              "retrieved_at": { "type": "string", "format": "date" },
+              "license_note": { "type": ["string", "null"] }
+            }
+          },
+          "notes": { "type": ["string", "null"] }
+        },
+        "allOf": [
+          {
+            "if": { "properties": { "reference_type": { "const": "comp_company" } } },
+            "then": { "required": ["company_name"] }
+          }
+        ]
+      }
+    }
+  }
+}
