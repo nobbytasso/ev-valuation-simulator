@@ -4,7 +4,14 @@ import { fileURLToPath } from 'node:url'
 import fc from 'fast-check'
 import { describe, expect, it } from 'vitest'
 import { closeEnough } from '../types.ts'
-import { computeAssetPos, evaluateDrugDiscovery, PHASE_ORDER } from './drugDiscovery.ts'
+import {
+  applyDrugDiscoveryDriver,
+  computeAssetPos,
+  drugDiscoveryBaseEv,
+  DRUG_DISCOVERY_SENSITIVITY_DRIVERS,
+  evaluateDrugDiscovery,
+  PHASE_ORDER,
+} from './drugDiscovery.ts'
 import type { DrugDiscoveryInputs, Phase, PipelineAsset } from './drugDiscovery.ts'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -316,5 +323,143 @@ describe('DrugDiscovery プロパティ', () => {
       phaseSuccessProbs: { preclinical: 0.5, phase1: 0.5, phase2: 0.3, phase3: 0.6, filing: 0.85 },
     })
     expect(computeAssetPos(asset)).toBeCloseTo(0.3 * 0.6 * 0.85, 9)
+  })
+})
+
+describe('DrugDiscovery 感度分析ドライバー(§1.5.1, D-6/B-1)', () => {
+  it('DRUG_DISCOVERY_SENSITIVITY_DRIVERS: 残フェーズのみのphaseSuccessProbs + own/licenseで分岐 + discountRate.base', () => {
+    const ownAsset = buildAsset({ currentPhase: 'phase2', commercialization: { type: 'own', contributionMargin: 0.65 } })
+    const licenseAsset = buildAsset({
+      currentPhase: 'preclinical',
+      commercialization: { type: 'license', royaltyRate: 0.15, milestones: [] },
+    })
+    const drivers = DRUG_DISCOVERY_SENSITIVITY_DRIVERS({
+      assets: [ownAsset, licenseAsset],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    })
+    expect(drivers).toEqual([
+      'assets[0].peakSales',
+      'assets[0].launchYear',
+      'assets[0].phaseSuccessProbs.phase2',
+      'assets[0].phaseSuccessProbs.phase3',
+      'assets[0].phaseSuccessProbs.filing',
+      'assets[0].commercialization.contributionMargin',
+      'assets[1].peakSales',
+      'assets[1].launchYear',
+      'assets[1].phaseSuccessProbs.preclinical',
+      'assets[1].phaseSuccessProbs.phase1',
+      'assets[1].phaseSuccessProbs.phase2',
+      'assets[1].phaseSuccessProbs.phase3',
+      'assets[1].phaseSuccessProbs.filing',
+      'assets[1].commercialization.royaltyRate',
+      'discountRate.base',
+    ])
+  })
+
+  it('applyDrugDiscoveryDriver: peakSales/launchYearは相対±δ(下限クランプ、launchYearは整数化)', () => {
+    const inputs: DrugDiscoveryInputs = {
+      assets: [buildAsset({ peakSales: 1000, launchYear: 10 })],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    }
+    const high = applyDrugDiscoveryDriver(inputs, 'assets[0].peakSales', 1.2)
+    expect(high.assets[0].peakSales).toBeCloseTo(1200, 9)
+    const low = applyDrugDiscoveryDriver(inputs, 'assets[0].peakSales', 0)
+    expect(low.assets[0].peakSales).toBe(0)
+
+    const launchHigh = applyDrugDiscoveryDriver(inputs, 'assets[0].launchYear', 1.2)
+    expect(launchHigh.assets[0].launchYear).toBe(Math.round(10 * 1.2))
+    const launchFloor = applyDrugDiscoveryDriver(inputs, 'assets[0].launchYear', 0)
+    expect(launchFloor.assets[0].launchYear).toBe(1)
+  })
+
+  it('applyDrugDiscoveryDriver: phaseSuccessProbsは[0,1]クランプ、指定asset以外は不変', () => {
+    const asset0 = buildAsset({ phaseSuccessProbs: { preclinical: 0.5, phase1: 1, phase2: 1, phase3: 1, filing: 1 } })
+    const asset1 = buildAsset({ name: 'other', peakSales: 999 })
+    const inputs: DrugDiscoveryInputs = {
+      assets: [asset0, asset1],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    }
+    const result = applyDrugDiscoveryDriver(inputs, 'assets[0].phaseSuccessProbs.preclinical', 1.5)
+    expect(result.assets[0].phaseSuccessProbs.preclinical).toBeCloseTo(0.75, 9)
+    expect(result.assets[1]).toBe(asset1)
+
+    const clampedHigh = applyDrugDiscoveryDriver(inputs, 'assets[0].phaseSuccessProbs.preclinical', 100)
+    expect(clampedHigh.assets[0].phaseSuccessProbs.preclinical).toBe(1)
+  })
+
+  it('applyDrugDiscoveryDriver: commercialization.contributionMargin/royaltyRateはown/license双方で正しいキーに適用', () => {
+    const ownInputs: DrugDiscoveryInputs = {
+      assets: [buildAsset({ commercialization: { type: 'own', contributionMargin: 0.5 } })],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    }
+    const ownResult = applyDrugDiscoveryDriver(ownInputs, 'assets[0].commercialization.contributionMargin', 1.2)
+    const commOwn = ownResult.assets[0].commercialization
+    expect(commOwn.type).toBe('own')
+    if (commOwn.type === 'own') expect(commOwn.contributionMargin).toBeCloseTo(0.6, 9)
+
+    const licenseInputs: DrugDiscoveryInputs = {
+      assets: [buildAsset({ commercialization: { type: 'license', royaltyRate: 0.1, milestones: [] } })],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    }
+    const licenseResult = applyDrugDiscoveryDriver(licenseInputs, 'assets[0].commercialization.royaltyRate', 1.2)
+    const commLicense = licenseResult.assets[0].commercialization
+    expect(commLicense.type).toBe('license')
+    if (commLicense.type === 'license') expect(commLicense.royaltyRate).toBeCloseTo(0.12, 9)
+
+    // own資産にroyaltyRateドライバーを適用しても無視される(型不一致)
+    const noop = applyDrugDiscoveryDriver(ownInputs, 'assets[0].commercialization.royaltyRate', 1.2)
+    expect(noop).toBe(ownInputs)
+  })
+
+  it('applyDrugDiscoveryDriver: discountRate.baseはポイント変動(加法、既定±0.02)で下限0.001クランプ', () => {
+    const inputs: DrugDiscoveryInputs = {
+      assets: [buildAsset()],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    }
+    const high = applyDrugDiscoveryDriver(inputs, 'discountRate.base', 1.2)
+    expect(high.discountRate.base).toBeCloseTo(0.13, 9)
+    expect(high.discountRate.pessimistic).toBe(0.12)
+    expect(high.discountRate.optimistic).toBe(0.1)
+
+    const low = applyDrugDiscoveryDriver(inputs, 'discountRate.base', 0.8)
+    expect(low.discountRate.base).toBeCloseTo(0.09, 9)
+
+    const floored = applyDrugDiscoveryDriver(
+      { ...inputs, discountRate: { ...inputs.discountRate, base: 0.005 } },
+      'discountRate.base',
+      0.8,
+    )
+    expect(floored.discountRate.base).toBeCloseTo(0.001, 9)
+  })
+
+  it('applyDrugDiscoveryDriver: 不明なdriverIdは入力をそのまま返す', () => {
+    const inputs: DrugDiscoveryInputs = {
+      assets: [buildAsset()],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    }
+    expect(applyDrugDiscoveryDriver(inputs, 'unknownDriver', 1.2)).toBe(inputs)
+    expect(applyDrugDiscoveryDriver(inputs, 'assets[9].peakSales', 1.2)).toBe(inputs)
+  })
+
+  it('drugDiscoveryBaseEv: baseケースのEVを返し、ドメイン外入力ではNaN', () => {
+    const inputs: DrugDiscoveryInputs = {
+      assets: [buildAsset()],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    }
+    const result = evaluateDrugDiscovery(inputs)
+    expect(result.ok).toBe(true)
+    if (!result.ok) return
+    expect(drugDiscoveryBaseEv(inputs)).toBeCloseTo(result.value.ev.base, 9)
+
+    const invalid: DrugDiscoveryInputs = { ...inputs, modelHorizonYears: 2.5 }
+    expect(drugDiscoveryBaseEv(invalid)).toBeNaN()
   })
 })

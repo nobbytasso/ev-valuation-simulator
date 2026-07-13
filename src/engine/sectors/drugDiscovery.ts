@@ -202,3 +202,89 @@ export function evaluateDrugDiscovery(inputs: DrugDiscoveryInputs): EngineResult
 
   return { ok: true, value: { ev, keyMetrics: {} } }
 }
+
+/**
+ * 感度分析ドライバー(§1.5.1、B-1/D-6対応)。品目配列(assets)の内部が対象のためパス形式で列挙する。
+ * 品目数に比例して増える(動的生成)。表示件数の絞り込み(span降順上位N件)はUI層の責務。
+ *
+ * phaseSuccessProbs は残フェーズ(currentPhase以降)のみを列挙する。既に完了したフェーズの確率は
+ * computeAssetRnpv 内で参照されず(remaining = PHASE_ORDER.slice(idx) のみ使用)、含めても
+ * span=0 の無意味なドライバーになるだけのため対象外とした(仕様書に明記なし → 実装判断)。
+ */
+export function DRUG_DISCOVERY_SENSITIVITY_DRIVERS(inputs: DrugDiscoveryInputs): string[] {
+  const driverIds: string[] = []
+  inputs.assets.forEach((asset, i) => {
+    const prefix = `assets[${i}]`
+    driverIds.push(`${prefix}.peakSales`)
+    driverIds.push(`${prefix}.launchYear`)
+    const idx = PHASE_ORDER.indexOf(asset.currentPhase)
+    for (const phase of PHASE_ORDER.slice(idx)) {
+      driverIds.push(`${prefix}.phaseSuccessProbs.${phase}`)
+    }
+    if (asset.commercialization.type === 'own') {
+      driverIds.push(`${prefix}.commercialization.contributionMargin`)
+    } else {
+      driverIds.push(`${prefix}.commercialization.royaltyRate`)
+    }
+  })
+  driverIds.push('discountRate.base')
+  return driverIds
+}
+
+const ASSET_DRIVER_RE = /^assets\[(\d+)\]\.(.+)$/
+
+/**
+ * ドライバーを相対変動させ、定義域端にクランプする(§1.5.1, U-15)。
+ * - 確率系(phaseSuccessProbs/contributionMargin/royaltyRate)・peakSales は相対±δ(乗算)。
+ * - launchYear は相対±δ後に四捨五入で整数化、下限1。
+ * - discountRate.base のみポイント変動(加法)。乗算のmultiplier(1±δ)から符号のみを取り出し、
+ *   固定幅 δ_r(既定0.02、U-20)を加減算する。δ_rを可変にする場合はDriverApplier型の
+ *   シグネチャ拡張が必要(TODO、Phase 4着手時に要相談)。
+ */
+export function applyDrugDiscoveryDriver(
+  inputs: DrugDiscoveryInputs,
+  driverId: string,
+  multiplier: number,
+): DrugDiscoveryInputs {
+  if (driverId === 'discountRate.base') {
+    const DELTA_R = 0.02
+    const sign = multiplier > 1 ? 1 : multiplier < 1 ? -1 : 0
+    const value = Math.max(inputs.discountRate.base + sign * DELTA_R, 0.001)
+    return { ...inputs, discountRate: { ...inputs.discountRate, base: value } }
+  }
+
+  const match = ASSET_DRIVER_RE.exec(driverId)
+  if (!match) return inputs
+  const index = Number(match[1])
+  const subPath = match[2]
+  const asset = inputs.assets[index]
+  if (!asset) return inputs
+
+  let updatedAsset: PipelineAsset
+  if (subPath === 'peakSales') {
+    updatedAsset = { ...asset, peakSales: Math.max(asset.peakSales * multiplier, 0) }
+  } else if (subPath === 'launchYear') {
+    updatedAsset = { ...asset, launchYear: Math.max(Math.round(asset.launchYear * multiplier), 1) }
+  } else if (subPath.startsWith('phaseSuccessProbs.')) {
+    const phase = subPath.slice('phaseSuccessProbs.'.length) as Phase
+    const value = Math.min(Math.max(asset.phaseSuccessProbs[phase] * multiplier, 0), 1)
+    updatedAsset = { ...asset, phaseSuccessProbs: { ...asset.phaseSuccessProbs, [phase]: value } }
+  } else if (subPath === 'commercialization.contributionMargin' && asset.commercialization.type === 'own') {
+    const value = Math.min(Math.max(asset.commercialization.contributionMargin * multiplier, 0), 1)
+    updatedAsset = { ...asset, commercialization: { ...asset.commercialization, contributionMargin: value } }
+  } else if (subPath === 'commercialization.royaltyRate' && asset.commercialization.type === 'license') {
+    const value = Math.min(Math.max(asset.commercialization.royaltyRate * multiplier, 0), 1)
+    updatedAsset = { ...asset, commercialization: { ...asset.commercialization, royaltyRate: value } }
+  } else {
+    return inputs
+  }
+
+  const assets = [...inputs.assets]
+  assets[index] = updatedAsset
+  return { ...inputs, assets }
+}
+
+export function drugDiscoveryBaseEv(inputs: DrugDiscoveryInputs): Money {
+  const result = evaluateDrugDiscovery(inputs)
+  return result.ok ? result.value.ev.base : Number.NaN
+}
