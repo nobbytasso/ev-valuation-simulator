@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import fc from 'fast-check'
 import { describe, expect, it } from 'vitest'
 import { closeEnough } from '../types.ts'
+import { buildTornado } from '../common/sensitivity.ts'
 import {
   applyDrugDiscoveryDriver,
   computeAssetPos,
@@ -473,5 +474,51 @@ describe('DrugDiscovery 感度分析ドライバー(§1.5.1, D-6/B-1)', () => {
 
     const invalid: DrugDiscoveryInputs = { ...inputs, modelHorizonYears: 2.5 }
     expect(drugDiscoveryBaseEv(invalid)).toBeNaN()
+  })
+})
+
+describe('DrugDiscovery buildTornado統合テスト(監査ゲート条件3、phase4-spec.md §6 C1)', () => {
+  function buildMixedInputs(): DrugDiscoveryInputs {
+    const ownAsset = buildAsset({
+      name: 'own-asset',
+      currentPhase: 'phase2',
+      phaseSuccessProbs: { preclinical: 1, phase1: 1, phase2: 0.6, phase3: 0.7, filing: 0.9 },
+      commercialization: { type: 'own', contributionMargin: 0.65 },
+    })
+    const licenseAsset = buildAsset({
+      name: 'license-asset',
+      currentPhase: 'preclinical',
+      launchYear: 8,
+      phaseSuccessProbs: { preclinical: 0.5, phase1: 0.6, phase2: 0.7, phase3: 0.8, filing: 0.9 },
+      commercialization: {
+        type: 'license',
+        royaltyRate: 0.15,
+        milestones: [{ phase: 'phase2', amount: 500 }],
+      },
+    })
+    return {
+      assets: [ownAsset, licenseAsset],
+      discountRate: { pessimistic: 0.12, base: 0.11, optimistic: 0.1 },
+      modelHorizonYears: 15,
+    }
+  }
+
+  it('P14: δ=0 で全ドライバーspan=0', () => {
+    const inputs = buildMixedInputs()
+    const driverIds = DRUG_DISCOVERY_SENSITIVITY_DRIVERS(inputs)
+    const items = buildTornado(inputs, { delta: 0, driverIds }, applyDrugDiscoveryDriver, drugDiscoveryBaseEv)
+    expect(items.length).toBe(driverIds.length)
+    for (const item of items) expect(item.span).toBeCloseTo(0, 6)
+  })
+
+  it('既定入力+2品目(own・license混在)で列挙全ドライバーのspan > 0、件数 = 列挙数', () => {
+    const inputs = buildMixedInputs()
+    const driverIds = DRUG_DISCOVERY_SENSITIVITY_DRIVERS(inputs)
+    const items = buildTornado(inputs, { delta: 0.2, driverIds }, applyDrugDiscoveryDriver, drugDiscoveryBaseEv)
+    expect(items.length).toBe(driverIds.length)
+    expect(new Set(items.map((item) => item.driverId)).size).toBe(driverIds.length)
+    for (const item of items) {
+      expect(item.span).toBeGreaterThan(0)
+    }
   })
 })
