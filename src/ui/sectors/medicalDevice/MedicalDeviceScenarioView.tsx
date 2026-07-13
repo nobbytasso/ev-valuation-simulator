@@ -4,6 +4,7 @@ import type { BenchmarkData } from '../../../adapters/benchmarks/types.ts'
 import { evaluateMedicalDevice } from '../../../engine/index.ts'
 import type { Scenario } from '../../../store/scenarioTypes.ts'
 import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx'
+import { CapitalPolicySection } from '../../capitalPolicy/CapitalPolicySection.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
 import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
@@ -27,6 +28,7 @@ export interface MedicalDeviceScenarioViewProps {
 export function MedicalDeviceScenarioView({ scenario, onSave, onDelete }: MedicalDeviceScenarioViewProps) {
   const [draftInputs, setDraftInputs] = useState(scenario.inputs)
   const [draftVcMethod, setDraftVcMethod] = useState(scenario.vcMethod)
+  const [draftCapitalPolicy, setDraftCapitalPolicy] = useState(scenario.capitalPolicy)
   const [benchmark, setBenchmark] = useState<BenchmarkData | null>(null)
 
   const lastSyncedId = useRef<string | null>(null)
@@ -34,6 +36,7 @@ export function MedicalDeviceScenarioView({ scenario, onSave, onDelete }: Medica
     if (lastSyncedId.current !== scenario.id) {
       setDraftInputs(scenario.inputs)
       setDraftVcMethod(scenario.vcMethod)
+      setDraftCapitalPolicy(scenario.capitalPolicy)
       lastSyncedId.current = scenario.id
     }
   }, [scenario])
@@ -49,10 +52,13 @@ export function MedicalDeviceScenarioView({ scenario, onSave, onDelete }: Medica
   }, [])
 
   const result = evaluateMedicalDevice(draftInputs)
-  const isDirty = draftInputs !== scenario.inputs || draftVcMethod !== scenario.vcMethod
+  const isDirty =
+    draftInputs !== scenario.inputs ||
+    draftVcMethod !== scenario.vcMethod ||
+    draftCapitalPolicy !== scenario.capitalPolicy
 
   const handleSave = () => {
-    onSave({ ...scenario, inputs: draftInputs, vcMethod: draftVcMethod })
+    onSave({ ...scenario, inputs: draftInputs, vcMethod: draftVcMethod, capitalPolicy: draftCapitalPolicy })
   }
 
   // プリセット適用はdraftの差し替えのみ(保存は「保存」ボタンで明示的に行う。C-7)。
@@ -94,6 +100,16 @@ export function MedicalDeviceScenarioView({ scenario, onSave, onDelete }: Medica
 
       {result.ok && (
         <VcMethodSection evRange={result.value.ev} vcMethod={draftVcMethod} onChange={setDraftVcMethod} />
+      )}
+
+      {result.ok && (
+        <CapitalPolicySection
+          scenarioId={scenario.id}
+          evRange={result.value.ev}
+          vcMethod={draftVcMethod}
+          capitalPolicy={draftCapitalPolicy}
+          onChange={setDraftCapitalPolicy}
+        />
       )}
 
       <SensitivitySection scenario={{ ...scenario, inputs: draftInputs }} />

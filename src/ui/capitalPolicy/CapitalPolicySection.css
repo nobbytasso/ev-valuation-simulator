@@ -1,0 +1,24 @@
+.capital-policy-section__caption {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.capital-policy-section__exit-source {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.capital-policy-section__table {
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.capital-policy-section__table input[type='text'] {
+  width: 8rem;
+}
+
+.capital-policy-section__table input[type='number'] {
+  width: 6rem;
+}

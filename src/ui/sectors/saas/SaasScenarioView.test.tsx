@@ -105,4 +105,19 @@ describe('SaasScenarioView', () => {
 
     expect(row.textContent).not.toBe(before)
   })
+
+  it('資本政策(exitEvSource)を変更して保存すると、保存内容に反映される(保存→再ロード相当、phase4-spec.md §6 C8)', async () => {
+    const user = userEvent.setup()
+    const scenario = buildSaasScenario()
+    expect(scenario.capitalPolicy.exitEvSource).toBe('base')
+    const onSave = vi.fn()
+    render(<SaasScenarioView scenario={scenario} onSave={onSave} onDelete={vi.fn()} />)
+
+    await user.selectOptions(await screen.findByLabelText('Exit企業価値の参照レンジ点'), 'optimistic')
+    await user.click(screen.getByRole('button', { name: '保存' }))
+
+    expect(onSave).toHaveBeenCalledTimes(1)
+    const saved = onSave.mock.calls[0][0] as Scenario
+    expect(saved.capitalPolicy.exitEvSource).toBe('optimistic')
+  })
 })
