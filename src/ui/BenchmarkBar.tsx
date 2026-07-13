@@ -18,6 +18,7 @@ export interface BenchmarkBarProps {
 function formatValue(value: number, unit: BenchmarkUnit): string {
   if (unit === 'percent') return `${value.toFixed(1)}%`
   if (unit === 'x_multiple') return `${value.toFixed(1)}x`
+  if (unit === 'ratio') return value.toFixed(2)
   return value.toLocaleString('ja-JP')
 }
 
@@ -25,6 +26,7 @@ function formatDiff(diff: number, unit: BenchmarkUnit): string {
   const sign = diff >= 0 ? '+' : ''
   if (unit === 'percent') return `${sign}${diff.toFixed(1)}pt`
   if (unit === 'x_multiple') return `${sign}${diff.toFixed(1)}x`
+  if (unit === 'ratio') return `${sign}${diff.toFixed(2)}`
   return `${sign}${diff.toLocaleString('ja-JP')}`
 }
 

@@ -3,16 +3,9 @@
  * 出典: data/benchmarks/benchmark.schema.json (v1.1)
  */
 import type { SaasInputs } from '../../../engine/index.ts'
-import type { BenchmarkUnit } from '../../../adapters/benchmarks/types.ts'
+import type { BenchmarkMetricConfig } from '../../benchmarkMetricConfig.ts'
 
-export interface SaasBenchmarkMetricConfig {
-  metricId: string
-  label: string
-  unit: BenchmarkUnit
-  getValue: (inputs: SaasInputs, keyMetrics: Record<string, number>) => number | undefined
-}
-
-export const SAAS_BENCHMARK_METRICS: SaasBenchmarkMetricConfig[] = [
+export const SAAS_BENCHMARK_METRICS: BenchmarkMetricConfig<SaasInputs>[] = [
   {
     metricId: 'arr_growth_yoy',
     label: 'ARR成長率(YoY)',

@@ -1,0 +1,9 @@
+.benchmark-comparison__item {
+  margin-bottom: 0.75rem;
+}
+
+.benchmark-comparison__source {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin: 0.15rem 0 0;
+}
