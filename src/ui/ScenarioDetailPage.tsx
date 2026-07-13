@@ -5,12 +5,32 @@ import { SECTOR_LABELS } from '../store/scenarioTypes.ts'
 import type { Scenario } from '../store/scenarioTypes.ts'
 import { GenericScenarioView } from './GenericScenarioView.tsx'
 import { EcD2cScenarioView } from './sectors/ecD2c/EcD2cScenarioView.tsx'
+import { MediaTechScenarioView } from './sectors/mediaTech/MediaTechScenarioView.tsx'
 import { SaasScenarioView } from './sectors/saas/SaasScenarioView.tsx'
 
+interface SectorViewProps {
+  scenario: Scenario
+  onSave: (next: Scenario) => void
+  onDelete: () => void
+}
+
 /**
- * シナリオ詳細ページ。セクターごとの専用ビューへディスパッチする。
- * 専用ビュー未実装のセクターは GenericScenarioView(生JSON編集)にフォールバックする。
+ * セクターごとの専用ビューへディスパッチする。専用ビュー未実装のセクターは
+ * GenericScenarioView(生JSON編集)にフォールバックする。
  */
+function SectorView({ scenario, onSave, onDelete }: SectorViewProps) {
+  switch (scenario.sector) {
+    case 'saas_jp':
+      return <SaasScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
+    case 'ec_d2c':
+      return <EcD2cScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
+    case 'media_tech':
+      return <MediaTechScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
+    default:
+      return <GenericScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
+  }
+}
+
 export function ScenarioDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -36,14 +56,7 @@ export function ScenarioDetailPage() {
     <section>
       <h1>{scenario.name}</h1>
       <p>セクター: {SECTOR_LABELS[scenario.sector]}</p>
-
-      {scenario.sector === 'saas_jp' ? (
-        <SaasScenarioView scenario={scenario} onSave={handleSave} onDelete={handleDelete} />
-      ) : scenario.sector === 'ec_d2c' ? (
-        <EcD2cScenarioView scenario={scenario} onSave={handleSave} onDelete={handleDelete} />
-      ) : (
-        <GenericScenarioView scenario={scenario} onSave={handleSave} onDelete={handleDelete} />
-      )}
+      <SectorView scenario={scenario} onSave={handleSave} onDelete={handleDelete} />
     </section>
   )
 }
