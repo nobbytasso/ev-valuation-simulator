@@ -5,6 +5,7 @@ import { evaluateClimateTech } from '../../../engine/index.ts'
 import type { Scenario } from '../../../store/scenarioTypes.ts'
 import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
+import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
 import '../../sectorScenarioView.css'
 import { ClimateTechForm } from './ClimateTechForm.tsx'
@@ -95,6 +96,8 @@ export function ClimateTechScenarioView({ scenario, onSave, onDelete }: ClimateT
       {result.ok && (
         <VcMethodSection evRange={result.value.ev} vcMethod={draftVcMethod} onChange={setDraftVcMethod} />
       )}
+
+      <SensitivitySection scenario={{ ...scenario, inputs: draftInputs }} />
 
       <BenchmarkComparisonSection
         benchmark={benchmark}

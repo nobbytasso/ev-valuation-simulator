@@ -1,0 +1,26 @@
+.sensitivity-section__note {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.sensitivity-section__default-delta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.sensitivity-section__table {
+  margin-top: 0.75rem;
+  width: 100%;
+}
+
+.sensitivity-section__table input {
+  width: 4rem;
+}
+
+.sensitivity-section__negligible {
+  margin-top: 0.75rem;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
