@@ -1,0 +1,49 @@
+.drug-asset-form {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.drug-asset-form__header {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.drug-asset-form__header label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  gap: 0.25rem;
+}
+
+.drug-asset-form__phase-table {
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.drug-asset-form__phase-table input {
+  width: 100%;
+}
+
+.drug-asset-form__milestones {
+  margin-top: 0.75rem;
+}
+
+.drug-asset-form__milestone-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.drug-asset-form__milestone-row label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  gap: 0.25rem;
+}
