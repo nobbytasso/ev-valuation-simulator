@@ -1,6 +1,7 @@
 import { PHASE_ORDER } from '../../../engine/index.ts'
 import type { Phase, PipelineAsset } from '../../../engine/index.ts'
 import { useStableListKeys } from '../../useStableListKeys.ts'
+import { PHASE_LABELS } from './phaseLabels.ts'
 import '../../sectorForm.css'
 import './DrugAssetForm.css'
 
@@ -9,14 +10,6 @@ export interface DrugAssetFormProps {
   onChange: (next: PipelineAsset) => void
   onRemove: () => void
   canRemove: boolean
-}
-
-const PHASE_LABELS: Record<Phase, string> = {
-  preclinical: '非臨床',
-  phase1: 'フェーズ1',
-  phase2: 'フェーズ2',
-  phase3: 'フェーズ3',
-  filing: '申請',
 }
 
 /**
