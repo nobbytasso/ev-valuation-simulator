@@ -5,6 +5,7 @@ import { SECTOR_LABELS } from '../store/scenarioTypes.ts'
 import type { Scenario } from '../store/scenarioTypes.ts'
 import { GenericScenarioView } from './GenericScenarioView.tsx'
 import { EcD2cScenarioView } from './sectors/ecD2c/EcD2cScenarioView.tsx'
+import { MedicalDeviceScenarioView } from './sectors/medicalDevice/MedicalDeviceScenarioView.tsx'
 import { MediaTechScenarioView } from './sectors/mediaTech/MediaTechScenarioView.tsx'
 import { SaasScenarioView } from './sectors/saas/SaasScenarioView.tsx'
 
@@ -26,6 +27,8 @@ function SectorView({ scenario, onSave, onDelete }: SectorViewProps) {
       return <EcD2cScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
     case 'media_tech':
       return <MediaTechScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
+    case 'medical_device':
+      return <MedicalDeviceScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
     default:
       return <GenericScenarioView scenario={scenario} onSave={onSave} onDelete={onDelete} />
   }
