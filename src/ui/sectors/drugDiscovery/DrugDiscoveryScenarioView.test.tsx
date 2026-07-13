@@ -94,6 +94,33 @@ describe('DrugDiscoveryScenarioView', () => {
     expect(screen.getAllByLabelText('品目名')).toHaveLength(1)
   })
 
+  it('中間の品目を削除しても残りの品目の入力内容が行ズレしない(D-12/B-8)', async () => {
+    const user = userEvent.setup()
+    const scenario = buildDrugDiscoveryScenario()
+    render(<DrugDiscoveryScenarioView scenario={scenario} onSave={vi.fn()} onDelete={vi.fn()} />)
+
+    await user.click(screen.getByRole('button', { name: '＋ 品目を追加' }))
+    await user.click(screen.getByRole('button', { name: '＋ 品目を追加' }))
+    const nameInputs = screen.getAllByLabelText('品目名')
+    expect(nameInputs).toHaveLength(3)
+
+    for (const [i, input] of nameInputs.entries()) {
+      await user.clear(input)
+      await user.type(input, `品目${i}`)
+    }
+    expect(screen.getAllByLabelText('品目名').map((el) => (el as HTMLInputElement).value)).toEqual([
+      '品目0',
+      '品目1',
+      '品目2',
+    ])
+
+    // 中間(index 1 = 品目1)を削除
+    await user.click(screen.getAllByRole('button', { name: 'この品目を削除' })[1])
+
+    const remainingNames = screen.getAllByLabelText('品目名').map((el) => (el as HTMLInputElement).value)
+    expect(remainingNames).toEqual(['品目0', '品目2'])
+  })
+
   it('ベンチマーク比較セクションにダミーバッジと業界標準比の差分を表示する(自社販売はロイヤリティ率比較を除外)', async () => {
     const scenario = buildDrugDiscoveryScenario()
     render(<DrugDiscoveryScenarioView scenario={scenario} onSave={vi.fn()} onDelete={vi.fn()} />)

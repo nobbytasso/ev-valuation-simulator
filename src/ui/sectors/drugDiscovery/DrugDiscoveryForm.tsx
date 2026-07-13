@@ -1,4 +1,5 @@
 import type { DrugDiscoveryInputs, PipelineAsset } from '../../../engine/index.ts'
+import { useStableListKeys } from '../../useStableListKeys.ts'
 import '../../sectorForm.css'
 import { DrugAssetForm } from './DrugAssetForm.tsx'
 
@@ -28,6 +29,7 @@ function createDefaultAsset(name: string): PipelineAsset {
  * min/max はエンジンのドメイン制約(§0.2.1)に対応する。
  */
 export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) {
+  const assetKeys = useStableListKeys(inputs.assets.length)
   const setDiscount = (key: 'pessimistic' | 'base' | 'optimistic', value: number) =>
     onChange({ ...inputs, discountRate: { ...inputs.discountRate, [key]: value } })
 
@@ -36,9 +38,11 @@ export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) 
   }
   const removeAsset = (index: number) => {
     onChange({ ...inputs, assets: inputs.assets.filter((_, i) => i !== index) })
+    assetKeys.removeAt(index)
   }
   const addAsset = () => {
     onChange({ ...inputs, assets: [...inputs.assets, createDefaultAsset(`品目${inputs.assets.length + 1}`)] })
+    assetKeys.push()
   }
 
   return (
@@ -92,7 +96,7 @@ export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) 
       <h3>パイプライン品目</h3>
       {inputs.assets.map((asset, i) => (
         <DrugAssetForm
-          key={i}
+          key={assetKeys.keys[i] ?? String(i)}
           asset={asset}
           onChange={(next) => updateAsset(i, next)}
           onRemove={() => removeAsset(i)}

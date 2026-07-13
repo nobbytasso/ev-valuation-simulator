@@ -75,7 +75,8 @@ export function DrugDiscoveryScenarioView({ scenario, onSave, onDelete }: DrugDi
 
       <section>
         <h2>入力ドライバー</h2>
-        <DrugDiscoveryForm inputs={draftInputs} onChange={setDraftInputs} />
+        {/* シナリオ切替時に品目・マイルストーンのkey管理状態(D-12)をリセットするためkeyでリマウントする */}
+        <DrugDiscoveryForm key={scenario.id} inputs={draftInputs} onChange={setDraftInputs} />
         <div className="sector-scenario-view__actions">
           <button type="button" onClick={handleSave} disabled={!isDirty}>
             保存
@@ -91,6 +92,8 @@ export function DrugDiscoveryScenarioView({ scenario, onSave, onDelete }: DrugDi
         <EvRangeResult result={result}>
           <ul>
             {draftInputs.assets.map((asset, i) => (
+              // 読み取り専用の表示リスト(入力なし・行固有のローカル状態なし)のためindex keyで問題ない。
+              // 編集可能な品目リスト自体はDrugDiscoveryForm側でuuid由来のkeyを使用(D-12)。
               <li key={i}>
                 {asset.name}: 上市確率(POS) {(computeAssetPos(asset) * 100).toFixed(1)}%
               </li>

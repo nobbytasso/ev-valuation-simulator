@@ -75,7 +75,8 @@ export function ClimateTechScenarioView({ scenario, onSave, onDelete }: ClimateT
 
       <section>
         <h2>入力ドライバー</h2>
-        <ClimateTechForm inputs={draftInputs} onChange={setDraftInputs} />
+        {/* シナリオ切替時にCAPEX行のkey管理状態(D-12)をリセットするためkeyでリマウントする */}
+        <ClimateTechForm key={scenario.id} inputs={draftInputs} onChange={setDraftInputs} />
         <div className="sector-scenario-view__actions">
           <button type="button" onClick={handleSave} disabled={!isDirty}>
             保存

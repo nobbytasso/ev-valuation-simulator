@@ -1,4 +1,5 @@
 import type { ClimateTechInputs } from '../../../engine/index.ts'
+import { useStableListKeys } from '../../useStableListKeys.ts'
 import '../../sectorForm.css'
 import './ClimateTechForm.css'
 
@@ -12,6 +13,7 @@ export interface ClimateTechFormProps {
  * min/max はエンジンのドメイン制約(§0.2.1)に対応する。
  */
 export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
+  const capexKeys = useStableListKeys(inputs.capexSchedule.length)
   const set = <K extends keyof ClimateTechInputs>(key: K, value: ClimateTechInputs[K]) =>
     onChange({ ...inputs, [key]: value })
   const setDiscount = (key: 'pessimistic' | 'base' | 'optimistic', value: number) =>
@@ -28,9 +30,11 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
       ? Math.max(...inputs.capexSchedule.map((c) => c.yearIndex)) + 1
       : 0
     onChange({ ...inputs, capexSchedule: [...inputs.capexSchedule, { yearIndex: nextYear, amount: 500 }] })
+    capexKeys.push()
   }
   const removeCapex = (index: number) => {
     onChange({ ...inputs, capexSchedule: inputs.capexSchedule.filter((_, i) => i !== index) })
+    capexKeys.removeAt(index)
   }
 
   return (
@@ -228,7 +232,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
           </thead>
           <tbody>
             {inputs.capexSchedule.map((c, i) => (
-              <tr key={i}>
+              <tr key={capexKeys.keys[i] ?? String(i)}>
                 <td>
                   <label>
                     年

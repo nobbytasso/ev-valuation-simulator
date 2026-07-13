@@ -1,5 +1,6 @@
 import { PHASE_ORDER } from '../../../engine/index.ts'
 import type { Phase, PipelineAsset } from '../../../engine/index.ts'
+import { useStableListKeys } from '../../useStableListKeys.ts'
 import '../../sectorForm.css'
 import './DrugAssetForm.css'
 
@@ -24,6 +25,9 @@ const PHASE_LABELS: Record<Phase, string> = {
  * 計算に使われないが、品目のcurrentPhase変更時に値を保持できるようUI上は常時編集可能とする)。
  */
 export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAssetFormProps) {
+  const milestoneKeys = useStableListKeys(
+    asset.commercialization.type === 'license' ? asset.commercialization.milestones.length : 0,
+  )
   const set = <K extends keyof PipelineAsset>(key: K, value: PipelineAsset[K]) => onChange({ ...asset, [key]: value })
   // マイルストーンは残フェーズ(現フェーズ以降)+上市時のみ選択可(C-6)。
   // 現フェーズより前を選択すると、エンジンは「既に到達済み」としてt=0・確率1で計上する
@@ -52,6 +56,7 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
         milestones: [...asset.commercialization.milestones, { phase: 'launch', amount: 500 }],
       },
     })
+    milestoneKeys.push()
   }
   const updateMilestone = (index: number, patch: Partial<{ phase: Phase | 'launch'; amount: number }>) => {
     if (asset.commercialization.type !== 'license') return
@@ -62,6 +67,7 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
     if (asset.commercialization.type !== 'license') return
     const milestones = asset.commercialization.milestones.filter((_, i) => i !== index)
     onChange({ ...asset, commercialization: { ...asset.commercialization, milestones } })
+    milestoneKeys.removeAt(index)
   }
 
   return (
@@ -226,7 +232,7 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
         <div className="drug-asset-form__milestones">
           <h4>マイルストーン</h4>
           {asset.commercialization.milestones.map((m, i) => (
-            <div key={i} className="drug-asset-form__milestone-row">
+            <div key={milestoneKeys.keys[i] ?? String(i)} className="drug-asset-form__milestone-row">
               <label>
                 発生タイミング
                 <select value={m.phase} onChange={(e) => updateMilestone(i, { phase: e.target.value as Phase | 'launch' })}>

@@ -85,6 +85,32 @@ describe('ClimateTechScenarioView', () => {
     expect(screen.getAllByLabelText('金額(百万円)')).toHaveLength(2)
   })
 
+  it('中間のCAPEX行を削除しても残りの行の入力内容が行ズレしない(D-12/B-8)', async () => {
+    const user = userEvent.setup()
+    const scenario = buildClimateTechScenario()
+    render(<ClimateTechScenarioView scenario={scenario} onSave={vi.fn()} onDelete={vi.fn()} />)
+
+    await user.click(screen.getByRole('button', { name: '＋ CAPEXを追加' }))
+    const amountInputs = screen.getAllByLabelText('金額(百万円)')
+    expect(amountInputs).toHaveLength(3)
+
+    for (const [i, input] of amountInputs.entries()) {
+      await user.clear(input)
+      await user.type(input, String(1000 + i))
+    }
+    expect(screen.getAllByLabelText('金額(百万円)').map((el) => (el as HTMLInputElement).value)).toEqual([
+      '1000',
+      '1001',
+      '1002',
+    ])
+
+    // 中間(index 1)を削除
+    await user.click(screen.getAllByRole('button', { name: '削除' })[1])
+
+    const remainingAmounts = screen.getAllByLabelText('金額(百万円)').map((el) => (el as HTMLInputElement).value)
+    expect(remainingAmounts).toEqual(['1000', '1002'])
+  })
+
   it('ベンチマーク比較セクションにダミーバッジと業界標準比の差分を表示する', async () => {
     const scenario = buildClimateTechScenario()
     render(<ClimateTechScenarioView scenario={scenario} onSave={vi.fn()} onDelete={vi.fn()} />)
