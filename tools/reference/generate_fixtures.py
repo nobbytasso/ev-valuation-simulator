@@ -5,6 +5,13 @@ Python リファレンス実装で期待出力を計算して src/engine/__fixtu
 に書き出す。TSエンジンのテストはこのJSONと相対誤差1e-9以内で突合する
 (docs/requirements-rev4.md §7 / docs/engine-spec.md §3)。
 
+全ケース(境界値・ランダムとも)は書き出し前に domain_check でドメイン制約
+(§0.2.1)を検証する。TSエンジン側(src/engine/common/validation.ts)の検証と
+独立実装のクロスチェックであり、サンプリング範囲(random_inputs.py)や
+境界値定義(boundary_cases.py)が将来変更されてドメイン外の値を生成して
+しまった場合、ここで即座に検出する(D-2裁定「サンプリング範囲を有効ドメイン内に
+限定」の実装)。
+
 実行: リポジトリルートから `python3 -m tools.reference.generate_fixtures`
 """
 
@@ -15,6 +22,7 @@ from random import Random
 from typing import Any, Callable, Dict, List
 
 from . import boundary_cases, random_inputs
+from .domain_check import check_domain
 from .sectors import climate_tech, drug_discovery, ec_d2c, media_tech, medical_device, saas
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -70,12 +78,17 @@ SECTORS: List[Dict[str, Any]] = [
 
 
 def build_cases(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
+    sector = entry["sector"]
     compute: Callable[[Dict[str, Any]], Dict[str, Any]] = entry["compute"]
     rng = Random(BASE_SEED + entry["seed_offset"])
 
     cases: List[Dict[str, Any]] = []
 
     for case_id, tags, case_input in entry["boundary_cases"]():
+        try:
+            check_domain(sector, case_input)
+        except Exception as e:
+            raise AssertionError(f"{sector}/{case_id}: ドメイン制約違反 ({e})") from e
         cases.append(
             {
                 "id": case_id,
@@ -87,9 +100,14 @@ def build_cases(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
 
     for i in range(RANDOM_CASES_PER_SECTOR):
         case_input = entry["gen_random"](rng)
+        case_id = f"random-{i:02d}"
+        try:
+            check_domain(sector, case_input)
+        except Exception as e:
+            raise AssertionError(f"{sector}/{case_id}: ドメイン制約違反 ({e})") from e
         cases.append(
             {
-                "id": f"random-{i:02d}",
+                "id": case_id,
                 "tags": ["random"],
                 "input": case_input,
                 "expected": compute(case_input),
