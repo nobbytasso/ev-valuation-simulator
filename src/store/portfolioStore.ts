@@ -8,6 +8,8 @@
 import { create } from 'zustand'
 import { LocalStorageAdapter } from '../adapters/storage/LocalStorageAdapter.ts'
 import type { StorageAdapter } from '../adapters/storage/StorageAdapter.ts'
+import { migratePortfolioHolding } from './portfolioMigration.ts'
+import { PORTFOLIO_SCHEMA_VERSION } from './scenarioTypes.ts'
 import type { PortfolioHolding, SectorId } from './scenarioTypes.ts'
 
 export const PORTFOLIO_STORAGE_KEY = 'ev-valuation-simulator:portfolio:v1'
@@ -40,7 +42,13 @@ export function createPortfolioStore(adapter: StorageAdapter<PortfolioHolding>) 
 
     addHolding: async (input) => {
       const now = new Date().toISOString()
-      const holding: PortfolioHolding = { id: crypto.randomUUID(), createdAt: now, updatedAt: now, ...input }
+      const holding: PortfolioHolding = {
+        id: crypto.randomUUID(),
+        createdAt: now,
+        updatedAt: now,
+        schemaVersion: PORTFOLIO_SCHEMA_VERSION,
+        ...input,
+      }
       await adapter.save(holding)
       set({ holdings: [...get().holdings, holding] })
       return holding
@@ -60,5 +68,5 @@ export function createPortfolioStore(adapter: StorageAdapter<PortfolioHolding>) 
 }
 
 export const usePortfolioStore = createPortfolioStore(
-  new LocalStorageAdapter<PortfolioHolding>(PORTFOLIO_STORAGE_KEY),
+  new LocalStorageAdapter<PortfolioHolding>(PORTFOLIO_STORAGE_KEY, migratePortfolioHolding),
 )

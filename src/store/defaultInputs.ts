@@ -10,6 +10,7 @@ import type {
   MedicalDeviceInputs,
   SaasInputs,
 } from '../engine/index.ts'
+import { SCENARIO_SCHEMA_VERSION } from './scenarioTypes.ts'
 import type { Scenario, ScenarioVcMethodInputs, SectorId } from './scenarioTypes.ts'
 
 function defaultSaasInputs(): SaasInputs {
@@ -134,7 +135,8 @@ function defaultClimateTechInputs(): ClimateTechInputs {
   }
 }
 
-function defaultVcMethodInputs(): ScenarioVcMethodInputs {
+/** VC法入力の既定値。schemaVersion移行(v1→v2)でvcMethodを補完する際にも使う。 */
+export function defaultVcMethodInputs(): ScenarioVcMethodInputs {
   return {
     targetMultiple: 10,
     yearsToExit: 5,
@@ -148,7 +150,14 @@ function defaultVcMethodInputs(): ScenarioVcMethodInputs {
 export function createScenario(sector: SectorId, name: string): Scenario {
   const id = crypto.randomUUID()
   const now = new Date().toISOString()
-  const base = { id, name, createdAt: now, updatedAt: now, vcMethod: defaultVcMethodInputs() }
+  const base = {
+    id,
+    name,
+    createdAt: now,
+    updatedAt: now,
+    vcMethod: defaultVcMethodInputs(),
+    schemaVersion: SCENARIO_SCHEMA_VERSION,
+  }
   switch (sector) {
     case 'saas_jp':
       return { ...base, sector, inputs: defaultSaasInputs() }

@@ -9,6 +9,7 @@ import { create } from 'zustand'
 import { LocalStorageAdapter } from '../adapters/storage/LocalStorageAdapter.ts'
 import type { StorageAdapter } from '../adapters/storage/StorageAdapter.ts'
 import { createScenario } from './defaultInputs.ts'
+import { migrateScenario } from './scenarioMigration.ts'
 import type { Scenario, SectorId } from './scenarioTypes.ts'
 
 export const SCENARIO_STORAGE_KEY = 'ev-valuation-simulator:scenarios:v1'
@@ -93,5 +94,7 @@ export function createScenarioStore(adapter: StorageAdapter<Scenario>) {
   }))
 }
 
-/** アプリ全体で使う既定のシナリオストア(localStorage バックエンド)。 */
-export const useScenarioStore = createScenarioStore(new LocalStorageAdapter<Scenario>(SCENARIO_STORAGE_KEY))
+/** アプリ全体で使う既定のシナリオストア(localStorage バックエンド、スキーマ移行対応)。 */
+export const useScenarioStore = createScenarioStore(
+  new LocalStorageAdapter<Scenario>(SCENARIO_STORAGE_KEY, migrateScenario),
+)

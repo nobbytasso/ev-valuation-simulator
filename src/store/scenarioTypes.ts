@@ -43,12 +43,20 @@ export interface ScenarioVcMethodInputs {
   netDebtAtExit: number // 既定 0
 }
 
+/**
+ * 永続化スキーマのバージョン。出典: docs/requirements-rev5.md §8、D-1裁定
+ * v1: Phase 2形式(vcMethodフィールドなし)。v2: Phase 3でvcMethodを追加。
+ * 形式変更時はここを+1し、src/store/scenarioMigration.ts に移行手順を追記する。
+ */
+export const SCENARIO_SCHEMA_VERSION = 2
+
 interface ScenarioBase<TSector extends SectorId, TInputs> {
   id: string
   name: string
   sector: TSector
   inputs: TInputs
   vcMethod: ScenarioVcMethodInputs
+  schemaVersion: number
   createdAt: string // ISO8601
   updatedAt: string // ISO8601
 }
@@ -61,6 +69,9 @@ export type Scenario =
   | ScenarioBase<'ec_d2c', EcD2cInputs>
   | ScenarioBase<'climate_tech', ClimateTechInputs>
 
+/** ポートフォリオ永続化データのスキーマバージョン。現行 1(形式変更なし)。 */
+export const PORTFOLIO_SCHEMA_VERSION = 1
+
 export interface PortfolioHolding {
   id: string
   companyName: string
@@ -69,6 +80,7 @@ export interface PortfolioHolding {
   round: string // 例: "シリーズA"
   ownershipPct: number // 現在の持分比率(0-1)
   scenarioId?: string // 紐づくシナリオ(評価額の参照先)
+  schemaVersion: number
   createdAt: string
   updatedAt: string
 }

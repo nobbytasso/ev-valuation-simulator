@@ -1,0 +1,23 @@
+{
+  "id": "legacy-saas-0001",
+  "name": "Phase2形式レガシーシナリオ(SaaS)",
+  "sector": "saas_jp",
+  "inputs": {
+    "arr": 1000,
+    "arrGrowth": 0.3,
+    "nrr": 1.1,
+    "grossMargin": 0.7,
+    "operatingMargin": 0.05,
+    "fcfMargin": 0.05,
+    "grossChurn": 0.1,
+    "cacPaybackMonths": 18,
+    "arrBasis": "ntm",
+    "evArrMultiple": { "pessimistic": 5, "base": 8, "optimistic": 12 },
+    "projectionYears": 5,
+    "growthDecayFactor": 0.85,
+    "discountRate": 0.12,
+    "terminalGrowth": 0.02
+  },
+  "createdAt": "2026-07-13T10:00:00.000Z",
+  "updatedAt": "2026-07-13T10:00:00.000Z"
+}

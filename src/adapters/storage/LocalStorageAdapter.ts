@@ -1,25 +1,43 @@
 /**
  * StorageAdapter の Stage 1 実装。ブラウザの localStorage をバックエンドとする。
  * 1つの localStorage キーの下に配列としてまとめて保存する。
+ *
+ * migrate 関数を注入することで、ロード時(readAll、list/load から利用)・
+ * インポート時(import)の両経路で永続化データのスキーマ移行を行う
+ * (出典: docs/requirements-rev5.md §8、D-1裁定)。未指定時は恒等関数。
  */
 import type { StorageAdapter } from './StorageAdapter.ts'
 
 export class LocalStorageAdapter<T extends { id: string }> implements StorageAdapter<T> {
   private readonly storageKey: string
+  private readonly migrate: (raw: unknown) => T
 
-  constructor(storageKey: string) {
+  constructor(storageKey: string, migrate: (raw: unknown) => T = (raw) => raw as T) {
     this.storageKey = storageKey
+    this.migrate = migrate
   }
 
   private readAll(): T[] {
     const raw = window.localStorage.getItem(this.storageKey)
     if (!raw) return []
+    let parsed: unknown
     try {
-      const parsed: unknown = JSON.parse(raw)
-      return Array.isArray(parsed) ? (parsed as T[]) : []
+      parsed = JSON.parse(raw)
     } catch {
       return []
     }
+    if (!Array.isArray(parsed)) return []
+
+    const migrated: T[] = []
+    for (const item of parsed) {
+      try {
+        migrated.push(this.migrate(item))
+      } catch {
+        // 破損・移行不能な1件はスキップし、他の項目のロードを継続する
+        // (旧形式データでアプリ全体がクラッシュしないことを優先する)
+      }
+    }
+    return migrated
   }
 
   private writeAll(items: T[]): void {
@@ -56,8 +74,9 @@ export class LocalStorageAdapter<T extends { id: string }> implements StorageAda
   }
 
   async import(json: string): Promise<T> {
-    const parsed = JSON.parse(json) as T
-    const withNewId: T = { ...parsed, id: crypto.randomUUID() }
+    const parsed: unknown = JSON.parse(json)
+    const migrated = this.migrate(parsed)
+    const withNewId: T = { ...migrated, id: crypto.randomUUID() }
     await this.save(withNewId)
     return withNewId
   }
