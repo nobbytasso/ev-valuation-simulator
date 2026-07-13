@@ -225,7 +225,7 @@ React \+ TypeScript \+ Vite / Zustand / Recharts / Framer Motion / SheetJS / fas
 | 3 | セクター別フォーム+結果ビュー(SaaS→EC/D2C→メディア→医療機器→創薬→クライメート)+ ベンチマーク基準線表示 | Claude Code | セクター毎受入(**完了、レビュー: docs/review-phase3.md**) |
 | 4 | 感度分析トルネード \+ 資本政策シミュレーター(**シナリオ結果ビューへの期待IRR/MOIC表示を含む**【Rev.5明確化】) | Claude Code | 受入 |
 | 5 | ポートフォリオ管理 \+ Excelエクスポート \+ **シナリオ並列比較ビュー(表+チャート)**【Rev.5割当】 | Claude Code | 出力Excel検収 |
-| 6 | デュアルテーマ磨き込み(ダーク: S.A.C./PSYCHO-PASS様式のワイヤーフレーム・円形ゲージ・判定色/スキャン演出、ライト: パステル/角丸/ハート・スパークル演出)+ **金額表示単位切替(百万円/億円)**【Rev.5割当】 | Claude Code | 両テーマのデザインレビュー |
+| 6 | デュアルテーマ磨き込み(ダーク: S.A.C./PSYCHO-PASS様式のワイヤーフレーム・円形ゲージ・判定色/スキャン演出、ライト: パステル/角丸/ハート・スパークル演出)+ **金額表示単位切替(百万円/億円)**【Rev.5割当】+ **ベンチマークのbasis/notes/as_of表示・years/count単位のサフィックス表示**【docs/review-phase3.md D-13/D-14、本節参照】 | Claude Code | 両テーマのデザインレビュー |
 | 7 | GitHub Pagesデプロイ(Actions)+ ダミーデータ組込み | Claude Code | 本番URL動作確認 |
 | — | ベンチマーク実データ作成(別プロジェクト・随時) | Claude Cowork | スキーマ準拠JSON納品(**v1.2**) |
 | 8 | Stage 2移行: DriveAdapter / GasEndpointSource | Claude Code | 別途要件化 |
@@ -236,6 +236,12 @@ React \+ TypeScript \+ Vite / Zustand / Recharts / Framer Motion / SheetJS / fas
 
 - **医療機器モデルへの implied EV/売上マルチプル追加**(DCF結果の妥当性チェック指標。エンジン+golden+Python参照実装の3点更新を伴うため独立バッチとし、**Phase 5 前後**に実施)【C-2裁定】
 
+### 低優先レビュー指摘のトリアージ【docs/review-phase3.md、2026-07-13裁定】
+
+- **D-13**(basis/notes/as_ofの表示)・**D-14**(years/count単位のサフィックス表示): 単独実装せず**Phase 6のデザイン磨き込みに吸収**(上記フェーズ表参照)。ベンチマーク比較UIの表示密度・情報設計をテーマ磨き込みと合わせて一括検討する。
+- **D-15**(`EvRangeResult` の補助ラベル「簡易DCF」ハードコード): 対応不要のまま放置可。現状SaaSのみが `auxiliary` を返し他セクターは返さないため実害なし。他セクターが `auxiliary` を返すようになった時点で再評価する。
+- **D-16**(`cashflows` フィールドの用途): Phase 3時点で未使用だが削除せず、Phase 6のチャート実装で使用する前提として残置する(docs/engine-spec.md §0.2 SectorValuationResult定義のコメント参照)。
+
 ---
 
 ## 付属ファイル
@@ -245,4 +251,5 @@ React \+ TypeScript \+ Vite / Zustand / Recharts / Framer Motion / SheetJS / fas
 - `cowork-benchmark-task.md` — Cowork側プロジェクト用タスク指示書(**v1.2対応**: 各metricの定義=分子/分母/基準時点の明記を必須化)
 
 *Rev.4 — 2026-07-13*  
-*Rev.5 — 2026-07-13(Phase 3レビュー裁定の反映。docs/review-phase3.md 参照)*
+*Rev.5 — 2026-07-13(Phase 3レビュー裁定の反映。docs/review-phase3.md 参照)*  
+*Rev.5更新(同日) — D-13/D-14をPhase 6に吸収、D-15放置可、D-16残置方針を追記(docs/review-phase3.md 低優先項目のトリアージ)*

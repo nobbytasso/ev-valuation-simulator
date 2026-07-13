@@ -61,6 +61,7 @@ interface SectorValuationResult {
 
 - ドメイン外入力は例外を投げず `ok: false` で返す(純粋関数・全域関数)。
 - 計算不能な派生指標(例: チャーン0のLTV)は `keyMetrics` に含めず、理由をUI層が判別できるよう `NaN` ではなく**キー自体を省略**する。
+- `cashflows` はPhase 3時点ではどのビューからも未参照(docs/review-phase3.md D-16)。**Phase 6のチャート実装(年次CF推移グラフ)で使用する想定として残置する**。Phase 6完了時点でも未使用であれば削除を検討する。
 
 ### 0.2.1 セクター別ドメイン制約一覧【v0.4追加、D-2の前提】
 
