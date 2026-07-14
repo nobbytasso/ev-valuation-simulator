@@ -3,6 +3,8 @@ import type { EvRange } from '../engine/index.ts'
 import type { ScenarioVcMethodInputs } from '../store/scenarioTypes.ts'
 import { formatMoney } from './format/money.ts'
 import { useMoneyUnit } from './format/useMoneyUnit.ts'
+import { CircularGauge } from './gauge/CircularGauge.tsx'
+import { IRR_DISPLAY_MAX, normalizeRatio } from './gauge/gaugeConstants.ts'
 import './VcMethodSection.css'
 
 const RANGE_KEYS = ['pessimistic', 'base', 'optimistic'] as const
@@ -97,6 +99,13 @@ export function VcMethodSection({ evRange, vcMethod, onChange }: VcMethodSection
       <p className="vc-method__implied-irr">
         目標倍率 {vcMethod.targetMultiple.toFixed(1)}x が含意するIRR: <strong>{formatPct(impliedIrr)}</strong>
       </p>
+      <CircularGauge
+        label="含意IRR"
+        value={impliedIrr}
+        valueText={formatPct(impliedIrr)}
+        ratio={normalizeRatio(impliedIrr, IRR_DISPLAY_MAX)}
+        status={results[0].isInfeasible ? 'bad' : 'neutral'}
+      />
 
       <table>
         <thead>

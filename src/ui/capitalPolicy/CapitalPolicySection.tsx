@@ -8,6 +8,8 @@ import type { CapTableHolder, DilutionInputs, EvRange, FundingRound } from '../.
 import type { ScenarioCapitalPolicyInputs, ScenarioVcMethodInputs } from '../../store/scenarioTypes.ts'
 import { formatMoney } from '../format/money.ts'
 import { useMoneyUnit } from '../format/useMoneyUnit.ts'
+import { CircularGauge } from '../gauge/CircularGauge.tsx'
+import { IRR_DISPLAY_MAX, MOIC_DISPLAY_MAX, normalizeRatio } from '../gauge/gaugeConstants.ts'
 import { useStableListKeys } from '../useStableListKeys.ts'
 import { buildOwnershipMatrix } from './ownershipMatrix.ts'
 import './CapitalPolicySection.css'
@@ -344,6 +346,24 @@ export function CapitalPolicySection({
               )}
             </strong>
           </p>
+          <div className="capital-policy-section__gauges">
+            {result.fundIrr !== null && (
+              <CircularGauge
+                label="期待IRR"
+                value={result.fundIrr}
+                valueText={formatPct(result.fundIrr)}
+                ratio={normalizeRatio(result.fundIrr, IRR_DISPLAY_MAX)}
+              />
+            )}
+            {result.fundMoic !== null && (
+              <CircularGauge
+                label="期待MOIC"
+                value={result.fundMoic}
+                valueText={`${result.fundMoic.toFixed(2)}x`}
+                ratio={normalizeRatio(result.fundMoic, MOIC_DISPLAY_MAX)}
+              />
+            )}
+          </div>
         </>
       ) : null}
     </section>

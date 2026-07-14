@@ -7,6 +7,8 @@ import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx
 import { CapitalPolicySection } from '../../capitalPolicy/CapitalPolicySection.tsx'
 import { CashflowChart } from '../../cashflow/CashflowChart.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
+import { CircularGauge } from '../../gauge/CircularGauge.tsx'
+import { RULE_OF_40_DISPLAY_MAX, RULE_OF_40_INDUSTRY_STANDARD, normalizeRatio } from '../../gauge/gaugeConstants.ts'
 import { KeyMetricsList } from '../../scenarioEvaluation/KeyMetricsList.tsx'
 import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
@@ -99,6 +101,15 @@ export function SaasScenarioView({ scenario, onSave, onDelete }: SaasScenarioVie
         <h2>結果</h2>
         <EvRangeResult result={result}>
           <KeyMetricsList sector="saas_jp" keyMetrics={result.ok ? result.value.keyMetrics : undefined} />
+          {result.ok && result.value.keyMetrics.ruleOf40 !== undefined && (
+            <CircularGauge
+              label="Rule of 40"
+              value={result.value.keyMetrics.ruleOf40}
+              valueText={`${result.value.keyMetrics.ruleOf40.toFixed(1)} pt`}
+              ratio={normalizeRatio(result.value.keyMetrics.ruleOf40, RULE_OF_40_DISPLAY_MAX)}
+              markerRatio={RULE_OF_40_INDUSTRY_STANDARD / RULE_OF_40_DISPLAY_MAX}
+            />
+          )}
           {result.ok && result.value.cashflows && <CashflowChart cashflows={result.value.cashflows} />}
         </EvRangeResult>
       </section>

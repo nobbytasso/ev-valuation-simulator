@@ -48,4 +48,21 @@ if (typeof window !== 'undefined') {
     }
     window.ResizeObserver = ResizeObserverPolyfill as unknown as typeof ResizeObserver
   }
+
+  // jsdomはmatchMediaを実装しない。円形ゲージ(useCountUp)・theme-effectsの
+  // prefers-reduced-motion判定が参照するため、既定matches:falseのno-opポリフィルを与える
+  // (reduced-motion固有の挙動を検証するテストは個別にwindow.matchMediaをモックする)。
+  if (!window.matchMedia) {
+    window.matchMedia = (query: string) =>
+      ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: () => {},
+        removeListener: () => {},
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        dispatchEvent: () => false,
+      }) as MediaQueryList
+  }
 }

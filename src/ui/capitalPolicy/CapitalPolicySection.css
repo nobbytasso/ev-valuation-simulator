@@ -22,3 +22,9 @@
 .capital-policy-section__table input[type='number'] {
   width: 6rem;
 }
+
+.capital-policy-section__gauges {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+}

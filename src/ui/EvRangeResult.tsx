@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import type { EngineResult, SectorValuationResult } from '../engine/index.ts'
 import { formatMoney, formatMoneyValue, moneyAxisLabel } from './format/money.ts'
 import { useMoneyUnit } from './format/useMoneyUnit.ts'
+import { CircularGauge } from './gauge/CircularGauge.tsx'
 
 export interface EvRangeResultProps {
   result: EngineResult<SectorValuationResult>
@@ -30,6 +31,10 @@ export function EvRangeResult({ result, children }: EvRangeResultProps) {
     )
   }
 
+  const { pessimistic, base, optimistic } = result.value.ev
+  const evSpan = optimistic - pessimistic
+  const evRatio = evSpan > 0 ? (base - pessimistic) / evSpan : null
+
   return (
     <div>
       <table>
@@ -50,6 +55,13 @@ export function EvRangeResult({ result, children }: EvRangeResultProps) {
           </tr>
         </tbody>
       </table>
+      <CircularGauge
+        label="企業価値(ベース)"
+        value={base}
+        valueText={formatMoney(base, unit)}
+        ratio={evRatio}
+        status={base <= 0 ? 'bad' : 'neutral'}
+      />
       {result.value.auxiliary !== undefined && <p>補助評価値(簡易DCF): {formatMoney(result.value.auxiliary, unit)}</p>}
       {result.value.ev.base <= 0 && (
         <p role="alert" className="status-bad">
