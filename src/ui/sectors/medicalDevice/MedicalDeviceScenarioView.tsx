@@ -6,6 +6,7 @@ import type { Scenario } from '../../../store/scenarioTypes.ts'
 import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx'
 import { CapitalPolicySection } from '../../capitalPolicy/CapitalPolicySection.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
+import { KeyMetricsList } from '../../scenarioEvaluation/KeyMetricsList.tsx'
 import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
 import '../../sectorScenarioView.css'
@@ -95,7 +96,9 @@ export function MedicalDeviceScenarioView({ scenario, onSave, onDelete }: Medica
 
       <section>
         <h2>結果</h2>
-        <EvRangeResult result={result} />
+        <EvRangeResult result={result}>
+          <KeyMetricsList sector="medical_device" keyMetrics={result.ok ? result.value.keyMetrics : undefined} />
+        </EvRangeResult>
       </section>
 
       {result.ok && (

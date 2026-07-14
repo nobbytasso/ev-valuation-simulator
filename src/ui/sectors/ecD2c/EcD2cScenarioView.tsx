@@ -6,6 +6,7 @@ import type { Scenario } from '../../../store/scenarioTypes.ts'
 import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx'
 import { CapitalPolicySection } from '../../capitalPolicy/CapitalPolicySection.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
+import { KeyMetricsList } from '../../scenarioEvaluation/KeyMetricsList.tsx'
 import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
 import '../../sectorScenarioView.css'
@@ -96,16 +97,7 @@ export function EcD2cScenarioView({ scenario, onSave, onDelete }: EcD2cScenarioV
       <section>
         <h2>結果</h2>
         <EvRangeResult result={result}>
-          {result.ok && (
-            <>
-              {result.value.keyMetrics.ltvCacRatio !== undefined && (
-                <p>LTV/CAC: {result.value.keyMetrics.ltvCacRatio.toFixed(2)}</p>
-              )}
-              <p>
-                コントリビューションマージン率: {(result.value.keyMetrics.contributionMarginRatio * 100).toFixed(1)}%
-              </p>
-            </>
-          )}
+          <KeyMetricsList sector="ec_d2c" keyMetrics={result.ok ? result.value.keyMetrics : undefined} />
         </EvRangeResult>
       </section>
 

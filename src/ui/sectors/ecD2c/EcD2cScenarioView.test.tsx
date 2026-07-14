@@ -17,13 +17,14 @@ function buildEcD2cScenario() {
 }
 
 describe('EcD2cScenarioView', () => {
-  it('EVレンジ・LTV/CAC・コントリビューションマージン率・VC法の含意IRRを表示する', async () => {
+  it('EVレンジ・keyMetrics(LTV/CAC比率・貢献利益率・LTV)・VC法の含意IRRを表示する(B-2統一表示)', async () => {
     const scenario = buildEcD2cScenario()
     render(<EcD2cScenarioView scenario={scenario} onSave={vi.fn()} onDelete={vi.fn()} />)
 
     expect(await screen.findByText('企業価値(百万円)')).toBeInTheDocument()
-    expect(screen.getByText(/LTV\/CAC: 3\.46/)).toBeInTheDocument()
-    expect(screen.getByText(/コントリビューションマージン率: 20\.0%/)).toBeInTheDocument()
+    expect(screen.getByText(/LTV\/CAC比率: 3\.46x/)).toBeInTheDocument()
+    expect(screen.getByText(/貢献利益率: 20\.0%/)).toBeInTheDocument()
+    expect(screen.getByText(/^LTV: /)).toBeInTheDocument()
     expect(await screen.findByText(/が含意するIRR/)).toBeInTheDocument()
   })
 

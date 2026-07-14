@@ -6,6 +6,7 @@ import type { Scenario } from '../../../store/scenarioTypes.ts'
 import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx'
 import { CapitalPolicySection } from '../../capitalPolicy/CapitalPolicySection.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
+import { KeyMetricsList } from '../../scenarioEvaluation/KeyMetricsList.tsx'
 import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
 import '../../sectorScenarioView.css'
@@ -96,9 +97,7 @@ export function MediaTechScenarioView({ scenario, onSave, onDelete }: MediaTechS
       <section>
         <h2>結果</h2>
         <EvRangeResult result={result}>
-          {result.ok && result.value.keyMetrics.ltvCpaRatio !== undefined && (
-            <p>LTV/CPA: {result.value.keyMetrics.ltvCpaRatio.toFixed(2)}</p>
-          )}
+          <KeyMetricsList sector="media_tech" keyMetrics={result.ok ? result.value.keyMetrics : undefined} />
         </EvRangeResult>
       </section>
 

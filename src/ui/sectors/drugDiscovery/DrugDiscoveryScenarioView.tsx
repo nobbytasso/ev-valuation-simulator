@@ -6,6 +6,7 @@ import type { Scenario } from '../../../store/scenarioTypes.ts'
 import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx'
 import { CapitalPolicySection } from '../../capitalPolicy/CapitalPolicySection.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
+import { KeyMetricsList } from '../../scenarioEvaluation/KeyMetricsList.tsx'
 import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
 import '../../sectorScenarioView.css'
@@ -106,6 +107,7 @@ export function DrugDiscoveryScenarioView({ scenario, onSave, onDelete }: DrugDi
               </li>
             ))}
           </ul>
+          <KeyMetricsList sector="drug_discovery" keyMetrics={result.ok ? result.value.keyMetrics : undefined} />
         </EvRangeResult>
       </section>
 

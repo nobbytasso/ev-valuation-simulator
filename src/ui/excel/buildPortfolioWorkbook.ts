@@ -7,6 +7,7 @@ import type { WorkBook } from 'xlsx'
 import type { DataStatus } from '../../adapters/benchmarks/types.ts'
 import { SECTOR_LABELS } from '../../store/scenarioTypes.ts'
 import type { PortfolioHolding, Scenario, SectorId } from '../../store/scenarioTypes.ts'
+import { formatUnavailable } from '../format/unavailable.ts'
 import { aggregatePortfolio, evaluateHolding } from '../portfolio/portfolioAggregation.ts'
 import { formatDataStatus } from './excelSheetHelpers.ts'
 import type { SheetRow } from './excelSheetHelpers.ts'
@@ -55,8 +56,8 @@ function buildSummarySheetRows(holdings: PortfolioHolding[], scenarioById: Map<s
       valuation.marketValue.pessimistic,
       valuation.marketValue.base,
       valuation.marketValue.optimistic,
-      valuation.moic ?? '',
-      valuation.irr !== null ? valuation.irr * 100 : valuation.irrUnavailableReason ? `—(${valuation.irrUnavailableReason})` : '—',
+      valuation.moic ?? formatUnavailable(valuation.moicUnavailableReason),
+      valuation.irr !== null ? valuation.irr * 100 : formatUnavailable(valuation.irrUnavailableReason),
       valuation.isCostBasis ? 'コスト評価' : 'シナリオ',
     ])
   }
@@ -73,8 +74,8 @@ function buildSummarySheetRows(holdings: PortfolioHolding[], scenarioById: Map<s
     summary.totalMarketValue.pessimistic,
     summary.totalMarketValue.base,
     summary.totalMarketValue.optimistic,
-    summary.fundMoic ?? '',
-    summary.fundIrr !== null ? summary.fundIrr * 100 : summary.fundIrrUnavailableReason ? `—(${summary.fundIrrUnavailableReason})` : '—',
+    summary.fundMoic ?? formatUnavailable(summary.fundMoicUnavailableReason),
+    summary.fundIrr !== null ? summary.fundIrr * 100 : formatUnavailable(summary.fundIrrUnavailableReason),
     summary.hasCostBasisHoldings ? 'コスト評価銘柄を含む' : '',
   ])
   return rows

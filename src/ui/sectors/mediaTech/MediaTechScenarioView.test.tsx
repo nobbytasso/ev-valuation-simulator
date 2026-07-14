@@ -17,12 +17,14 @@ function buildMediaTechScenario() {
 }
 
 describe('MediaTechScenarioView', () => {
-  it('EVレンジ・LTV/CPA・VC法の含意IRRを表示する', async () => {
+  it('EVレンジ・keyMetrics(LTV/CPA比率・CAC回収期間等)・VC法の含意IRRを表示する(B-2統一表示)', async () => {
     const scenario = buildMediaTechScenario()
     render(<MediaTechScenarioView scenario={scenario} onSave={vi.fn()} onDelete={vi.fn()} />)
 
     expect(await screen.findByText('企業価値(百万円)')).toBeInTheDocument()
-    expect(screen.getByText(/LTV\/CPA: 2\.97/)).toBeInTheDocument()
+    expect(screen.getByText(/LTV\/CPA比率: 2\.97x/)).toBeInTheDocument()
+    // B-2トリアージ指示: メディアのpaybackMonths(CAC回収期間)は従来非表示だった。統一表示後は必ず出る。
+    expect(screen.getByText(/CAC回収期間: /)).toBeInTheDocument()
     expect(await screen.findByText(/が含意するIRR/)).toBeInTheDocument()
   })
 

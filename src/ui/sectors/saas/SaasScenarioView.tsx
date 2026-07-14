@@ -6,6 +6,7 @@ import type { Scenario } from '../../../store/scenarioTypes.ts'
 import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx'
 import { CapitalPolicySection } from '../../capitalPolicy/CapitalPolicySection.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
+import { KeyMetricsList } from '../../scenarioEvaluation/KeyMetricsList.tsx'
 import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
 import { SaasForm } from './SaasForm.tsx'
@@ -96,7 +97,7 @@ export function SaasScenarioView({ scenario, onSave, onDelete }: SaasScenarioVie
       <section>
         <h2>結果</h2>
         <EvRangeResult result={result}>
-          {result.ok && <p>Rule of 40: {result.value.keyMetrics.ruleOf40?.toFixed(1)} pt</p>}
+          <KeyMetricsList sector="saas_jp" keyMetrics={result.ok ? result.value.keyMetrics : undefined} />
         </EvRangeResult>
       </section>
 

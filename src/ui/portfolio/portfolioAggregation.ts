@@ -27,6 +27,8 @@ export interface HoldingValuation {
   marketValue: EvRange
   /** 時価_base / investmentAmount。investmentAmount <= 0 のときは null。 */
   moic: Money | null
+  /** moicがnullの理由(画面・Excelとも「—(理由)」に統一する。§7表記統一、B-2)。 */
+  moicUnavailableReason: string | null
   irr: Ratio | null
   irrUnavailableReason: string | null
 }
@@ -51,13 +53,30 @@ export function evaluateHolding(holding: PortfolioHolding, linkedScenario: Scena
         optimistic: holding.ownershipPct * evaluation.value.ev.optimistic,
       }
   const moicValue = holding.investmentAmount > 0 ? marketValue.base / holding.investmentAmount : null
+  const moicUnavailableReason = moicValue === null ? '投資額が0以下' : null
 
   if (holding.investmentDate === null) {
-    return { holdingId: holding.id, isCostBasis, marketValue, moic: moicValue, irr: null, irrUnavailableReason: '投資日未設定' }
+    return {
+      holdingId: holding.id,
+      isCostBasis,
+      marketValue,
+      moic: moicValue,
+      moicUnavailableReason,
+      irr: null,
+      irrUnavailableReason: '投資日未設定',
+    }
   }
   const t = computeYearsElapsed(holding.investmentDate, evalDateIso)
   if (t <= 0) {
-    return { holdingId: holding.id, isCostBasis, marketValue, moic: moicValue, irr: null, irrUnavailableReason: '当日投資のため未定義' }
+    return {
+      holdingId: holding.id,
+      isCostBasis,
+      marketValue,
+      moic: moicValue,
+      moicUnavailableReason,
+      irr: null,
+      irrUnavailableReason: '当日投資のため未定義',
+    }
   }
   const irr = irrBisection(buildHoldingCashflows(holding.investmentAmount, marketValue.base, t))
   return {
@@ -65,6 +84,7 @@ export function evaluateHolding(holding: PortfolioHolding, linkedScenario: Scena
     isCostBasis,
     marketValue,
     moic: moicValue,
+    moicUnavailableReason,
     irr,
     irrUnavailableReason: irr === null ? '算出不能' : null,
   }
@@ -74,6 +94,7 @@ export interface FundSummary {
   totalMarketValue: EvRange
   totalInvestment: Money
   fundMoic: Money | null
+  fundMoicUnavailableReason: string | null
   fundIrr: Ratio | null
   fundIrrUnavailableReason: string | null
   /** 集計にコスト評価銘柄が1件以上含まれるか(時価総額の注記に使用、§3.4)。 */
@@ -100,6 +121,8 @@ export function aggregatePortfolio(
   }
   const totalInvestment = holdings.reduce((sum, h) => sum + h.investmentAmount, 0)
   const fundMoic = totalInvestment > 0 ? totalMarketValue.base / totalInvestment : null
+  const fundMoicUnavailableReason =
+    fundMoic !== null ? null : holdings.length === 0 ? '銘柄がありません' : '投資額合計が0以下'
   const hasCostBasisHoldings = valuations.some((v) => v.isCostBasis)
 
   if (holdings.length === 0) {
@@ -107,6 +130,7 @@ export function aggregatePortfolio(
       totalMarketValue,
       totalInvestment,
       fundMoic,
+      fundMoicUnavailableReason,
       fundIrr: null,
       fundIrrUnavailableReason: '銘柄がありません',
       hasCostBasisHoldings,
@@ -119,6 +143,7 @@ export function aggregatePortfolio(
       totalMarketValue,
       totalInvestment,
       fundMoic,
+      fundMoicUnavailableReason,
       fundIrr: null,
       fundIrrUnavailableReason: '投資日未設定の銘柄があります',
       hasCostBasisHoldings,
@@ -134,6 +159,7 @@ export function aggregatePortfolio(
     totalMarketValue,
     totalInvestment,
     fundMoic,
+    fundMoicUnavailableReason,
     fundIrr,
     fundIrrUnavailableReason: fundIrr === null ? '算出不能' : null,
     hasCostBasisHoldings,

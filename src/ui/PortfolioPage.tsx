@@ -8,6 +8,7 @@ import type { PortfolioHolding, SectorId } from '../store/scenarioTypes.ts'
 import { buildPortfolioWorkbook } from './excel/buildPortfolioWorkbook.ts'
 import { downloadXlsxFile } from './excel/downloadXlsxFile.ts'
 import { formatMoney, formatMoneyValue, moneyAxisLabel } from './format/money.ts'
+import { formatUnavailable } from './format/unavailable.ts'
 import { useMoneyUnit } from './format/useMoneyUnit.ts'
 import { aggregatePortfolio, evaluateHolding } from './portfolio/portfolioAggregation.ts'
 import './PortfolioPage.css'
@@ -16,12 +17,12 @@ function formatPct(value: number | null): string {
   if (value === null) return '—'
   return `${(value * 100).toFixed(1)}%`
 }
-function formatMoic(value: number | null): string {
-  if (value === null) return '—'
+function formatMoic(value: number | null, reason: string | null): string {
+  if (value === null) return formatUnavailable(reason)
   return `${value.toFixed(2)}x`
 }
 function formatIrr(value: number | null, reason: string | null): string {
-  if (value === null) return reason ? `—(${reason})` : '—'
+  if (value === null) return formatUnavailable(reason)
   return formatPct(value)
 }
 
@@ -200,7 +201,7 @@ export function PortfolioPage() {
                       {valuation.isCostBasis && <span className="portfolio-page__cost-badge">コスト評価</span>}
                     </td>
                     <td>{formatMoney(valuation.marketValue.optimistic, unit)}</td>
-                    <td>{formatMoic(valuation.moic)}</td>
+                    <td>{formatMoic(valuation.moic, valuation.moicUnavailableReason)}</td>
                     <td>{formatIrr(valuation.irr, valuation.irrUnavailableReason)}</td>
                     <td>
                       <button type="button" onClick={() => removeHolding(h.id)}>
@@ -244,7 +245,7 @@ export function PortfolioPage() {
               </tr>
               <tr>
                 <td>ファンドMOIC</td>
-                <td>{formatMoic(fundSummary.fundMoic)}</td>
+                <td>{formatMoic(fundSummary.fundMoic, fundSummary.fundMoicUnavailableReason)}</td>
               </tr>
               <tr>
                 <td>ファンドIRR</td>

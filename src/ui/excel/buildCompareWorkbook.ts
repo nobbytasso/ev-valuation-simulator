@@ -10,6 +10,7 @@ import { SECTOR_LABELS } from '../../store/scenarioTypes.ts'
 import type { SectorId } from '../../store/scenarioTypes.ts'
 import type { CompareColumn } from '../compare/compareEngine.ts'
 import { buildSectorBlocks, impliedIrrFor } from '../compare/compareEngine.ts'
+import { formatUnavailable } from '../format/unavailable.ts'
 import { buildScenarioAssumptionRows } from './excelSheetHelpers.ts'
 import type { SheetRow } from './excelSheetHelpers.ts'
 
@@ -18,7 +19,7 @@ function columnHeader(col: CompareColumn): string {
 }
 
 function expectedReturnCell(value: number | null | undefined, reason: string | null | undefined): string | number {
-  if (value === null || value === undefined) return reason ? `—(${reason})` : '—'
+  if (value === null || value === undefined) return formatUnavailable(reason ?? null)
   return value
 }
 

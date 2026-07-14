@@ -9,6 +9,7 @@ import { buildCompareWorkbook } from '../excel/buildCompareWorkbook.ts'
 import { downloadXlsxFile } from '../excel/downloadXlsxFile.ts'
 import { formatMoney } from '../format/money.ts'
 import type { MoneyUnit } from '../format/money.ts'
+import { formatUnavailable } from '../format/unavailable.ts'
 import { useMoneyUnit } from '../format/useMoneyUnit.ts'
 import type { FieldFormat } from '../scenarioEvaluation/fieldLabelTypes.ts'
 import { buildCompareColumns, buildEvChartData, buildSectorBlocks, impliedIrrFor } from './compareEngine.ts'
@@ -34,7 +35,7 @@ function columnHeader(col: CompareColumn): string {
 
 function expectedReturnText(value: number | null | undefined, reason: string | null | undefined, kind: 'pct' | 'x'): string {
   if (value === null || value === undefined) {
-    return reason ? `—(${reason})` : '—'
+    return formatUnavailable(reason ?? null)
   }
   return kind === 'pct' ? formatPct(value) : `${value.toFixed(2)}x`
 }
