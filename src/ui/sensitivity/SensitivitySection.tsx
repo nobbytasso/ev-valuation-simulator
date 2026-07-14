@@ -7,6 +7,7 @@ import { Bar, BarChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 
 import type { Scenario, SectorId } from '../../store/scenarioTypes.ts'
 import { formatMoney } from '../format/money.ts'
 import { useMoneyUnit } from '../format/useMoneyUnit.ts'
+import { SectionHeading } from '../SectionHeading.tsx'
 import { buildTornadoRows } from './sensitivityRegistry.ts'
 import './SensitivitySection.css'
 
@@ -51,7 +52,7 @@ export function SensitivitySection({ scenario }: SensitivitySectionProps) {
   if (!Number.isFinite(baseEv)) {
     return (
       <section className="sensitivity-section">
-        <h2>感度分析(トルネードチャート)</h2>
+        <SectionHeading captionKey="sensitivity">感度分析(トルネードチャート)</SectionHeading>
         <p role="alert">入力エラーのため感度分析を実行できません。</p>
       </section>
     )
@@ -74,7 +75,7 @@ export function SensitivitySection({ scenario }: SensitivitySectionProps) {
 
   return (
     <section className="sensitivity-section">
-      <h2>感度分析(トルネードチャート)</h2>
+      <SectionHeading captionKey="sensitivity">感度分析(トルネードチャート)</SectionHeading>
       {showUnitEconomicsNote && (
         <p className="sensitivity-section__note">
           マルチプル法のため、ユニットエコノミクス系ドライバー(解約率・CPA・F2転換率等)はEVに影響せず、感度対象外です。

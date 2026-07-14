@@ -13,6 +13,7 @@ import type { MoneyUnit } from '../format/money.ts'
 import { formatUnavailable } from '../format/unavailable.ts'
 import { useMoneyUnit } from '../format/useMoneyUnit.ts'
 import type { FieldFormat } from '../scenarioEvaluation/fieldLabelTypes.ts'
+import { SectionHeading } from '../SectionHeading.tsx'
 import { buildCompareColumns, buildEvChartData, buildSectorBlocks, impliedIrrFor } from './compareEngine.ts'
 import type { CompareColumn } from './compareEngine.ts'
 import { EvRangeChart } from './EvRangeChart.tsx'
@@ -102,7 +103,7 @@ export function ScenarioComparePage() {
 
   return (
     <section className="scenario-compare-page">
-      <h1>シナリオ比較({columns.length}件)</h1>
+      <SectionHeading captionKey="compare" level={1}>シナリオ比較({columns.length}件)</SectionHeading>
       <p>
         <Link to="/">← シナリオ一覧へ戻る</Link>
       </p>

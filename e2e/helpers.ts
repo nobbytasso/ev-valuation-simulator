@@ -16,6 +16,8 @@ export async function createScenario(page: Page, sectorLabel: string): Promise<s
   await page.click('button:has-text("新規作成")')
   const link = page.locator('table tbody tr td a').last()
   await link.click()
-  await expect(page.getByRole('heading', { name: '結果', exact: true })).toBeVisible()
+  // C9で「結果」見出しに英字キャプション(§6.3)が併記され「結果 ENTERPRISE VALUE」相当の
+  // アクセシブルネームになるため完全一致ではなくlevel(h2)で「シミュレーション結果」(h3)と区別する。
+  await expect(page.getByRole('heading', { name: '結果', level: 2 })).toBeVisible()
   return page.url()
 }

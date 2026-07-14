@@ -1,6 +1,7 @@
 import type { BenchmarkData, BenchmarkEntry } from '../adapters/benchmarks/types.ts'
 import { BenchmarkBar } from './BenchmarkBar.tsx'
 import { DummyDataBadge } from './DummyDataBadge.tsx'
+import { SectionHeading } from './SectionHeading.tsx'
 import type { BenchmarkMetricConfig } from './benchmarkMetricConfig.ts'
 import './BenchmarkComparisonSection.css'
 
@@ -47,10 +48,10 @@ export function BenchmarkComparisonSection<TInputs>({
 }: BenchmarkComparisonSectionProps<TInputs>) {
   return (
     <section>
-      <h2>
+      <SectionHeading captionKey="benchmarkComparison">
         ベンチマーク比較
         {benchmark?.data_status === 'dummy' && <DummyDataBadge />}
-      </h2>
+      </SectionHeading>
       {!benchmark ? (
         <p>ベンチマークデータを読み込み中...</p>
       ) : !keyMetrics ? (

@@ -1,0 +1,61 @@
+/**
+ * ダーク(FUI)専用の演出(§6.1)。すべて :root[data-theme='dark'] にスコープし、
+ * コンポーネント側にテーマ分岐を書かない(設計原則3)。
+ * 初回のみ・短時間(≤600ms)、prefers-reduced-motion で完全無効(base.cssの既存ガードが効く)。
+ */
+
+/* 計算実行時のスキャン走査(プリセット適用時+シナリオ切替時のみ。P6-8裁定)。useScanRevealが付与。 */
+:root[data-theme='dark'] .scan-active {
+  position: relative;
+  overflow: hidden;
+}
+:root[data-theme='dark'] .scan-active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(77, 216, 230, 0.28) 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: scan-sweep var(--motion-duration-slow) linear;
+  pointer-events: none;
+}
+@keyframes scan-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* パネル出現時のタイプイン/デコード風表示(初回マウント時のみ。DOM再利用時は自然に再生されない)。 */
+:root[data-theme='dark'] .section-heading {
+  animation: heading-decode 500ms var(--motion-easing) both;
+}
+@keyframes heading-decode {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+    letter-spacing: 0.15em;
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    letter-spacing: normal;
+  }
+}
+
+/* 円形ゲージの確定演出(リング収束→数値ロック時の発光)。カウントアップ(useCountUp)と同期する長さ。 */
+:root[data-theme='dark'] .circular-gauge__fill {
+  animation: gauge-lock var(--motion-duration-slow) var(--motion-easing) both;
+}
+@keyframes gauge-lock {
+  0% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  70% {
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  100% {
+    filter: drop-shadow(0 0 4px var(--gauge-fill));
+  }
+}

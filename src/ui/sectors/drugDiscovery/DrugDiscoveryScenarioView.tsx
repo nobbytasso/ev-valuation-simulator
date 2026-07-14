@@ -6,8 +6,10 @@ import type { Scenario } from '../../../store/scenarioTypes.ts'
 import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx'
 import { CapitalPolicySection } from '../../capitalPolicy/CapitalPolicySection.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
+import { SectionHeading } from '../../SectionHeading.tsx'
 import { KeyMetricsList } from '../../scenarioEvaluation/KeyMetricsList.tsx'
 import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
+import { useScanReveal } from '../../../theme-effects/index.ts'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
 import '../../sectorScenarioView.css'
 import { DrugDiscoveryForm } from './DrugDiscoveryForm.tsx'
@@ -63,14 +65,18 @@ export function DrugDiscoveryScenarioView({ scenario, onSave, onDelete }: DrugDi
   }
 
   // プリセット適用はdraftの差し替えのみ(保存は「保存」ボタンで明示的に行う。C-7)。
+  const [presetApplyCount, setPresetApplyCount] = useState(0)
   const applyPreset = (presetInputs: typeof draftInputs) => {
     setDraftInputs(presetInputs)
+    setPresetApplyCount((c) => c + 1)
   }
+  // ダークのスキャン走査(§6.1)。プリセット適用時+シナリオ切替時のみ発火(P6-8裁定)。
+  const scanActive = useScanReveal(`${scenario.id}:${presetApplyCount}`)
 
   return (
     <div className="sector-scenario-view">
       <section>
-        <h2>シナリオプリセット</h2>
+        <SectionHeading captionKey="presets">シナリオプリセット</SectionHeading>
         <div className="sector-scenario-view__presets">
           {DRUG_DISCOVERY_PRESETS.map((preset) => (
             <button key={preset.id} type="button" onClick={() => applyPreset(preset.inputs)}>
@@ -82,7 +88,7 @@ export function DrugDiscoveryScenarioView({ scenario, onSave, onDelete }: DrugDi
       </section>
 
       <section>
-        <h2>入力ドライバー</h2>
+        <SectionHeading captionKey="inputDrivers">入力ドライバー</SectionHeading>
         {/* シナリオ切替時に品目・マイルストーンのkey管理状態(D-12)をリセットするためkeyでリマウントする */}
         <DrugDiscoveryForm key={scenario.id} inputs={draftInputs} onChange={setDraftInputs} />
         <div className="sector-scenario-view__actions">
@@ -95,8 +101,8 @@ export function DrugDiscoveryScenarioView({ scenario, onSave, onDelete }: DrugDi
         </div>
       </section>
 
-      <section>
-        <h2>結果</h2>
+      <section className={scanActive ? 'scan-active' : undefined}>
+        <SectionHeading captionKey="result">結果</SectionHeading>
         <EvRangeResult result={result}>
           <ul>
             {draftInputs.assets.map((asset, i) => (

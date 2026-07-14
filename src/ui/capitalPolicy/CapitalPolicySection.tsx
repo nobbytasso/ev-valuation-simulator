@@ -10,6 +10,7 @@ import { formatMoney } from '../format/money.ts'
 import { useMoneyUnit } from '../format/useMoneyUnit.ts'
 import { CircularGauge } from '../gauge/CircularGauge.tsx'
 import { IRR_DISPLAY_MAX, MOIC_DISPLAY_MAX, normalizeRatio } from '../gauge/gaugeConstants.ts'
+import { SectionHeading } from '../SectionHeading.tsx'
 import { useStableListKeys } from '../useStableListKeys.ts'
 import { buildOwnershipMatrix } from './ownershipMatrix.ts'
 import './CapitalPolicySection.css'
@@ -126,7 +127,7 @@ export function CapitalPolicySection({
 
   return (
     <section className="capital-policy-section">
-      <h2>資本政策・希薄化シミュレーター</h2>
+      <SectionHeading captionKey="capitalPolicy">資本政策・希薄化シミュレーター</SectionHeading>
       <p className="capital-policy-section__caption">
         VC法セクションの「目標倍率からの要求水準」は目標から逆算した値です。ここでの「期待IRR/MOIC」は、
         入力した資本政策とシナリオ評価額から順算した予測値です。

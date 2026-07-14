@@ -5,6 +5,7 @@ import { formatMoney } from './format/money.ts'
 import { useMoneyUnit } from './format/useMoneyUnit.ts'
 import { CircularGauge } from './gauge/CircularGauge.tsx'
 import { IRR_DISPLAY_MAX, normalizeRatio } from './gauge/gaugeConstants.ts'
+import { SectionHeading } from './SectionHeading.tsx'
 import './VcMethodSection.css'
 
 const RANGE_KEYS = ['pessimistic', 'base', 'optimistic'] as const
@@ -47,7 +48,7 @@ export function VcMethodSection({ evRange, vcMethod, onChange }: VcMethodSection
 
   return (
     <section className="vc-method">
-      <h2>VC法 / IRR・MOIC</h2>
+      <SectionHeading captionKey="vcMethod">VC法 / IRR・MOIC</SectionHeading>
       <div className="vc-method__inputs">
         <label>
           目標倍率(MOIC)

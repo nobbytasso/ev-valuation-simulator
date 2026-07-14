@@ -100,6 +100,26 @@ table td {
   border-width: 0 2px 2px 0;
 }
 
+/*
+ * 日英併記キャプション(§6.3)。DOMは両テーマ常設、スタイルのみトークンで切替える
+ * (ダーク: 等幅小サイズ大文字シアン、ライト: 小さな欧文ピンク系)。
+ */
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  flex-wrap: wrap;
+}
+
+.section-heading__caption-en {
+  font-family: var(--caption-font);
+  color: var(--caption-color);
+  font-size: 0.55em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
 /* フォーカス可視化(WCAG AA対応の一環。§8.1)。テーマごとにトークンで濃淡を変える。 */
 button:focus-visible,
 input:focus-visible,

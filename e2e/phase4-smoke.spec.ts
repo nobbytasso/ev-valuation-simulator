@@ -164,7 +164,7 @@ test('6. v1形式データを注入→明示リロード→クラッシュせず
   }, legacyV1.id)
   await page.reload()
 
-  await expect(page.getByRole('heading', { name: '結果', exact: true })).toBeVisible()
+  await expect(page.getByRole('heading', { name: '結果', level: 2 })).toBeVisible()
   const capitalPolicyText = await page.locator('.capital-policy-section').innerText()
   expect(capitalPolicyText).toContain('創業者')
 })

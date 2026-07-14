@@ -1,1 +1,1 @@
-export {}
+export { useScanReveal } from './scanReveal.ts'

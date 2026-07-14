@@ -7,8 +7,10 @@ import { BenchmarkComparisonSection } from '../../BenchmarkComparisonSection.tsx
 import { CapitalPolicySection } from '../../capitalPolicy/CapitalPolicySection.tsx'
 import { CashflowChart } from '../../cashflow/CashflowChart.tsx'
 import { EvRangeResult } from '../../EvRangeResult.tsx'
+import { SectionHeading } from '../../SectionHeading.tsx'
 import { KeyMetricsList } from '../../scenarioEvaluation/KeyMetricsList.tsx'
 import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
+import { useScanReveal } from '../../../theme-effects/index.ts'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
 import '../../sectorScenarioView.css'
 import { MedicalDeviceForm } from './MedicalDeviceForm.tsx'
@@ -64,14 +66,18 @@ export function MedicalDeviceScenarioView({ scenario, onSave, onDelete }: Medica
   }
 
   // プリセット適用はdraftの差し替えのみ(保存は「保存」ボタンで明示的に行う。C-7)。
+  const [presetApplyCount, setPresetApplyCount] = useState(0)
   const applyPreset = (presetInputs: typeof draftInputs) => {
     setDraftInputs(presetInputs)
+    setPresetApplyCount((c) => c + 1)
   }
+  // ダークのスキャン走査(§6.1)。プリセット適用時+シナリオ切替時のみ発火(P6-8裁定)。
+  const scanActive = useScanReveal(`${scenario.id}:${presetApplyCount}`)
 
   return (
     <div className="sector-scenario-view">
       <section>
-        <h2>シナリオプリセット</h2>
+        <SectionHeading captionKey="presets">シナリオプリセット</SectionHeading>
         <div className="sector-scenario-view__presets">
           {MEDICAL_DEVICE_PRESETS.map((preset) => (
             <button key={preset.id} type="button" onClick={() => applyPreset(preset.inputs)}>
@@ -83,7 +89,7 @@ export function MedicalDeviceScenarioView({ scenario, onSave, onDelete }: Medica
       </section>
 
       <section>
-        <h2>入力ドライバー</h2>
+        <SectionHeading captionKey="inputDrivers">入力ドライバー</SectionHeading>
         <MedicalDeviceForm inputs={draftInputs} onChange={setDraftInputs} />
         <div className="sector-scenario-view__actions">
           <button type="button" onClick={handleSave} disabled={!isDirty}>
@@ -95,8 +101,8 @@ export function MedicalDeviceScenarioView({ scenario, onSave, onDelete }: Medica
         </div>
       </section>
 
-      <section>
-        <h2>結果</h2>
+      <section className={scanActive ? 'scan-active' : undefined}>
+        <SectionHeading captionKey="result">結果</SectionHeading>
         <EvRangeResult result={result}>
           <KeyMetricsList sector="medical_device" keyMetrics={result.ok ? result.value.keyMetrics : undefined} />
           {result.ok && result.value.cashflows && <CashflowChart cashflows={result.value.cashflows} />}

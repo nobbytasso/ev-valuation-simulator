@@ -12,6 +12,7 @@ import { formatMoney, formatMoneyValue, moneyAxisLabel } from './format/money.ts
 import { formatUnavailable } from './format/unavailable.ts'
 import { useMoneyUnit } from './format/useMoneyUnit.ts'
 import { aggregatePortfolio, evaluateHolding } from './portfolio/portfolioAggregation.ts'
+import { SectionHeading } from './SectionHeading.tsx'
 import './PortfolioPage.css'
 
 function formatPct(value: number | null): string {
@@ -105,7 +106,7 @@ export function PortfolioPage() {
 
   return (
     <section>
-      <h1>ポートフォリオ</h1>
+      <SectionHeading captionKey="portfolio" level={1}>ポートフォリオ</SectionHeading>
       {isLoaded && holdings.length > 0 && (
         <button type="button" onClick={handleExportXlsx}>
           Excelエクスポート
