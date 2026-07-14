@@ -1,5 +1,6 @@
 import { Bar, BarChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import type { BenchmarkUnit } from '../adapters/benchmarks/types.ts'
+import { formatDiff, formatValue } from './benchmarkFormat.ts'
 import './BenchmarkBar.css'
 
 export interface BenchmarkComp {
@@ -13,30 +14,15 @@ export interface BenchmarkBarProps {
   currentValue: number
   industryStandard?: number
   comps?: BenchmarkComp[]
-}
-
-function formatValue(value: number, unit: BenchmarkUnit): string {
-  if (unit === 'percent') return `${value.toFixed(1)}%`
-  if (unit === 'x_multiple') return `${value.toFixed(1)}x`
-  if (unit === 'ratio') return value.toFixed(2)
-  if (unit === 'jpy') return `${value.toLocaleString('ja-JP')}円`
-  return value.toLocaleString('ja-JP')
-}
-
-function formatDiff(diff: number, unit: BenchmarkUnit): string {
-  const sign = diff >= 0 ? '+' : ''
-  if (unit === 'percent') return `${sign}${diff.toFixed(1)}pt`
-  if (unit === 'x_multiple') return `${sign}${diff.toFixed(1)}x`
-  if (unit === 'ratio') return `${sign}${diff.toFixed(2)}`
-  if (unit === 'jpy') return `${sign}${diff.toLocaleString('ja-JP')}円`
-  return `${sign}${diff.toLocaleString('ja-JP')}`
+  /** unit派生の既定サフィックスを上書きする(D-14。BenchmarkMetricConfig.unitSuffix由来)。 */
+  unitSuffix?: string
 }
 
 /**
  * 指標のゲージ/バーチャートに、業界標準値・比較対象企業を基準線(マーカーライン)として
  * 重畳表示する。出典: docs/requirements-rev4.md §4.1.2
  */
-export function BenchmarkBar({ label, unit, currentValue, industryStandard, comps = [] }: BenchmarkBarProps) {
+export function BenchmarkBar({ label, unit, currentValue, industryStandard, comps = [], unitSuffix }: BenchmarkBarProps) {
   const allValues = [currentValue, industryStandard, ...comps.map((c) => c.value)].filter(
     (v): v is number => v !== undefined,
   )
@@ -51,12 +37,12 @@ export function BenchmarkBar({ label, unit, currentValue, industryStandard, comp
     <div className="benchmark-bar">
       <div className="benchmark-bar__header">
         <span className="benchmark-bar__label">{label}</span>
-        <span className="benchmark-bar__value tabular-numbers">{formatValue(currentValue, unit)}</span>
+        <span className="benchmark-bar__value tabular-numbers">{formatValue(currentValue, unit, unitSuffix)}</span>
         {diff !== undefined && (
           <span
             className={`benchmark-bar__diff ${diff >= 0 ? 'benchmark-bar__diff--good' : 'benchmark-bar__diff--bad'}`}
           >
-            業界標準比 {formatDiff(diff, unit)}
+            業界標準比 {formatDiff(diff, unit, unitSuffix)}
           </span>
         )}
       </div>

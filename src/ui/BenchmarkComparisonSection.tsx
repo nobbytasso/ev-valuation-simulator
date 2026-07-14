@@ -1,4 +1,4 @@
-import type { BenchmarkData } from '../adapters/benchmarks/types.ts'
+import type { BenchmarkData, BenchmarkEntry } from '../adapters/benchmarks/types.ts'
 import { BenchmarkBar } from './BenchmarkBar.tsx'
 import { DummyDataBadge } from './DummyDataBadge.tsx'
 import type { BenchmarkMetricConfig } from './benchmarkMetricConfig.ts'
@@ -10,6 +10,29 @@ export interface BenchmarkComparisonSectionProps<TInputs> {
   inputs: TInputs
   /** undefinedの場合は入力エラー中として比較をスキップする */
   keyMetrics: Record<string, number> | undefined
+}
+
+/**
+ * 出典行(D-13)。basis(算定基準)を併記し、notesはdetails/開閉で表示する。
+ * 「取得日」(source.retrieved_at)はエントリ固有、「基準日(as_of)」はセクター単位でデータ全体が
+ * 更新された時点(BenchmarkData.as_of)であり意味が異なるため、両方を明示して並記する
+ * (出典: docs/phase6-spec.md §7 D-13。従来「取得日」のみの表記だったものを整理)。
+ */
+function BenchmarkSourceCitation({ entry, asOf, prefixLabel }: { entry: BenchmarkEntry; asOf: string; prefixLabel: string }) {
+  const basisText = entry.basis ? `算定基準: ${entry.basis}・` : ''
+  return (
+    <div className="benchmark-comparison__source">
+      <p>
+        {prefixLabel} 出典: {entry.source.name}({basisText}基準日(as_of): {asOf}・取得日: {entry.source.retrieved_at})
+      </p>
+      {entry.notes && (
+        <details className="benchmark-comparison__notes">
+          <summary>備考</summary>
+          <p>{entry.notes}</p>
+        </details>
+      )}
+    </div>
+  )
 }
 
 /**
@@ -48,16 +71,18 @@ export function BenchmarkComparisonSection<TInputs>({
                 currentValue={currentValue}
                 industryStandard={industryStandard?.value}
                 comps={comps}
+                unitSuffix={metric.unitSuffix}
               />
               {industryStandard && (
-                <p className="benchmark-comparison__source">
-                  業界標準 出典: {industryStandard.source.name}(取得日: {industryStandard.source.retrieved_at})
-                </p>
+                <BenchmarkSourceCitation entry={industryStandard} asOf={benchmark.as_of} prefixLabel="業界標準" />
               )}
               {compEntries.map((c) => (
-                <p key={c.company_name ?? c.source.name} className="benchmark-comparison__source">
-                  {c.company_name ?? '(不明)'} 出典: {c.source.name}(取得日: {c.source.retrieved_at})
-                </p>
+                <BenchmarkSourceCitation
+                  key={c.company_name ?? c.source.name}
+                  entry={c}
+                  asOf={benchmark.as_of}
+                  prefixLabel={c.company_name ?? '(不明)'}
+                />
               ))}
             </div>
           )

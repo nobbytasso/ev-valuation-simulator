@@ -7,3 +7,16 @@
   color: var(--color-text-muted);
   margin: 0.15rem 0 0;
 }
+
+.benchmark-comparison__source p {
+  margin: 0;
+}
+
+.benchmark-comparison__notes {
+  margin-top: 0.15rem;
+}
+
+.benchmark-comparison__notes summary {
+  cursor: pointer;
+  color: var(--color-accent);
+}
