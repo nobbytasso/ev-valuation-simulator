@@ -10,13 +10,15 @@
   --color-surface: #fff5fa;
   --color-border: #f4d9e8;
   --color-text: #3a2933;
-  --color-text-muted: #8a7480;
+  /* C11: WCAG AAコントラストテスト(contrast.test.ts)を満たすまで濃色側へ調整(§8.1)。 */
+  --color-text-muted: #826d78;
   --color-accent: #ff8fc7;
-  --color-accent-contrast: #ffffff;
-  --color-warning: #d98a2b;
-  --color-status-good: #2ba88f;
-  --color-status-caution: #d98a2b;
-  --color-status-bad: #d94f6e;
+  /* 白文字はアクセント/警告色の淡い地では4.5:1に届かないため濃色シェードに変更(C11)。 */
+  --color-accent-contrast: #3a2933;
+  --color-warning: #a0641d;
+  --color-status-good: #21816e;
+  --color-status-caution: #a0641d;
+  --color-status-bad: #d33458;
 
   /* 角丸: 大きめ、ふんわり */
   --radius-sm: 10px;
