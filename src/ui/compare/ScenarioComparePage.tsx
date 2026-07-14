@@ -107,12 +107,12 @@ export function ScenarioComparePage() {
         Excelエクスポート
       </button>
 
-      <section>
+      <section className="panel">
         <h2>EVレンジ</h2>
         {chartData.length > 0 ? <EvRangeChart data={chartData} /> : <p>表示可能なシナリオがありません。</p>}
       </section>
 
-      <section>
+      <section className="panel">
         <h2>共通指標</h2>
         <table>
           <thead>
@@ -183,7 +183,7 @@ export function ScenarioComparePage() {
       </section>
 
       {sectorBlocks.map((block) => (
-        <section key={block.sector}>
+        <section key={block.sector} className="panel">
           <h2>{SECTOR_LABELS[block.sector]}別指標</h2>
           <table>
             <thead>

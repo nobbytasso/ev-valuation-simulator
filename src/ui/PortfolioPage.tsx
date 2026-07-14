@@ -106,7 +106,7 @@ export function PortfolioPage() {
         </button>
       )}
 
-      <div>
+      <div className="panel">
         <input
           placeholder="企業名"
           value={companyName}
@@ -146,75 +146,77 @@ export function PortfolioPage() {
       ) : holdings.length === 0 ? (
         <p>保有銘柄がまだありません。</p>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>企業名</th>
-              <th>セクター</th>
-              <th>評価シナリオ</th>
-              <th>投資日</th>
-              <th>投資額{moneyAxisLabel(unit)}</th>
-              <th>持分</th>
-              <th>時価(悲観)</th>
-              <th>時価(ベース)</th>
-              <th>時価(楽観)</th>
-              <th>MOIC</th>
-              <th>IRR</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {holdings.map((h) => {
-              const linkedScenario = h.scenarioId ? (scenarioById.get(h.scenarioId) ?? null) : null
-              const isDangling = Boolean(h.scenarioId) && !linkedScenario
-              const candidateScenarios = scenarios.filter((s) => s.sector === h.sector)
-              const valuation = evaluateHolding(h, linkedScenario, evalDateIso)
-              return (
-                <tr key={h.id}>
-                  <td>{h.companyName}</td>
-                  <td>{SECTOR_LABELS[h.sector]}</td>
-                  <td>
-                    <select value={isDangling ? '' : (h.scenarioId ?? '')} onChange={(e) => linkScenario(h, e.target.value)}>
-                      <option value="">(未紐付け)</option>
-                      {candidateScenarios.map((s) => (
-                        <option key={s.id} value={s.id}>
-                          {s.name}
-                        </option>
-                      ))}
-                    </select>
-                    {isDangling && <span className="portfolio-page__dangling"> (削除済み)</span>}
-                  </td>
-                  <td>
-                    <input
-                      type="date"
-                      value={h.investmentDate ?? ''}
-                      onChange={(e) => setHoldingInvestmentDate(h, e.target.value)}
-                    />
-                  </td>
-                  <td>{formatMoneyValue(h.investmentAmount, unit)}</td>
-                  <td>{(h.ownershipPct * 100).toFixed(1)}%</td>
-                  <td>{formatMoney(valuation.marketValue.pessimistic, unit)}</td>
-                  <td>
-                    {formatMoney(valuation.marketValue.base, unit)}
-                    {valuation.isCostBasis && <span className="portfolio-page__cost-badge">コスト評価</span>}
-                  </td>
-                  <td>{formatMoney(valuation.marketValue.optimistic, unit)}</td>
-                  <td>{formatMoic(valuation.moic)}</td>
-                  <td>{formatIrr(valuation.irr, valuation.irrUnavailableReason)}</td>
-                  <td>
-                    <button type="button" onClick={() => removeHolding(h.id)}>
-                      削除
-                    </button>
-                  </td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+        <div className="panel">
+          <table>
+            <thead>
+              <tr>
+                <th>企業名</th>
+                <th>セクター</th>
+                <th>評価シナリオ</th>
+                <th>投資日</th>
+                <th>投資額{moneyAxisLabel(unit)}</th>
+                <th>持分</th>
+                <th>時価(悲観)</th>
+                <th>時価(ベース)</th>
+                <th>時価(楽観)</th>
+                <th>MOIC</th>
+                <th>IRR</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {holdings.map((h) => {
+                const linkedScenario = h.scenarioId ? (scenarioById.get(h.scenarioId) ?? null) : null
+                const isDangling = Boolean(h.scenarioId) && !linkedScenario
+                const candidateScenarios = scenarios.filter((s) => s.sector === h.sector)
+                const valuation = evaluateHolding(h, linkedScenario, evalDateIso)
+                return (
+                  <tr key={h.id}>
+                    <td>{h.companyName}</td>
+                    <td>{SECTOR_LABELS[h.sector]}</td>
+                    <td>
+                      <select value={isDangling ? '' : (h.scenarioId ?? '')} onChange={(e) => linkScenario(h, e.target.value)}>
+                        <option value="">(未紐付け)</option>
+                        {candidateScenarios.map((s) => (
+                          <option key={s.id} value={s.id}>
+                            {s.name}
+                          </option>
+                        ))}
+                      </select>
+                      {isDangling && <span className="portfolio-page__dangling"> (削除済み)</span>}
+                    </td>
+                    <td>
+                      <input
+                        type="date"
+                        value={h.investmentDate ?? ''}
+                        onChange={(e) => setHoldingInvestmentDate(h, e.target.value)}
+                      />
+                    </td>
+                    <td>{formatMoneyValue(h.investmentAmount, unit)}</td>
+                    <td>{(h.ownershipPct * 100).toFixed(1)}%</td>
+                    <td>{formatMoney(valuation.marketValue.pessimistic, unit)}</td>
+                    <td>
+                      {formatMoney(valuation.marketValue.base, unit)}
+                      {valuation.isCostBasis && <span className="portfolio-page__cost-badge">コスト評価</span>}
+                    </td>
+                    <td>{formatMoney(valuation.marketValue.optimistic, unit)}</td>
+                    <td>{formatMoic(valuation.moic)}</td>
+                    <td>{formatIrr(valuation.irr, valuation.irrUnavailableReason)}</td>
+                    <td>
+                      <button type="button" onClick={() => removeHolding(h.id)}>
+                        削除
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {isLoaded && holdings.length > 0 && (
-        <section className="portfolio-page__summary">
+        <section className="portfolio-page__summary panel">
           <h2>ファンド単位集計</h2>
           <p className="portfolio-page__summary-caption">
             評価基準日: {new Date(evalDateIso).toLocaleDateString('ja-JP')}。

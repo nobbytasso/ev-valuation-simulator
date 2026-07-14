@@ -35,7 +35,28 @@
   /* モーション: 短く鋭い */
   --motion-duration-fast: 120ms;
   --motion-duration-base: 200ms;
+  --motion-duration-slow: 600ms;
   --motion-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /*
+   * 第2層トークン(Phase 6・出典: docs/phase6-spec.md §1)。
+   * FUI様式: 微細グリッド背景、細線ワイヤーフレームパネル+コーナーマーカー、発光ラインの強調段。
+   */
+  --pattern-bg:
+    repeating-linear-gradient(0deg, rgba(77, 216, 230, 0.05) 0, rgba(77, 216, 230, 0.05) 1px, transparent 1px, transparent 28px),
+    repeating-linear-gradient(90deg, rgba(77, 216, 230, 0.05) 0, rgba(77, 216, 230, 0.05) 1px, transparent 1px, transparent 28px);
+  --pattern-bg-size: 28px 28px;
+  --panel-border-style: 1px solid var(--color-border);
+  --corner-marker-size: 10px;
+  --corner-marker-color: var(--color-accent);
+  --shadow-glow-strong: 0 0 16px rgba(77, 216, 230, 0.5);
+  --surface-overlay: rgba(77, 216, 230, 0.06);
+  --caption-font: var(--font-mono);
+  --caption-color: var(--color-accent);
+  --gauge-track: rgba(77, 216, 230, 0.16);
+  --gauge-fill: var(--color-accent);
+  --gauge-lock: var(--color-text);
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
 
   color-scheme: dark;
 }

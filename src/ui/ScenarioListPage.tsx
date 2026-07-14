@@ -99,51 +99,53 @@ export function ScenarioListPage() {
             </Link>
             {selectedIds.length >= MAX_COMPARE_SCENARIOS && <span> (上限{MAX_COMPARE_SCENARIOS}件)</span>}
           </div>
-          <table>
-            <thead>
-              <tr>
-                <th>比較</th>
-                <th>名前</th>
-                <th>セクター</th>
-                <th>更新日時</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              {scenarios.map((s) => (
-                <tr key={s.id}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedIds.includes(s.id)}
-                      disabled={!selectedIds.includes(s.id) && selectedIds.length >= MAX_COMPARE_SCENARIOS}
-                      onChange={() => toggleSelected(s.id)}
-                      aria-label={`${s.name}を比較対象に選択`}
-                    />
-                  </td>
-                  <td>
-                    <Link to={`/scenarios/${s.id}`}>{s.name}</Link>
-                  </td>
-                  <td>{SECTOR_LABELS[s.sector]}</td>
-                  <td>{new Date(s.updatedAt).toLocaleString('ja-JP')}</td>
-                  <td>
-                    <button type="button" onClick={() => duplicate(s.id)}>
-                      複製
-                    </button>
-                    <button type="button" onClick={() => handleRename(s.id, s.name)}>
-                      名前変更
-                    </button>
-                    <button type="button" onClick={() => remove(s.id)}>
-                      削除
-                    </button>
-                    <button type="button" onClick={() => handleExport(s.id, s.name)}>
-                      エクスポート
-                    </button>
-                  </td>
+          <div className="panel">
+            <table>
+              <thead>
+                <tr>
+                  <th>比較</th>
+                  <th>名前</th>
+                  <th>セクター</th>
+                  <th>更新日時</th>
+                  <th>操作</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {scenarios.map((s) => (
+                  <tr key={s.id}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedIds.includes(s.id)}
+                        disabled={!selectedIds.includes(s.id) && selectedIds.length >= MAX_COMPARE_SCENARIOS}
+                        onChange={() => toggleSelected(s.id)}
+                        aria-label={`${s.name}を比較対象に選択`}
+                      />
+                    </td>
+                    <td>
+                      <Link to={`/scenarios/${s.id}`}>{s.name}</Link>
+                    </td>
+                    <td>{SECTOR_LABELS[s.sector]}</td>
+                    <td>{new Date(s.updatedAt).toLocaleString('ja-JP')}</td>
+                    <td>
+                      <button type="button" onClick={() => duplicate(s.id)}>
+                        複製
+                      </button>
+                      <button type="button" onClick={() => handleRename(s.id, s.name)}>
+                        名前変更
+                      </button>
+                      <button type="button" onClick={() => remove(s.id)}>
+                        削除
+                      </button>
+                      <button type="button" onClick={() => handleExport(s.id, s.name)}>
+                        エクスポート
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </>
       )}
     </section>
