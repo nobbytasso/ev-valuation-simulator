@@ -216,7 +216,7 @@ export function CapitalPolicySection({
           <tr>
             <th>ラウンド名</th>
             <th>年</th>
-            <th>プレバリュー(百万円)</th>
+            <th>プレマネー(百万円)</th>
             <th>調達額(百万円)</th>
             <th>プール目標(%)</th>
             <th>自ファンド出資額(百万円)</th>

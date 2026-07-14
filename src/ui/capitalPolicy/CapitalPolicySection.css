@@ -10,9 +10,23 @@
   margin-bottom: 0.75rem;
 }
 
+/* 入力テーブル: 列幅は内容準拠(width:100%で引き伸ばさない)。
+   見出しは左揃えにして入力欄の左端と揃える(デザインレビュー指摘3)。 */
 .capital-policy-section__table {
-  width: 100%;
+  border-collapse: collapse;
   margin-bottom: 0.75rem;
+}
+
+.capital-policy-section__table th,
+.capital-policy-section__table td {
+  text-align: left;
+  vertical-align: middle;
+  padding: 0.2rem 1.25rem 0.2rem 0;
+}
+
+.capital-policy-section__table th:last-child,
+.capital-policy-section__table td:last-child {
+  padding-right: 0;
 }
 
 .capital-policy-section__table input[type='text'] {

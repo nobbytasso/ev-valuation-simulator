@@ -123,7 +123,7 @@ function buildResultsSheetRows(scenario: Scenario): SheetRow[] {
   rows.push([])
 
   rows.push(['資本政策: ラウンド表'])
-  rows.push(['ラウンド名', '年', 'プレバリュー(百万円)', '調達額(百万円)', 'プール目標(%)', '自ファンド出資額(百万円)'])
+  rows.push(['ラウンド名', '年', 'プレマネー(百万円)', '調達額(百万円)', 'プール目標(%)', '自ファンド出資額(百万円)'])
   for (const r of scenario.capitalPolicy.rounds) {
     rows.push([r.name, r.yearIndex, r.preMoneyValuation, r.amountRaised, r.optionPoolPostPct * 100, r.fundInvestment])
   }
