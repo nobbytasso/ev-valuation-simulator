@@ -1,3 +1,4 @@
+import { ratioToPercentInput } from './format/percent.ts'
 import { useEffect, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { StaticJsonSource } from '../adapters/benchmarks/StaticJsonSource.ts'
@@ -136,7 +137,7 @@ export function PortfolioPage() {
         <input
           type="number"
           placeholder="持分(%)"
-          value={ownershipPct * 100}
+          value={ratioToPercentInput(ownershipPct)}
           onChange={(e) => setOwnershipPct(Number(e.target.value) / 100)}
         />
         <label>

@@ -1,3 +1,4 @@
+import { ratioToPercentInput } from '../../format/percent.ts'
 import type { SaasInputs } from '../../../engine/index.ts'
 import '../../sectorForm.css'
 
@@ -33,13 +34,13 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
           type="number"
           step="1"
           min="-99"
-          value={inputs.arrGrowth * 100}
+          value={ratioToPercentInput(inputs.arrGrowth)}
           onChange={(e) => set('arrGrowth', Number(e.target.value) / 100)}
         />
       </label>
       <label>
         NRR(%)
-        <input type="number" step="1" value={inputs.nrr * 100} onChange={(e) => set('nrr', Number(e.target.value) / 100)} />
+        <input type="number" step="1" value={ratioToPercentInput(inputs.nrr)} onChange={(e) => set('nrr', Number(e.target.value) / 100)} />
       </label>
       <label>
         グロスマージン(%)
@@ -48,7 +49,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
           step="1"
           min="0"
           max="100"
-          value={inputs.grossMargin * 100}
+          value={ratioToPercentInput(inputs.grossMargin)}
           onChange={(e) => set('grossMargin', Number(e.target.value) / 100)}
         />
       </label>
@@ -59,7 +60,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
           step="1"
           min="-100"
           max="100"
-          value={inputs.operatingMargin * 100}
+          value={ratioToPercentInput(inputs.operatingMargin)}
           onChange={(e) => set('operatingMargin', Number(e.target.value) / 100)}
         />
       </label>
@@ -70,7 +71,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
           step="1"
           min="-100"
           max="100"
-          value={inputs.fcfMargin * 100}
+          value={ratioToPercentInput(inputs.fcfMargin)}
           onChange={(e) => set('fcfMargin', Number(e.target.value) / 100)}
         />
       </label>
@@ -81,7 +82,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
           step="1"
           min="0"
           max="100"
-          value={inputs.grossChurn * 100}
+          value={ratioToPercentInput(inputs.grossChurn)}
           onChange={(e) => set('grossChurn', Number(e.target.value) / 100)}
         />
       </label>
@@ -164,7 +165,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
           type="number"
           step="0.5"
           min="0.1"
-          value={inputs.discountRate * 100}
+          value={ratioToPercentInput(inputs.discountRate)}
           onChange={(e) => set('discountRate', Number(e.target.value) / 100)}
         />
       </label>
@@ -173,7 +174,7 @@ export function SaasForm({ inputs, onChange }: SaasFormProps) {
         <input
           type="number"
           step="0.5"
-          value={inputs.terminalGrowth * 100}
+          value={ratioToPercentInput(inputs.terminalGrowth)}
           onChange={(e) => set('terminalGrowth', Number(e.target.value) / 100)}
         />
       </label>

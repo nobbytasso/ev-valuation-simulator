@@ -1,3 +1,4 @@
+import { ratioToPercentInput } from '../../format/percent.ts'
 import { PHASE_ORDER } from '../../../engine/index.ts'
 import type { Phase, PipelineAsset } from '../../../engine/index.ts'
 import { useStableListKeys } from '../../useStableListKeys.ts'
@@ -104,7 +105,7 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
                   step="1"
                   min="0"
                   max="100"
-                  value={asset.phaseSuccessProbs[p] * 100}
+                  value={ratioToPercentInput(asset.phaseSuccessProbs[p])}
                   onChange={(e) => setPhaseField('phaseSuccessProbs', p, Number(e.target.value) / 100)}
                 />
               </td>
@@ -173,7 +174,7 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
             step="1"
             min="0"
             max="100"
-            value={asset.declineRate * 100}
+            value={ratioToPercentInput(asset.declineRate)}
             onChange={(e) => set('declineRate', Number(e.target.value) / 100)}
           />
         </label>
@@ -193,7 +194,7 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
             <input
               type="number"
               step="1"
-              value={asset.commercialization.contributionMargin * 100}
+              value={ratioToPercentInput(asset.commercialization.contributionMargin)}
               onChange={(e) =>
                 onChange({
                   ...asset,
@@ -208,7 +209,7 @@ export function DrugAssetForm({ asset, onChange, onRemove, canRemove }: DrugAsse
             <input
               type="number"
               step="1"
-              value={asset.commercialization.royaltyRate * 100}
+              value={ratioToPercentInput(asset.commercialization.royaltyRate)}
               onChange={(e) => {
                 if (asset.commercialization.type !== 'license') return
                 onChange({

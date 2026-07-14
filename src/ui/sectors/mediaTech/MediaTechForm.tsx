@@ -1,3 +1,4 @@
+import { ratioToPercentInput } from '../../format/percent.ts'
 import type { MediaTechInputs } from '../../../engine/index.ts'
 import '../../sectorForm.css'
 
@@ -36,7 +37,7 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
           type="number"
           step="1"
           min="-99"
-          value={inputs.mauGrowth * 100}
+          value={ratioToPercentInput(inputs.mauGrowth)}
           onChange={(e) => set('mauGrowth', Number(e.target.value) / 100)}
         />
       </label>
@@ -58,7 +59,7 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
           step="1"
           min="0"
           max="100"
-          value={inputs.dauMauRatio * 100}
+          value={ratioToPercentInput(inputs.dauMauRatio)}
           onChange={(e) => set('dauMauRatio', Number(e.target.value) / 100)}
         />
       </label>
@@ -69,7 +70,7 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
           step="0.5"
           min="0"
           max="100"
-          value={inputs.monthlyChurn * 100}
+          value={ratioToPercentInput(inputs.monthlyChurn)}
           onChange={(e) => set('monthlyChurn', Number(e.target.value) / 100)}
         />
       </label>
@@ -80,7 +81,7 @@ export function MediaTechForm({ inputs, onChange }: MediaTechFormProps) {
           step="1"
           min="0"
           max="100"
-          value={inputs.contentCostRatio * 100}
+          value={ratioToPercentInput(inputs.contentCostRatio)}
           onChange={(e) => set('contentCostRatio', Number(e.target.value) / 100)}
         />
       </label>

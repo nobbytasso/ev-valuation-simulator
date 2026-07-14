@@ -1,3 +1,4 @@
+import { ratioToPercentInput } from '../../format/percent.ts'
 import type { ClimateTechInputs } from '../../../engine/index.ts'
 import { useStableListKeys } from '../../useStableListKeys.ts'
 import '../../sectorForm.css'
@@ -56,7 +57,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
             step="1"
             min="0"
             max="100"
-            value={inputs.massProductionProb * 100}
+            value={ratioToPercentInput(inputs.massProductionProb)}
             onChange={(e) => set('massProductionProb', Number(e.target.value) / 100)}
           />
         </label>
@@ -67,7 +68,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
             step="1"
             min="0"
             max="100"
-            value={inputs.subsidyCoverage * 100}
+            value={ratioToPercentInput(inputs.subsidyCoverage)}
             onChange={(e) => set('subsidyCoverage', Number(e.target.value) / 100)}
           />
         </label>
@@ -118,7 +119,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
             step="1"
             min="0"
             max="99.9"
-            value={inputs.costDeclineRate * 100}
+            value={ratioToPercentInput(inputs.costDeclineRate)}
             onChange={(e) => set('costDeclineRate', Number(e.target.value) / 100)}
           />
         </label>
@@ -129,7 +130,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
             step="1"
             min="0"
             max="100"
-            value={inputs.offtakeCoverage * 100}
+            value={ratioToPercentInput(inputs.offtakeCoverage)}
             onChange={(e) => set('offtakeCoverage', Number(e.target.value) / 100)}
           />
         </label>
@@ -140,7 +141,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
             step="1"
             min="0"
             max="100"
-            value={inputs.merchantRealization * 100}
+            value={ratioToPercentInput(inputs.merchantRealization)}
             onChange={(e) => set('merchantRealization', Number(e.target.value) / 100)}
           />
         </label>
@@ -194,7 +195,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
             type="number"
             step="0.5"
             min="0.1"
-            value={inputs.discountRate.pessimistic * 100}
+            value={ratioToPercentInput(inputs.discountRate.pessimistic)}
             onChange={(e) => setDiscount('pessimistic', Number(e.target.value) / 100)}
           />
         </label>
@@ -204,7 +205,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
             type="number"
             step="0.5"
             min="0.1"
-            value={inputs.discountRate.base * 100}
+            value={ratioToPercentInput(inputs.discountRate.base)}
             onChange={(e) => setDiscount('base', Number(e.target.value) / 100)}
           />
         </label>
@@ -214,7 +215,7 @@ export function ClimateTechForm({ inputs, onChange }: ClimateTechFormProps) {
             type="number"
             step="0.5"
             min="0.1"
-            value={inputs.discountRate.optimistic * 100}
+            value={ratioToPercentInput(inputs.discountRate.optimistic)}
             onChange={(e) => setDiscount('optimistic', Number(e.target.value) / 100)}
           />
         </label>

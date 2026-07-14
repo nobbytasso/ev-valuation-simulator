@@ -1,3 +1,4 @@
+import { ratioToPercentInput } from '../../format/percent.ts'
 import type { DeviceClass, MedicalDeviceInputs } from '../../../engine/index.ts'
 import '../../sectorForm.css'
 
@@ -36,7 +37,7 @@ export function MedicalDeviceForm({ inputs, onChange }: MedicalDeviceFormProps) 
           type="number"
           step="1"
           min="-99"
-          value={inputs.procedureGrowth * 100}
+          value={ratioToPercentInput(inputs.procedureGrowth)}
           onChange={(e) => set('procedureGrowth', Number(e.target.value) / 100)}
         />
       </label>
@@ -86,7 +87,7 @@ export function MedicalDeviceForm({ inputs, onChange }: MedicalDeviceFormProps) 
           step="1"
           min="0"
           max="100"
-          value={inputs.peakPenetration * 100}
+          value={ratioToPercentInput(inputs.peakPenetration)}
           onChange={(e) => set('peakPenetration', Number(e.target.value) / 100)}
         />
       </label>
@@ -107,7 +108,7 @@ export function MedicalDeviceForm({ inputs, onChange }: MedicalDeviceFormProps) 
           step="1"
           min="0"
           max="99.9"
-          value={inputs.recurringRatio * 100}
+          value={ratioToPercentInput(inputs.recurringRatio)}
           onChange={(e) => set('recurringRatio', Number(e.target.value) / 100)}
         />
       </label>
@@ -116,7 +117,7 @@ export function MedicalDeviceForm({ inputs, onChange }: MedicalDeviceFormProps) 
         <input
           type="number"
           step="1"
-          value={inputs.operatingMargin * 100}
+          value={ratioToPercentInput(inputs.operatingMargin)}
           onChange={(e) => set('operatingMargin', Number(e.target.value) / 100)}
         />
       </label>
@@ -135,7 +136,7 @@ export function MedicalDeviceForm({ inputs, onChange }: MedicalDeviceFormProps) 
         <input
           type="number"
           step="0.5"
-          value={inputs.terminalGrowth * 100}
+          value={ratioToPercentInput(inputs.terminalGrowth)}
           onChange={(e) => set('terminalGrowth', Number(e.target.value) / 100)}
         />
       </label>
@@ -148,7 +149,7 @@ export function MedicalDeviceForm({ inputs, onChange }: MedicalDeviceFormProps) 
             type="number"
             step="0.5"
             min="0.1"
-            value={inputs.discountRate.pessimistic * 100}
+            value={ratioToPercentInput(inputs.discountRate.pessimistic)}
             onChange={(e) => setDiscount('pessimistic', Number(e.target.value) / 100)}
           />
         </label>
@@ -158,7 +159,7 @@ export function MedicalDeviceForm({ inputs, onChange }: MedicalDeviceFormProps) 
             type="number"
             step="0.5"
             min="0.1"
-            value={inputs.discountRate.base * 100}
+            value={ratioToPercentInput(inputs.discountRate.base)}
             onChange={(e) => setDiscount('base', Number(e.target.value) / 100)}
           />
         </label>
@@ -168,7 +169,7 @@ export function MedicalDeviceForm({ inputs, onChange }: MedicalDeviceFormProps) 
             type="number"
             step="0.5"
             min="0.1"
-            value={inputs.discountRate.optimistic * 100}
+            value={ratioToPercentInput(inputs.discountRate.optimistic)}
             onChange={(e) => setDiscount('optimistic', Number(e.target.value) / 100)}
           />
         </label>

@@ -1,3 +1,4 @@
+import { ratioToPercentInput } from '../../format/percent.ts'
 import type { EcD2cInputs } from '../../../engine/index.ts'
 import '../../sectorForm.css'
 
@@ -33,7 +34,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
           type="number"
           step="1"
           min="-99"
-          value={inputs.revenueGrowth * 100}
+          value={ratioToPercentInput(inputs.revenueGrowth)}
           onChange={(e) => set('revenueGrowth', Number(e.target.value) / 100)}
         />
       </label>
@@ -44,7 +45,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
           step="1"
           min="0"
           max="100"
-          value={inputs.grossMargin * 100}
+          value={ratioToPercentInput(inputs.grossMargin)}
           onChange={(e) => set('grossMargin', Number(e.target.value) / 100)}
         />
       </label>
@@ -55,7 +56,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
           step="1"
           min="0"
           max="99.9"
-          value={inputs.f2Rate * 100}
+          value={ratioToPercentInput(inputs.f2Rate)}
           onChange={(e) => set('f2Rate', Number(e.target.value) / 100)}
         />
       </label>
@@ -96,7 +97,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
           step="1"
           min="0"
           max="100"
-          value={inputs.adCostRatio * 100}
+          value={ratioToPercentInput(inputs.adCostRatio)}
           onChange={(e) => set('adCostRatio', Number(e.target.value) / 100)}
         />
       </label>
@@ -107,7 +108,7 @@ export function EcD2cForm({ inputs, onChange }: EcD2cFormProps) {
           step="1"
           min="0"
           max="100"
-          value={inputs.logisticsCostRatio * 100}
+          value={ratioToPercentInput(inputs.logisticsCostRatio)}
           onChange={(e) => set('logisticsCostRatio', Number(e.target.value) / 100)}
         />
       </label>

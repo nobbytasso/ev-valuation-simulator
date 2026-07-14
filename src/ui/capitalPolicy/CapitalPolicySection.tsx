@@ -2,6 +2,7 @@
  * 資本政策・希薄化シミュレーターセクション(T4)。出典: docs/phase4-spec.md §4
  * VC法セクション(既存)とは併存し、意味の違いをキャプションで明示する(§4.3)。
  */
+import { ratioToPercentInput } from '../format/percent.ts'
 import { useEffect, useRef } from 'react'
 import { simulateDilution, validateDilutionInputs } from '../../engine/index.ts'
 import type { CapTableHolder, DilutionInputs, EvRange, FundingRound } from '../../engine/index.ts'
@@ -174,7 +175,7 @@ export function CapitalPolicySection({
                 <input
                   type="number"
                   step="1"
-                  value={holder.ownership * 100}
+                  value={ratioToPercentInput(holder.ownership)}
                   onChange={(e) => updateHolder(i, { ownership: Number(e.target.value) / 100 })}
                 />
               </td>
@@ -256,7 +257,7 @@ export function CapitalPolicySection({
                 <input
                   type="number"
                   step="1"
-                  value={round.optionPoolPostPct * 100}
+                  value={ratioToPercentInput(round.optionPoolPostPct)}
                   onChange={(e) => updateRound(i, { optionPoolPostPct: Number(e.target.value) / 100 })}
                 />
               </td>

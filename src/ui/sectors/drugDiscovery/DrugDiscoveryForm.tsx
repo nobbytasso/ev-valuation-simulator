@@ -1,3 +1,4 @@
+import { ratioToPercentInput } from '../../format/percent.ts'
 import type { DrugDiscoveryInputs, PipelineAsset } from '../../../engine/index.ts'
 import { useStableListKeys } from '../../useStableListKeys.ts'
 import '../../sectorForm.css'
@@ -66,7 +67,7 @@ export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) 
               type="number"
               step="0.5"
               min="0.1"
-              value={inputs.discountRate.pessimistic * 100}
+              value={ratioToPercentInput(inputs.discountRate.pessimistic)}
               onChange={(e) => setDiscount('pessimistic', Number(e.target.value) / 100)}
             />
           </label>
@@ -76,7 +77,7 @@ export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) 
               type="number"
               step="0.5"
               min="0.1"
-              value={inputs.discountRate.base * 100}
+              value={ratioToPercentInput(inputs.discountRate.base)}
               onChange={(e) => setDiscount('base', Number(e.target.value) / 100)}
             />
           </label>
@@ -86,7 +87,7 @@ export function DrugDiscoveryForm({ inputs, onChange }: DrugDiscoveryFormProps) 
               type="number"
               step="0.5"
               min="0.1"
-              value={inputs.discountRate.optimistic * 100}
+              value={ratioToPercentInput(inputs.discountRate.optimistic)}
               onChange={(e) => setDiscount('optimistic', Number(e.target.value) / 100)}
             />
           </label>

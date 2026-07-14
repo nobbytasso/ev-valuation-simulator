@@ -1,3 +1,4 @@
+import { ratioToPercentInput } from './format/percent.ts'
 import { computeVcMethod } from '../engine/index.ts'
 import type { EvRange } from '../engine/index.ts'
 import type { ScenarioVcMethodInputs } from '../store/scenarioTypes.ts'
@@ -82,7 +83,7 @@ export function VcMethodSection({ evRange, vcMethod, onChange }: VcMethodSection
           <input
             type="number"
             step="1"
-            value={vcMethod.dilutionRetention * 100}
+            value={ratioToPercentInput(vcMethod.dilutionRetention)}
             onChange={(e) => update({ dilutionRetention: Number(e.target.value) / 100 })}
           />
         </label>
