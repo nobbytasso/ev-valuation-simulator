@@ -1,0 +1,23 @@
+.portfolio-page__dangling {
+  color: var(--color-status-bad);
+  font-size: 0.85rem;
+}
+
+.portfolio-page__cost-badge {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-status-caution);
+  color: var(--color-accent-contrast);
+  font-size: 0.75rem;
+}
+
+.portfolio-page__summary {
+  margin-top: 2rem;
+}
+
+.portfolio-page__summary-caption {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+  max-width: 60rem;
+}
