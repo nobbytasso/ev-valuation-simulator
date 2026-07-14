@@ -1,0 +1,52 @@
+/**
+ * ライト(ギャルゲー風ポップ)専用の演出(§6.2)。すべて :root[data-theme='light'] にスコープし、
+ * コンポーネント側にテーマ分岐を書かない(設計原則3)。既定はdisplay:noneでダークでは非表示。
+ * data-status表示領域(チャート・数表)には重ねない(portal起点はボタンのクリック座標であり、
+ * データ表示領域の外側=操作エリアで発火する)。
+ */
+.particle-burst-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+}
+:root[data-theme='light'] .particle-burst-layer {
+  display: block;
+}
+
+.particle-burst {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.particle-burst__item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 14px;
+  color: var(--color-accent);
+  opacity: 0;
+  animation: particle-pop 600ms ease-out forwards;
+}
+
+@keyframes particle-pop {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.5);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx), var(--dy)) rotate(var(--rotate)) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .particle-burst-layer {
+    display: none;
+  }
+}

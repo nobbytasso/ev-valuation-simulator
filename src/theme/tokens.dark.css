@@ -57,6 +57,8 @@
   --gauge-fill: var(--color-accent);
   --gauge-lock: var(--color-text);
   --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
+  /* ボタンの押下スケール(§6.2)。ダークは控えめ、ライトの「ぷにっと感」とはトークンで差を付ける。 */
+  --button-active-scale: 0.98;
 
   color-scheme: dark;
 }

@@ -120,6 +120,15 @@ table td {
   font-weight: 400;
 }
 
+/*
+ * ボタンの押下スケール(§6.2「ボタンのぷにっとしたスケール」)。テーマ共通CSSに置き、
+ * トークン(--button-active-scale)でダーク(控えめ)/ライト(ぷにっと)の差を付ける。
+ */
+button:active {
+  transform: scale(var(--button-active-scale));
+  transition: transform var(--motion-duration-fast) var(--motion-easing);
+}
+
 /* フォーカス可視化(WCAG AA対応の一環。§8.1)。テーマごとにトークンで濃淡を変える。 */
 button:focus-visible,
 input:focus-visible,

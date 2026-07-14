@@ -5,6 +5,7 @@ import './theme/tokens.dark.css'
 import './theme/tokens.light.css'
 import './theme/base.css'
 import './theme-effects/darkEffects.css'
+import './theme-effects/lightEffects.css'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(

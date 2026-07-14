@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import type { MouseEvent } from 'react'
 import { StaticJsonSource } from '../../../adapters/benchmarks/StaticJsonSource.ts'
 import type { BenchmarkData } from '../../../adapters/benchmarks/types.ts'
 import { evaluateMediaTech } from '../../../engine/index.ts'
@@ -9,7 +10,7 @@ import { EvRangeResult } from '../../EvRangeResult.tsx'
 import { SectionHeading } from '../../SectionHeading.tsx'
 import { KeyMetricsList } from '../../scenarioEvaluation/KeyMetricsList.tsx'
 import { SensitivitySection } from '../../sensitivity/SensitivitySection.tsx'
-import { useScanReveal } from '../../../theme-effects/index.ts'
+import { useParticleBurst, useScanReveal } from '../../../theme-effects/index.ts'
 import { VcMethodSection } from '../../VcMethodSection.tsx'
 import '../../sectorScenarioView.css'
 import { MediaTechForm } from './MediaTechForm.tsx'
@@ -60,15 +61,20 @@ export function MediaTechScenarioView({ scenario, onSave, onDelete }: MediaTechS
     draftVcMethod !== scenario.vcMethod ||
     draftCapitalPolicy !== scenario.capitalPolicy
 
-  const handleSave = () => {
+  // ライトのハート/スパークル(§6.2)。保存成功・プリセット適用時に発火(ダークではCSS側で非表示)。
+  const { trigger: burstParticles, portal: particlePortal } = useParticleBurst()
+
+  const handleSave = (e: MouseEvent) => {
     onSave({ ...scenario, inputs: draftInputs, vcMethod: draftVcMethod, capitalPolicy: draftCapitalPolicy })
+    burstParticles(e.clientX, e.clientY)
   }
 
   // プリセット適用はdraftの差し替えのみ(保存は「保存」ボタンで明示的に行う。C-7)。
   const [presetApplyCount, setPresetApplyCount] = useState(0)
-  const applyPreset = (presetInputs: typeof draftInputs) => {
+  const applyPreset = (presetInputs: typeof draftInputs, e: MouseEvent) => {
     setDraftInputs(presetInputs)
     setPresetApplyCount((c) => c + 1)
+    burstParticles(e.clientX, e.clientY)
   }
   // ダークのスキャン走査(§6.1)。プリセット適用時+シナリオ切替時のみ発火(P6-8裁定)。
   const scanActive = useScanReveal(`${scenario.id}:${presetApplyCount}`)
@@ -79,7 +85,7 @@ export function MediaTechScenarioView({ scenario, onSave, onDelete }: MediaTechS
         <SectionHeading captionKey="presets">シナリオプリセット</SectionHeading>
         <div className="sector-scenario-view__presets">
           {MEDIA_TECH_PRESETS.map((preset) => (
-            <button key={preset.id} type="button" onClick={() => applyPreset(preset.inputs)}>
+            <button key={preset.id} type="button" onClick={(e) => applyPreset(preset.inputs, e)}>
               <strong>{preset.label}</strong>
               <span>{preset.description}</span>
             </button>
@@ -129,6 +135,7 @@ export function MediaTechScenarioView({ scenario, onSave, onDelete }: MediaTechS
         inputs={draftInputs}
         keyMetrics={result.ok ? result.value.keyMetrics : undefined}
       />
+      {particlePortal}
     </div>
   )
 }

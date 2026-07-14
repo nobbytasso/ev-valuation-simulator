@@ -61,6 +61,8 @@
   --gauge-fill: var(--color-accent);
   --gauge-lock: var(--color-text);
   --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
+  /* ボタンの押下スケール(§6.2)。ぷにっとした押し込み感を出すため大きめに縮める。 */
+  --button-active-scale: 0.92;
 
   color-scheme: light;
 }
