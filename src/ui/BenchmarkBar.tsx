@@ -49,8 +49,10 @@ export function BenchmarkBar({ label, unit, currentValue, industryStandard, comp
           </span>
         )}
       </div>
-      <ResponsiveContainer width="100%" height={56}>
-        <BarChart data={[{ name: label, value: currentValue }]} layout="vertical" margin={{ top: 8, right: 8, bottom: 0, left: 8 }}>
+      {/* 基準線ラベル(position: 'top')の描画領域をmargin.topで確保する。8pxでは
+          fontSize 11のラベルがSVG上端で見切れる(2026-07-15デザインレビュー指摘1)。 */}
+      <ResponsiveContainer width="100%" height={72}>
+        <BarChart data={[{ name: label, value: currentValue }]} layout="vertical" margin={{ top: 24, right: 8, bottom: 0, left: 8 }}>
           <XAxis type="number" domain={domain} hide />
           <YAxis type="category" dataKey="name" hide />
           <Bar dataKey="value" fill="var(--color-accent)" radius={2} barSize={16} />

@@ -32,7 +32,8 @@ export function CashflowChart({ cashflows }: CashflowChartProps) {
           />
           <ReferenceLine y={0} stroke="var(--color-text-muted)" />
           <Tooltip formatter={(value) => formatMoney(Number(value), unit)} />
-          <Bar dataKey="cf" name="年次CF">
+          {/* バーはコンテナ幅に追随させず上限40pxの細身に保つ(2026-07-15デザインレビュー指摘5)。 */}
+          <Bar dataKey="cf" name="年次CF" maxBarSize={40} radius={[2, 2, 0, 0]}>
             {data.map((d) => (
               <Cell key={d.year} fill={d.cf >= 0 ? 'var(--color-status-good)' : 'var(--color-status-bad)'} />
             ))}
