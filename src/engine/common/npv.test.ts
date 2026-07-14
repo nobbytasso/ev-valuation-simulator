@@ -26,6 +26,12 @@ describe('presentValue', () => {
     )
   })
 
+  it('engine-spec §0.1(Phase 5追記): t は非負の実数(年フラクション)を許容する', () => {
+    // PV(TV) = TV_T / (1 + r)^T と同じ Math.pow の式であり、小数 t でも数学的に成立する
+    const pv = presentValue(0.1, [{ t: 2.37, cf: 100 }])
+    expect(pv).toBeCloseTo(100 / Math.pow(1.1, 2.37), 9)
+  })
+
   it('t の並び順に依存せず同じ結果を返す(総和順序の安定性)', () => {
     fc.assert(
       fc.property(
@@ -99,6 +105,21 @@ describe('IRR', () => {
     ])
     expect(irr).not.toBeNull()
     if (irr !== null) expect(irr).toBeCloseTo(0.1, 9)
+  })
+
+  it('engine-spec §0.1/§1.3(Phase 5追記): t は非負の実数(年フラクション)を許容する', () => {
+    // 投資100、2.37年後に150回収(ポートフォリオの未実現IRRを想定した小数年ケース)
+    const irr = irrBisection([
+      { t: 0, cf: -100 },
+      { t: 2.37, cf: 150 },
+    ])
+    expect(irr).not.toBeNull()
+    if (irr === null) return
+    // 閉形式 IRR = (150/100)^(1/2.37) - 1 と一致することを確認
+    const closedForm = irrClosedFormSingle(100, 150, 2.37)
+    expect(closedForm).not.toBeNull()
+    if (closedForm === null) return
+    expect(Math.abs(irr - closedForm)).toBeLessThan(1e-6)
   })
 })
 
