@@ -7,23 +7,22 @@ import { SECTOR_LABELS } from '../../store/scenarioTypes.ts'
 import type { SectorId } from '../../store/scenarioTypes.ts'
 import { buildCompareWorkbook } from '../excel/buildCompareWorkbook.ts'
 import { downloadXlsxFile } from '../excel/downloadXlsxFile.ts'
+import { formatMoney } from '../format/money.ts'
+import type { MoneyUnit } from '../format/money.ts'
+import { useMoneyUnit } from '../format/useMoneyUnit.ts'
 import type { FieldFormat } from '../scenarioEvaluation/fieldLabelTypes.ts'
 import { buildCompareColumns, buildEvChartData, buildSectorBlocks, impliedIrrFor } from './compareEngine.ts'
 import type { CompareColumn } from './compareEngine.ts'
 import { EvRangeChart } from './EvRangeChart.tsx'
 import './ScenarioComparePage.css'
 
-function formatMoney(value: number | null | undefined): string {
-  if (value === null || value === undefined) return '—'
-  return `${value.toLocaleString('ja-JP', { maximumFractionDigits: 0 })} 百万円`
-}
 function formatPct(value: number | null | undefined): string {
   if (value === null || value === undefined) return '—'
   return `${(value * 100).toFixed(1)}%`
 }
-function formatByField(value: number | null, format: FieldFormat, unit: string): string {
+function formatByField(value: number | null, format: FieldFormat, unit: string, moneyUnit: MoneyUnit): string {
   if (value === null) return '—'
-  if (format === 'money') return `${value.toLocaleString('ja-JP', { maximumFractionDigits: 0 })} 百万円`
+  if (format === 'money') return formatMoney(value, moneyUnit)
   if (format === 'yen') return `${value.toLocaleString('ja-JP', { maximumFractionDigits: 0 })}円`
   if (format === 'ratio') return `${(value * 100).toFixed(1)}%`
   return unit ? `${value.toLocaleString('ja-JP', { maximumFractionDigits: 2 })}${unit}` : value.toLocaleString('ja-JP', { maximumFractionDigits: 2 })
@@ -45,6 +44,7 @@ function expectedReturnText(value: number | null | undefined, reason: string | n
  * 選択状態はURLクエリ(?ids=...)で持つ。編集は各シナリオ詳細で行う。
  */
 export function ScenarioComparePage() {
+  const { unit } = useMoneyUnit()
   const { scenarios, isLoaded, loadAll } = useScenarioStore()
   const [searchParams] = useSearchParams()
   const [benchmarkStatusBySector, setBenchmarkStatusBySector] = useState<Partial<Record<SectorId, DataStatus | 'unknown'>>>({})
@@ -133,19 +133,19 @@ export function ScenarioComparePage() {
             <tr>
               <td>EV(悲観)</td>
               {columns.map((c) => (
-                <td key={c.id}>{formatMoney(c.evaluation?.ok ? c.evaluation.value.ev.pessimistic : null)}</td>
+                <td key={c.id}>{formatMoney(c.evaluation?.ok ? c.evaluation.value.ev.pessimistic : null, unit)}</td>
               ))}
             </tr>
             <tr>
               <td>EV(ベース)</td>
               {columns.map((c) => (
-                <td key={c.id}>{formatMoney(c.evaluation?.ok ? c.evaluation.value.ev.base : null)}</td>
+                <td key={c.id}>{formatMoney(c.evaluation?.ok ? c.evaluation.value.ev.base : null, unit)}</td>
               ))}
             </tr>
             <tr>
               <td>EV(楽観)</td>
               {columns.map((c) => (
-                <td key={c.id}>{formatMoney(c.evaluation?.ok ? c.evaluation.value.ev.optimistic : null)}</td>
+                <td key={c.id}>{formatMoney(c.evaluation?.ok ? c.evaluation.value.ev.optimistic : null, unit)}</td>
               ))}
             </tr>
             <tr>
@@ -163,7 +163,7 @@ export function ScenarioComparePage() {
             <tr>
               <td>VC法: 投資額</td>
               {columns.map((c) => (
-                <td key={c.id}>{c.scenario ? formatMoney(c.scenario.vcMethod.investment) : '—'}</td>
+                <td key={c.id}>{c.scenario ? formatMoney(c.scenario.vcMethod.investment, unit) : '—'}</td>
               ))}
             </tr>
             <tr>
@@ -199,7 +199,7 @@ export function ScenarioComparePage() {
                 <tr key={row.key}>
                   <td>{row.label}</td>
                   {block.columnIds.map((id) => (
-                    <td key={id}>{formatByField(row.valuesByColumnId[id] ?? null, row.format, row.unit)}</td>
+                    <td key={id}>{formatByField(row.valuesByColumnId[id] ?? null, row.format, row.unit, unit)}</td>
                   ))}
                 </tr>
               ))}

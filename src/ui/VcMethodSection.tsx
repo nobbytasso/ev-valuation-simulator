@@ -1,6 +1,8 @@
 import { computeVcMethod } from '../engine/index.ts'
 import type { EvRange } from '../engine/index.ts'
 import type { ScenarioVcMethodInputs } from '../store/scenarioTypes.ts'
+import { formatMoney } from './format/money.ts'
+import { useMoneyUnit } from './format/useMoneyUnit.ts'
 import './VcMethodSection.css'
 
 const RANGE_KEYS = ['pessimistic', 'base', 'optimistic'] as const
@@ -10,9 +12,6 @@ const RANGE_LABELS: Record<(typeof RANGE_KEYS)[number], string> = {
   optimistic: '楽観',
 }
 
-function formatMoney(value: number): string {
-  return `${value.toLocaleString('ja-JP', { maximumFractionDigits: 0 })} 百万円`
-}
 function formatPct(value: number): string {
   return `${(value * 100).toFixed(1)}%`
 }
@@ -29,6 +28,7 @@ export interface VcMethodSectionProps {
  * 目標倍率が含意するIRRを示す。
  */
 export function VcMethodSection({ evRange, vcMethod, onChange }: VcMethodSectionProps) {
+  const { unit } = useMoneyUnit()
   const results = RANGE_KEYS.map((key) =>
     computeVcMethod({
       exitEnterpriseValue: evRange[key],
@@ -111,13 +111,13 @@ export function VcMethodSection({ evRange, vcMethod, onChange }: VcMethodSection
           <tr>
             <td>Exit株式価値</td>
             {results.map((r, i) => (
-              <td key={RANGE_KEYS[i]}>{formatMoney(r.exitEquityValue)}</td>
+              <td key={RANGE_KEYS[i]}>{formatMoney(r.exitEquityValue, unit)}</td>
             ))}
           </tr>
           <tr>
             <td>現在の許容ポストマネー</td>
             {results.map((r, i) => (
-              <td key={RANGE_KEYS[i]}>{formatMoney(r.impliedPostMoneyNow)}</td>
+              <td key={RANGE_KEYS[i]}>{formatMoney(r.impliedPostMoneyNow, unit)}</td>
             ))}
           </tr>
           <tr>

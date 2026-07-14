@@ -6,6 +6,8 @@ import { useEffect, useRef } from 'react'
 import { simulateDilution, validateDilutionInputs } from '../../engine/index.ts'
 import type { CapTableHolder, DilutionInputs, EvRange, FundingRound } from '../../engine/index.ts'
 import type { ScenarioCapitalPolicyInputs, ScenarioVcMethodInputs } from '../../store/scenarioTypes.ts'
+import { formatMoney } from '../format/money.ts'
+import { useMoneyUnit } from '../format/useMoneyUnit.ts'
 import { useStableListKeys } from '../useStableListKeys.ts'
 import { buildOwnershipMatrix } from './ownershipMatrix.ts'
 import './CapitalPolicySection.css'
@@ -25,9 +27,6 @@ const EXIT_EV_SOURCE_OPTIONS: { value: ScenarioCapitalPolicyInputs['exitEvSource
   { value: 'optimistic', label: '楽観' },
 ]
 
-function formatMoney(value: number): string {
-  return `${value.toLocaleString('ja-JP', { maximumFractionDigits: 0 })} 百万円`
-}
 function formatPct(value: number): string {
   return `${(value * 100).toFixed(1)}%`
 }
@@ -58,6 +57,7 @@ export function CapitalPolicySection({
   capitalPolicy,
   onChange,
 }: CapitalPolicySectionProps) {
+  const { unit } = useMoneyUnit()
   const holderKeys = useStableListKeys(capitalPolicy.initialCapTable.length)
   const roundKeys = useStableListKeys(capitalPolicy.rounds.length)
 
@@ -322,7 +322,7 @@ export function CapitalPolicySection({
             Exit時 自社(ファンド)実効持分合計: <strong>{formatPct(fundOwnershipSum)}</strong>
           </p>
           <p>
-            Exit時 自社(ファンド)手取り合計: <strong>{formatMoney(fundPayoutSum)}</strong>
+            Exit時 自社(ファンド)手取り合計: <strong>{formatMoney(fundPayoutSum, unit)}</strong>
           </p>
           <p>
             期待IRR:{' '}

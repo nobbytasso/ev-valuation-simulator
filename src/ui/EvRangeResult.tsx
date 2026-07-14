@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 import type { EngineResult, SectorValuationResult } from '../engine/index.ts'
+import { formatMoney, formatMoneyValue, moneyAxisLabel } from './format/money.ts'
+import { useMoneyUnit } from './format/useMoneyUnit.ts'
 
 export interface EvRangeResultProps {
   result: EngineResult<SectorValuationResult>
@@ -12,6 +14,7 @@ export interface EvRangeResultProps {
  * エラー一覧を表示する。全セクター結果ビューで共有(出典: docs/requirements-rev4.md §4.1.2)。
  */
 export function EvRangeResult({ result, children }: EvRangeResultProps) {
+  const { unit } = useMoneyUnit()
   if (!result.ok) {
     return (
       <div role="alert">
@@ -40,16 +43,14 @@ export function EvRangeResult({ result, children }: EvRangeResultProps) {
         </thead>
         <tbody>
           <tr>
-            <td>企業価値(百万円)</td>
-            <td>{result.value.ev.pessimistic.toLocaleString('ja-JP', { maximumFractionDigits: 0 })}</td>
-            <td>{result.value.ev.base.toLocaleString('ja-JP', { maximumFractionDigits: 0 })}</td>
-            <td>{result.value.ev.optimistic.toLocaleString('ja-JP', { maximumFractionDigits: 0 })}</td>
+            <td>企業価値{moneyAxisLabel(unit)}</td>
+            <td>{formatMoneyValue(result.value.ev.pessimistic, unit)}</td>
+            <td>{formatMoneyValue(result.value.ev.base, unit)}</td>
+            <td>{formatMoneyValue(result.value.ev.optimistic, unit)}</td>
           </tr>
         </tbody>
       </table>
-      {result.value.auxiliary !== undefined && (
-        <p>補助評価値(簡易DCF): {result.value.auxiliary.toLocaleString('ja-JP', { maximumFractionDigits: 0 })} 百万円</p>
-      )}
+      {result.value.auxiliary !== undefined && <p>補助評価値(簡易DCF): {formatMoney(result.value.auxiliary, unit)}</p>}
       {children}
     </div>
   )

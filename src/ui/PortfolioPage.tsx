@@ -7,13 +7,11 @@ import { SECTOR_IDS, SECTOR_LABELS } from '../store/scenarioTypes.ts'
 import type { PortfolioHolding, SectorId } from '../store/scenarioTypes.ts'
 import { buildPortfolioWorkbook } from './excel/buildPortfolioWorkbook.ts'
 import { downloadXlsxFile } from './excel/downloadXlsxFile.ts'
+import { formatMoney, formatMoneyValue, moneyAxisLabel } from './format/money.ts'
+import { useMoneyUnit } from './format/useMoneyUnit.ts'
 import { aggregatePortfolio, evaluateHolding } from './portfolio/portfolioAggregation.ts'
 import './PortfolioPage.css'
 
-function formatMoney(value: number | null): string {
-  if (value === null) return '—'
-  return `${value.toLocaleString('ja-JP', { maximumFractionDigits: 0 })} 百万円`
-}
 function formatPct(value: number | null): string {
   if (value === null) return '—'
   return `${(value * 100).toFixed(1)}%`
@@ -33,6 +31,7 @@ function formatIrr(value: number | null, reason: string | null): string {
  * どちらとも異なる「投資実績(投資日・投資額)と現在時価に基づく未実現値」である(§3.4)。
  */
 export function PortfolioPage() {
+  const { unit } = useMoneyUnit()
   const { holdings, isLoaded, loadAll, addHolding, updateHolding, removeHolding } = usePortfolioStore()
   const { scenarios, isLoaded: scenariosLoaded, loadAll: loadScenarios } = useScenarioStore()
   const [companyName, setCompanyName] = useState('')
@@ -154,7 +153,7 @@ export function PortfolioPage() {
               <th>セクター</th>
               <th>評価シナリオ</th>
               <th>投資日</th>
-              <th>投資額(百万円)</th>
+              <th>投資額{moneyAxisLabel(unit)}</th>
               <th>持分</th>
               <th>時価(悲観)</th>
               <th>時価(ベース)</th>
@@ -192,14 +191,14 @@ export function PortfolioPage() {
                       onChange={(e) => setHoldingInvestmentDate(h, e.target.value)}
                     />
                   </td>
-                  <td>{h.investmentAmount.toLocaleString('ja-JP')}</td>
+                  <td>{formatMoneyValue(h.investmentAmount, unit)}</td>
                   <td>{(h.ownershipPct * 100).toFixed(1)}%</td>
-                  <td>{formatMoney(valuation.marketValue.pessimistic)}</td>
+                  <td>{formatMoney(valuation.marketValue.pessimistic, unit)}</td>
                   <td>
-                    {formatMoney(valuation.marketValue.base)}
+                    {formatMoney(valuation.marketValue.base, unit)}
                     {valuation.isCostBasis && <span className="portfolio-page__cost-badge">コスト評価</span>}
                   </td>
-                  <td>{formatMoney(valuation.marketValue.optimistic)}</td>
+                  <td>{formatMoney(valuation.marketValue.optimistic, unit)}</td>
                   <td>{formatMoic(valuation.moic)}</td>
                   <td>{formatIrr(valuation.irr, valuation.irrUnavailableReason)}</td>
                   <td>
@@ -227,19 +226,19 @@ export function PortfolioPage() {
             <tbody>
               <tr>
                 <td>時価総額(悲観)</td>
-                <td>{formatMoney(fundSummary.totalMarketValue.pessimistic)}</td>
+                <td>{formatMoney(fundSummary.totalMarketValue.pessimistic, unit)}</td>
               </tr>
               <tr>
                 <td>時価総額(ベース)</td>
-                <td>{formatMoney(fundSummary.totalMarketValue.base)}</td>
+                <td>{formatMoney(fundSummary.totalMarketValue.base, unit)}</td>
               </tr>
               <tr>
                 <td>時価総額(楽観)</td>
-                <td>{formatMoney(fundSummary.totalMarketValue.optimistic)}</td>
+                <td>{formatMoney(fundSummary.totalMarketValue.optimistic, unit)}</td>
               </tr>
               <tr>
                 <td>投資額合計</td>
-                <td>{formatMoney(fundSummary.totalInvestment)}</td>
+                <td>{formatMoney(fundSummary.totalInvestment, unit)}</td>
               </tr>
               <tr>
                 <td>ファンドMOIC</td>

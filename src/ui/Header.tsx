@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom'
 import { StaticJsonSource } from '../adapters/benchmarks/StaticJsonSource.ts'
 import { SECTOR_IDS } from '../store/scenarioTypes.ts'
 import { DummyDataBadge } from './DummyDataBadge.tsx'
+import { MoneyUnitToggle } from './MoneyUnitToggle.tsx'
 import { ThemeToggle } from './ThemeToggle.tsx'
 
 /**
@@ -39,6 +40,7 @@ export function Header() {
         </NavLink>
         <NavLink to="/portfolio">ポートフォリオ</NavLink>
       </nav>
+      <MoneyUnitToggle />
       <ThemeToggle />
     </header>
   )

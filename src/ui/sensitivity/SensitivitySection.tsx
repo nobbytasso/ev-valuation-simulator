@@ -5,6 +5,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Bar, BarChart, ReferenceLine, ResponsiveContainer, XAxis, YAxis } from 'recharts'
 import type { Scenario, SectorId } from '../../store/scenarioTypes.ts'
+import { formatMoney } from '../format/money.ts'
+import { useMoneyUnit } from '../format/useMoneyUnit.ts'
 import { buildTornadoRows } from './sensitivityRegistry.ts'
 import './SensitivitySection.css'
 
@@ -21,12 +23,9 @@ export interface SensitivitySectionProps {
   scenario: Scenario
 }
 
-function formatMoney(value: number): string {
-  return `${value.toLocaleString('ja-JP', { maximumFractionDigits: 0 })} 百万円`
-}
-
 /** 感度分析セクション。Recharts横棒(基準EVからの2セグメント)+ 変動幅設定UI。 */
 export function SensitivitySection({ scenario }: SensitivitySectionProps) {
+  const { unit } = useMoneyUnit()
   const [defaultDeltaPct, setDefaultDeltaPct] = useState(DEFAULT_DELTA_PCT)
   const [deltaPctByDriverId, setDeltaPctByDriverId] = useState<Record<string, number>>({})
   const [showAll, setShowAll] = useState(false)
@@ -99,7 +98,7 @@ export function SensitivitySection({ scenario }: SensitivitySectionProps) {
         <>
           <ResponsiveContainer width="100%" height={Math.max(visibleRows.length * 32, 64)}>
             <BarChart data={chartData} layout="vertical" margin={{ top: 8, right: 24, bottom: 8, left: 8 }}>
-              <XAxis type="number" tickFormatter={(v: number) => formatMoney(v + baseEv)} />
+              <XAxis type="number" tickFormatter={(v: number) => formatMoney(v + baseEv, unit)} />
               <YAxis type="category" dataKey="label" width={180} />
               <ReferenceLine x={0} stroke="var(--color-accent)" strokeWidth={2} />
               <Bar dataKey="low" stackId="tornado" fill="var(--color-warning)" barSize={14} />
@@ -121,9 +120,9 @@ export function SensitivitySection({ scenario }: SensitivitySectionProps) {
               {visibleRows.map((row) => (
                 <tr key={row.driverId}>
                   <td>{row.label}</td>
-                  <td>{formatMoney(row.evAtLow)}</td>
-                  <td>{formatMoney(row.evAtHigh)}</td>
-                  <td>{formatMoney(row.span)}</td>
+                  <td>{formatMoney(row.evAtLow, unit)}</td>
+                  <td>{formatMoney(row.evAtHigh, unit)}</td>
+                  <td>{formatMoney(row.span, unit)}</td>
                   <td>
                     {row.isFixedDelta ? (
                       '±2pt(固定)'
