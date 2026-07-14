@@ -224,7 +224,7 @@ React \+ TypeScript \+ Vite / Zustand / Recharts / Framer Motion / SheetJS / fas
 | 2 | UI骨格(ルーティング/Zustand/StorageAdapter/テーマ基盤(FUI・ポップの2トークンセット: 色/角丸/影/フォント/モーション)/シナリオCRUD) | Claude Code | 保存・復元・テーマ切替がE2Eで動作(**完了**) |
 | 3 | セクター別フォーム+結果ビュー(SaaS→EC/D2C→メディア→医療機器→創薬→クライメート)+ ベンチマーク基準線表示 | Claude Code | セクター毎受入(**完了、レビュー: docs/review-phase3.md**) |
 | 4 | 感度分析トルネード \+ 資本政策シミュレーター(**シナリオ結果ビューへの期待IRR/MOIC表示を含む**【Rev.5明確化】) | Claude Code | 受入(**完了、報告: docs/logs/phase4-completion-report-20260714.md**) |
-| 5 | ポートフォリオ管理 \+ Excelエクスポート \+ **シナリオ並列比較ビュー(表+チャート)**【Rev.5割当】 | Claude Code | 出力Excel検収 |
+| 5 | ポートフォリオ管理 \+ Excelエクスポート \+ **シナリオ並列比較ビュー(表+チャート)**【Rev.5割当】 | Claude Code | 出力Excel検収(**完了、2026-07-14にユーザー検収OK。報告: docs/logs/phase5-completion-report-20260714.md、検収: docs/logs/phase5-excel-acceptance-instructions-20260714.md**) |
 | 6 | デュアルテーマ磨き込み(ダーク: S.A.C./PSYCHO-PASS様式のワイヤーフレーム・円形ゲージ・判定色/スキャン演出、ライト: パステル/角丸/ハート・スパークル演出)+ **金額表示単位切替(百万円/億円)**【Rev.5割当】+ **ベンチマークのbasis/notes/as_of表示・years/count単位のサフィックス表示**【docs/review-phase3.md D-13/D-14、本節参照】 | Claude Code | 両テーマのデザインレビュー |
 | 7 | GitHub Pagesデプロイ(Actions)+ ダミーデータ組込み | Claude Code | 本番URL動作確認 |
 | — | ベンチマーク実データ作成(別プロジェクト・随時) | Claude Cowork | スキーマ準拠JSON納品(**v1.2**) |
