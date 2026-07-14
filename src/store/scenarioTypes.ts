@@ -84,8 +84,12 @@ export type Scenario =
   | ScenarioBase<'ec_d2c', EcD2cInputs>
   | ScenarioBase<'climate_tech', ClimateTechInputs>
 
-/** ポートフォリオ永続化データのスキーマバージョン。現行 1(形式変更なし)。 */
-export const PORTFOLIO_SCHEMA_VERSION = 1
+/**
+ * ポートフォリオ永続化データのスキーマバージョン。出典: docs/phase5-spec.md §3.2、§5
+ * v1: Phase 2形式(investmentDateフィールドなし)。v2: Phase 5でinvestmentDateを追加。
+ * 形式変更時はここを+1し、src/store/portfolioMigration.ts に移行手順を追記する。
+ */
+export const PORTFOLIO_SCHEMA_VERSION = 2
 
 export interface PortfolioHolding {
   id: string
@@ -95,6 +99,11 @@ export interface PortfolioHolding {
   round: string // 例: "シリーズA"
   ownershipPct: number // 現在の持分比率(0-1)
   scenarioId?: string // 紐づくシナリオ(評価額の参照先)
+  /**
+   * 投資日(ISO8601日付)。IRR計算の起点。v2で追加。既存データは null 補完
+   * (P5-3裁定: createdAtでの代替はしない。誤ったIRRを黙って出すより「未設定」を明示する)。
+   */
+  investmentDate: string | null
   schemaVersion: number
   createdAt: string
   updatedAt: string

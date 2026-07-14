@@ -25,6 +25,7 @@ export interface PortfolioStoreState {
     round: string
     ownershipPct: number
     scenarioId?: string
+    investmentDate?: string | null
   }) => Promise<PortfolioHolding>
   updateHolding: (holding: PortfolioHolding) => Promise<void>
   removeHolding: (id: string) => Promise<void>
@@ -48,6 +49,7 @@ export function createPortfolioStore(adapter: StorageAdapter<PortfolioHolding>) 
         updatedAt: now,
         schemaVersion: PORTFOLIO_SCHEMA_VERSION,
         ...input,
+        investmentDate: input.investmentDate ?? null,
       }
       await adapter.save(holding)
       set({ holdings: [...get().holdings, holding] })

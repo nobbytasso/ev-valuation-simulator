@@ -1,11 +1,12 @@
 /**
  * ポートフォリオ永続化データのマイグレーションパイプライン。
- * 出典: docs/requirements-rev5.md §8
+ * 出典: docs/requirements-rev5.md §8、docs/phase5-spec.md §3.2(P5-3裁定)
  *
- * PortfolioHolding は現時点で形式変更がないため MIGRATIONS は空だが、
  * schemaVersion 未設定の旧データ(Phase 2形式)を安全に読み込めるよう
- * scenarioMigration.ts と同じパイプライン構造を用意しておく。
- * 将来の形式変更時は MIGRATIONS に手順を追記する。
+ * scenarioMigration.ts と同じパイプライン構造を用いる。
+ * ロード時(LocalStorageAdapter.list/load 内部の readAll)・インポート時
+ * (LocalStorageAdapter.import)の両経路で同じ関数を通す(D-1裁定と同じ規律。
+ * portfolioStore.ts での注入により両経路とも本関数を通過する)。
  */
 import { PORTFOLIO_SCHEMA_VERSION } from './scenarioTypes.ts'
 import type { PortfolioHolding } from './scenarioTypes.ts'
@@ -16,7 +17,19 @@ function isRawRecord(value: unknown): value is RawRecord {
   return typeof value === 'object' && value !== null
 }
 
-const MIGRATIONS: Record<number, (raw: RawRecord) => RawRecord> = {}
+/**
+ * v1(Phase 2形式) → v2: investmentDate を null で補完する。
+ * P5-3裁定: createdAt を投資日と偽装しない(誤ったIRRを黙って出すより「未設定」を明示する)。
+ */
+function migrateV1ToV2(raw: RawRecord): RawRecord {
+  if ('investmentDate' in raw) return raw
+  return { ...raw, investmentDate: null }
+}
+
+/** キー: 移行前バージョン。値: そのバージョンから次バージョンへの変換手順。 */
+const MIGRATIONS: Record<number, (raw: RawRecord) => RawRecord> = {
+  1: migrateV1ToV2,
+}
 
 export function migratePortfolioHolding(raw: unknown): PortfolioHolding {
   if (!isRawRecord(raw)) {
