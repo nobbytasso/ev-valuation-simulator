@@ -4,9 +4,10 @@
  */
 import { useEffect, useRef } from 'react'
 import { simulateDilution, validateDilutionInputs } from '../../engine/index.ts'
-import type { CapTableHolder, DilutionInputs, EvRange, FundingRound, RoundSnapshot } from '../../engine/index.ts'
+import type { CapTableHolder, DilutionInputs, EvRange, FundingRound } from '../../engine/index.ts'
 import type { ScenarioCapitalPolicyInputs, ScenarioVcMethodInputs } from '../../store/scenarioTypes.ts'
 import { useStableListKeys } from '../useStableListKeys.ts'
+import { buildOwnershipMatrix } from './ownershipMatrix.ts'
 import './CapitalPolicySection.css'
 
 export interface CapitalPolicySectionProps {
@@ -44,32 +45,6 @@ function createDefaultRound(nextYear: number): FundingRound {
     optionPoolPostPct: 0.1,
     fundInvestment: 0,
   }
-}
-
-interface HolderRowValues {
-  id: string
-  name: string
-  values: (number | null)[] // [初期, ラウンド1後, ラウンド2後, ...]
-}
-
-/** ラウンド毎の持分推移マトリクスを構築する(§4.3-1。途中参加の保有者は参加前の列を空欄)。 */
-function buildOwnershipMatrix(initialCapTable: CapTableHolder[], rounds: RoundSnapshot[]): HolderRowValues[] {
-  const columns: CapTableHolder[][] = [initialCapTable, ...rounds.map((r) => r.capTableAfter)]
-  const order: string[] = []
-  const namesById = new Map<string, string>()
-  for (const column of columns) {
-    for (const holder of column) {
-      if (!namesById.has(holder.id)) {
-        namesById.set(holder.id, holder.name)
-        order.push(holder.id)
-      }
-    }
-  }
-  return order.map((id) => ({
-    id,
-    name: namesById.get(id) as string,
-    values: columns.map((column) => column.find((h) => h.id === id)?.ownership ?? null),
-  }))
 }
 
 /**
