@@ -13,27 +13,10 @@
 import { readFileSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
 import type { Page } from '@playwright/test'
+import { createScenario, resetStorage } from './helpers.ts'
 
 const SCENARIO_STORAGE_KEY = 'ev-valuation-simulator:scenarios:v1'
 const THEME_STORAGE_KEY = 'ev-valuation-simulator:theme'
-
-async function resetStorage(page: Page) {
-  await page.goto('/#/')
-  await page.evaluate(() => localStorage.clear())
-  await page.reload()
-  await expect(page.getByRole('heading', { name: 'シナリオ一覧' })).toBeVisible()
-}
-
-async function createScenario(page: Page, sectorLabel: string): Promise<string> {
-  await page.goto('/#/')
-  await expect(page.getByRole('heading', { name: 'シナリオ一覧' })).toBeVisible()
-  await page.locator('select').first().selectOption({ label: sectorLabel })
-  await page.click('button:has-text("新規作成")')
-  const link = page.locator('table tbody tr td a').last()
-  await link.click()
-  await expect(page.getByRole('heading', { name: '結果', exact: true })).toBeVisible()
-  return page.url()
-}
 
 test.beforeEach(async ({ page }) => {
   await resetStorage(page)
