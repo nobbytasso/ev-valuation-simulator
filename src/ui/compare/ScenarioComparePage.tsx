@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { StaticJsonSource } from '../../adapters/benchmarks/StaticJsonSource.ts'
 import type { DataStatus } from '../../adapters/benchmarks/types.ts'
@@ -33,9 +34,10 @@ function columnHeader(col: CompareColumn): string {
   return col.found && col.scenario ? col.scenario.name : '見つかりません'
 }
 
-function expectedReturnText(value: number | null | undefined, reason: string | null | undefined, kind: 'pct' | 'x'): string {
+/** 算出不能は「悪化」ではなく「注意」として色分けする(§5「資本政策・ポートフォリオの—(理由)」)。 */
+function expectedReturnText(value: number | null | undefined, reason: string | null | undefined, kind: 'pct' | 'x'): ReactNode {
   if (value === null || value === undefined) {
-    return formatUnavailable(reason ?? null)
+    return <span className="status-caution">{formatUnavailable(reason ?? null)}</span>
   }
   return kind === 'pct' ? formatPct(value) : `${value.toFixed(2)}x`
 }

@@ -25,6 +25,14 @@
   color: var(--color-status-good);
 }
 
+.benchmark-bar__diff--caution {
+  color: var(--color-status-caution);
+}
+
 .benchmark-bar__diff--bad {
   color: var(--color-status-bad);
+}
+
+.benchmark-bar__diff--neutral {
+  color: var(--color-text-muted);
 }

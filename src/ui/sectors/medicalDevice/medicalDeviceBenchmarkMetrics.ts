@@ -20,6 +20,7 @@ export const MEDICAL_DEVICE_BENCHMARK_METRICS: BenchmarkMetricConfig<MedicalDevi
     label: '実効上市までの年数(承認+償還)',
     unit: 'years',
     getValue: (inputs) => (inputs.deviceClass === 'III' ? inputs.launchYear + inputs.approvalDelayYears : undefined),
+    direction: 'lower_better',
   },
   {
     // penetration_5y = Pen(実効上市年+4)。エンジンのPen(t)式をpenetrationAtYear()経由で
@@ -28,11 +29,13 @@ export const MEDICAL_DEVICE_BENCHMARK_METRICS: BenchmarkMetricConfig<MedicalDevi
     label: '上市5年目の浸透率',
     unit: 'percent',
     getValue: (inputs) => penetrationAtYear(inputs, inputs.launchYear + inputs.approvalDelayYears + 4) * 100,
+    direction: 'higher_better',
   },
   {
     metricId: 'recurring_revenue_ratio',
     label: 'リカーリング比率',
     unit: 'percent',
     getValue: (inputs) => inputs.recurringRatio * 100,
+    direction: 'higher_better',
   },
 ]

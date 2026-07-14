@@ -326,12 +326,22 @@ export function CapitalPolicySection({
           </p>
           <p>
             期待IRR:{' '}
-            <strong>{result.fundIrr !== null ? formatPct(result.fundIrr) : '—(自ファンドの出資がありません)'}</strong>
+            <strong>
+              {result.fundIrr !== null ? (
+                formatPct(result.fundIrr)
+              ) : (
+                <span className="status-caution">—(自ファンドの出資がありません)</span>
+              )}
+            </strong>
           </p>
           <p>
             期待MOIC:{' '}
             <strong>
-              {result.fundMoic !== null ? `${result.fundMoic.toFixed(2)}x` : '—(自ファンドの出資がありません)'}
+              {result.fundMoic !== null ? (
+                `${result.fundMoic.toFixed(2)}x`
+              ) : (
+                <span className="status-caution">—(自ファンドの出資がありません)</span>
+              )}
             </strong>
           </p>
         </>

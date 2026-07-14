@@ -72,6 +72,7 @@ export function BenchmarkComparisonSection<TInputs>({
                 industryStandard={industryStandard?.value}
                 comps={comps}
                 unitSuffix={metric.unitSuffix}
+                direction={metric.direction}
               />
               {industryStandard && (
                 <BenchmarkSourceCitation entry={industryStandard} asOf={benchmark.as_of} prefixLabel="業界標準" />

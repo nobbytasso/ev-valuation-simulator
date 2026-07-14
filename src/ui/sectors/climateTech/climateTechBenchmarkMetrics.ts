@@ -16,23 +16,27 @@ export const CLIMATE_TECH_BENCHMARK_METRICS: BenchmarkMetricConfig<ClimateTechIn
     label: 'オフテイク契約カバー率',
     unit: 'percent',
     getValue: (inputs) => inputs.offtakeCoverage * 100,
+    direction: 'higher_better',
   },
   {
     metricId: 'subsidy_dependency',
     label: '補助金依存度',
     unit: 'percent',
     getValue: (inputs) => inputs.subsidyCoverage * 100,
+    direction: 'lower_better',
   },
   {
     metricId: 'scaleup_success_prob',
     label: '量産化到達確率',
     unit: 'percent',
     getValue: (inputs) => inputs.massProductionProb * 100,
+    direction: 'higher_better',
   },
   {
     metricId: 'discount_rate',
     label: '割引率(ベース)',
     unit: 'percent',
     getValue: (inputs) => inputs.discountRate.base * 100,
+    direction: 'neutral',
   },
 ]

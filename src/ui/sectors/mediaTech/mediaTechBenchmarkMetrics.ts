@@ -16,6 +16,7 @@ export const MEDIA_TECH_BENCHMARK_METRICS: BenchmarkMetricConfig<MediaTechInputs
     label: '月次ARPU',
     unit: 'jpy', // v1.2: 円建て単価はjpy(従来はcountで代用していた)
     getValue: (inputs) => inputs.arpuMonthly.ad + inputs.arpuMonthly.paid + inputs.arpuMonthly.commerce,
+    direction: 'higher_better',
   },
   {
     // (1-monthlyChurn)^12。エンジンのretentionAfterMonths()経由(D-9/B-3: UI側での式複製を廃止)。
@@ -23,11 +24,13 @@ export const MEDIA_TECH_BENCHMARK_METRICS: BenchmarkMetricConfig<MediaTechInputs
     label: '12ヶ月継続率',
     unit: 'percent',
     getValue: (inputs) => retentionAfterMonths(inputs.monthlyChurn, 12) * 100,
+    direction: 'higher_better',
   },
   {
     metricId: 'ev_sales_multiple',
     label: 'EV/売上マルチプル(ベース)',
     unit: 'x_multiple',
     getValue: (inputs) => inputs.evSalesMultiple.base,
+    direction: 'neutral',
   },
 ]

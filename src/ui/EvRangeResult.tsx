@@ -51,6 +51,11 @@ export function EvRangeResult({ result, children }: EvRangeResultProps) {
         </tbody>
       </table>
       {result.value.auxiliary !== undefined && <p>補助評価値(簡易DCF): {formatMoney(result.value.auxiliary, unit)}</p>}
+      {result.value.ev.base <= 0 && (
+        <p role="alert" className="status-bad">
+          企業価値(ベース)が0以下です。投資判断に用いる際は前提条件を再確認してください。
+        </p>
+      )}
       {children}
     </div>
   )

@@ -22,18 +22,21 @@ export const DRUG_DISCOVERY_BENCHMARK_METRICS: BenchmarkMetricConfig<DrugDiscove
     label: '非臨床→P1成功確率(先頭品目)',
     unit: 'percent',
     getValue: (inputs) => inputs.assets[0]?.phaseSuccessProbs.preclinical * 100,
+    direction: 'higher_better',
   },
   {
     metricId: 'pos_p1_to_p2',
     label: 'P1→P2成功確率(先頭品目)',
     unit: 'percent',
     getValue: (inputs) => inputs.assets[0]?.phaseSuccessProbs.phase1 * 100,
+    direction: 'higher_better',
   },
   {
     metricId: 'pos_p2_to_p3',
     label: 'P2→P3成功確率(先頭品目)',
     unit: 'percent',
     getValue: (inputs) => inputs.assets[0]?.phaseSuccessProbs.phase2 * 100,
+    direction: 'higher_better',
   },
   {
     metricId: 'pos_p3_to_approval',
@@ -44,6 +47,7 @@ export const DRUG_DISCOVERY_BENCHMARK_METRICS: BenchmarkMetricConfig<DrugDiscove
       if (!asset) return undefined
       return asset.phaseSuccessProbs.phase3 * asset.phaseSuccessProbs.filing * 100
     },
+    direction: 'higher_better',
   },
   {
     metricId: 'royalty_rate',
@@ -53,11 +57,13 @@ export const DRUG_DISCOVERY_BENCHMARK_METRICS: BenchmarkMetricConfig<DrugDiscove
       const commercialization = inputs.assets[0]?.commercialization
       return commercialization?.type === 'license' ? commercialization.royaltyRate * 100 : undefined
     },
+    direction: 'higher_better',
   },
   {
     metricId: 'discount_rate',
     label: '割引率(ベース)',
     unit: 'percent',
     getValue: (inputs) => inputs.discountRate.base * 100,
+    direction: 'neutral',
   },
 ]

@@ -14,7 +14,7 @@ interface DummyInputs {
 }
 
 const metrics: BenchmarkMetricConfig<DummyInputs>[] = [
-  { metricId: 'sample_metric', label: 'サンプル指標', unit: 'percent', getValue: (i) => i.value },
+  { metricId: 'sample_metric', label: 'サンプル指標', unit: 'percent', getValue: (i) => i.value, direction: 'higher_better' },
 ]
 
 function buildBenchmark(): BenchmarkData {

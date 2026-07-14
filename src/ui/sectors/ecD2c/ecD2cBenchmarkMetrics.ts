@@ -11,30 +11,35 @@ export const EC_D2C_BENCHMARK_METRICS: BenchmarkMetricConfig<EcD2cInputs>[] = [
     label: '売上成長率(YoY)',
     unit: 'percent',
     getValue: (inputs) => inputs.revenueGrowth * 100,
+    direction: 'higher_better',
   },
   {
     metricId: 'gross_margin',
     label: '粗利率',
     unit: 'percent',
     getValue: (inputs) => inputs.grossMargin * 100,
+    direction: 'higher_better',
   },
   {
     metricId: 'f2_conversion',
     label: 'F2転換率',
     unit: 'percent',
     getValue: (inputs) => inputs.f2Rate * 100,
+    direction: 'higher_better',
   },
   {
     metricId: 'ltv_cac',
     label: 'LTV/CAC',
     unit: 'ratio',
     getValue: (_inputs, keyMetrics) => keyMetrics.ltvCacRatio,
+    direction: 'higher_better',
   },
   {
     metricId: 'ad_cost_ratio',
     label: '売上比広告費',
     unit: 'percent',
     getValue: (inputs) => inputs.adCostRatio * 100,
+    direction: 'lower_better',
   },
   {
     // ベンチマークの ev_sales_multiple は売上ベースのマルチプルのため、
@@ -43,5 +48,6 @@ export const EC_D2C_BENCHMARK_METRICS: BenchmarkMetricConfig<EcD2cInputs>[] = [
     label: 'EV/売上マルチプル(ベース)',
     unit: 'x_multiple',
     getValue: (inputs) => (inputs.multipleBasis === 'revenue' ? inputs.evMultiple.base : undefined),
+    direction: 'neutral',
   },
 ]

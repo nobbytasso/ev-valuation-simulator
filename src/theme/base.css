@@ -38,6 +38,20 @@ table td {
 }
 
 /*
+ * 判定色ユーティリティ(§5)。値そのものではなく状態を表す短いテキスト・記号に限定して使う
+ * (面や大きな領域に判定色を塗らない。既存のBEM系クラス(.benchmark-bar__diff--*等)と併存する)。
+ */
+.status-good {
+  color: var(--color-status-good);
+}
+.status-caution {
+  color: var(--color-status-caution);
+}
+.status-bad {
+  color: var(--color-status-bad);
+}
+
+/*
  * パネル共通クラス(設計原則3・phase6-spec.md §1)。ダーク=細線ワイヤーフレーム+コーナーマーカー、
  * ライト=罫線なしのふんわりカード。値はすべて第2層トークン参照のみ、テーマ分岐はコンポーネントに書かない。
  * .sector-scenario-view > section は各セクター結果ビューの直下セクション(プリセット/入力/結果/

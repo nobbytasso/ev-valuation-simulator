@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
 import { StaticJsonSource } from '../adapters/benchmarks/StaticJsonSource.ts'
 import type { DataStatus } from '../adapters/benchmarks/types.ts'
 import { usePortfolioStore } from '../store/portfolioStore.ts'
@@ -17,12 +18,16 @@ function formatPct(value: number | null): string {
   if (value === null) return '—'
   return `${(value * 100).toFixed(1)}%`
 }
-function formatMoic(value: number | null, reason: string | null): string {
-  if (value === null) return formatUnavailable(reason)
+/** 算出不能は「悪化」ではなく「注意」として色分けする(§5「資本政策・ポートフォリオの—(理由)」)。 */
+function unavailableNode(reason: string | null): ReactNode {
+  return <span className="status-caution">{formatUnavailable(reason)}</span>
+}
+function formatMoic(value: number | null, reason: string | null): ReactNode {
+  if (value === null) return unavailableNode(reason)
   return `${value.toFixed(2)}x`
 }
-function formatIrr(value: number | null, reason: string | null): string {
-  if (value === null) return formatUnavailable(reason)
+function formatIrr(value: number | null, reason: string | null): ReactNode {
+  if (value === null) return unavailableNode(reason)
   return formatPct(value)
 }
 
