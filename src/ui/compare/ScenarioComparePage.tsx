@@ -1,11 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { computeVcMethod } from '../../engine/index.ts'
+import { StaticJsonSource } from '../../adapters/benchmarks/StaticJsonSource.ts'
+import type { DataStatus } from '../../adapters/benchmarks/types.ts'
 import { useScenarioStore } from '../../store/scenarioStore.ts'
 import { SECTOR_LABELS } from '../../store/scenarioTypes.ts'
-import type { Scenario } from '../../store/scenarioTypes.ts'
+import type { SectorId } from '../../store/scenarioTypes.ts'
+import { buildCompareWorkbook } from '../excel/buildCompareWorkbook.ts'
+import { downloadXlsxFile } from '../excel/downloadXlsxFile.ts'
 import type { FieldFormat } from '../scenarioEvaluation/fieldLabelTypes.ts'
-import { buildCompareColumns, buildEvChartData, buildSectorBlocks } from './compareEngine.ts'
+import { buildCompareColumns, buildEvChartData, buildSectorBlocks, impliedIrrFor } from './compareEngine.ts'
 import type { CompareColumn } from './compareEngine.ts'
 import { EvRangeChart } from './EvRangeChart.tsx'
 import './ScenarioComparePage.css'
@@ -26,18 +29,6 @@ function formatByField(value: number | null, format: FieldFormat, unit: string):
   return unit ? `${value.toLocaleString('ja-JP', { maximumFractionDigits: 2 })}${unit}` : value.toLocaleString('ja-JP', { maximumFractionDigits: 2 })
 }
 
-/** VC法の含意IRR。exitEnterpriseValueに依存しない式のため、評価不能な列でも算出できる(計算はcomputeVcMethodへ委譲)。 */
-function impliedIrrFor(scenario: Scenario): number {
-  return computeVcMethod({
-    exitEnterpriseValue: 0,
-    netDebtAtExit: scenario.vcMethod.netDebtAtExit,
-    targetMultiple: scenario.vcMethod.targetMultiple,
-    yearsToExit: scenario.vcMethod.yearsToExit,
-    investment: scenario.vcMethod.investment,
-    dilutionRetention: scenario.vcMethod.dilutionRetention,
-  }).impliedIrr
-}
-
 function columnHeader(col: CompareColumn): string {
   return col.found && col.scenario ? col.scenario.name : '見つかりません'
 }
@@ -56,6 +47,7 @@ function expectedReturnText(value: number | null | undefined, reason: string | n
 export function ScenarioComparePage() {
   const { scenarios, isLoaded, loadAll } = useScenarioStore()
   const [searchParams] = useSearchParams()
+  const [benchmarkStatusBySector, setBenchmarkStatusBySector] = useState<Partial<Record<SectorId, DataStatus | 'unknown'>>>({})
 
   useEffect(() => {
     if (!isLoaded) void loadAll()
@@ -65,6 +57,22 @@ export function ScenarioComparePage() {
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
+
+  const columns = isLoaded ? buildCompareColumns(ids, scenarios) : []
+  const sectors = Array.from(new Set(columns.map((c) => c.scenario?.sector).filter((s): s is SectorId => Boolean(s))))
+
+  useEffect(() => {
+    if (sectors.length === 0) return
+    let cancelled = false
+    void Promise.all(sectors.map((s) => new StaticJsonSource().fetchSector(s).then((data) => [s, data?.data_status ?? 'unknown'] as const))).then(
+      (entries) => {
+        if (!cancelled) setBenchmarkStatusBySector(Object.fromEntries(entries))
+      },
+    )
+    return () => {
+      cancelled = true
+    }
+  }, [sectors.join(',')])
 
   if (!isLoaded) {
     return <p>読み込み中...</p>
@@ -81,9 +89,13 @@ export function ScenarioComparePage() {
     )
   }
 
-  const columns = buildCompareColumns(ids, scenarios)
   const chartData = buildEvChartData(columns)
   const sectorBlocks = buildSectorBlocks(columns)
+
+  const handleExportXlsx = () => {
+    const workbook = buildCompareWorkbook(columns, benchmarkStatusBySector)
+    downloadXlsxFile(`シナリオ比較_${columns.length}件.xlsx`, workbook)
+  }
 
   return (
     <section className="scenario-compare-page">
@@ -91,6 +103,9 @@ export function ScenarioComparePage() {
       <p>
         <Link to="/">← シナリオ一覧へ戻る</Link>
       </p>
+      <button type="button" onClick={handleExportXlsx}>
+        Excelエクスポート
+      </button>
 
       <section>
         <h2>EVレンジ</h2>

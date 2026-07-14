@@ -14,82 +14,13 @@ import type { Scenario } from '../../store/scenarioTypes.ts'
 import { SECTOR_LABELS } from '../../store/scenarioTypes.ts'
 import { buildOwnershipMatrix } from '../capitalPolicy/ownershipMatrix.ts'
 import { evaluateScenario } from '../scenarioEvaluation/evaluateScenario.ts'
-import { FIELD_LABEL_TABLES } from '../scenarioEvaluation/fieldLabelTables.ts'
-import type { FieldLabelEntry } from '../scenarioEvaluation/fieldLabelTypes.ts'
-import { getByPath } from '../scenarioEvaluation/getByPath.ts'
 import { KEY_METRICS_LABELS } from '../scenarioEvaluation/keyMetricsLabels.ts'
-import { PHASE_LABELS } from '../sectors/drugDiscovery/phaseLabels.ts'
 import { buildTornadoRows } from '../sensitivity/sensitivityRegistry.ts'
-
-type SheetRow = (string | number)[]
+import type { SheetRow } from './excelSheetHelpers.ts'
+import { buildScenarioAssumptionRows } from './excelSheetHelpers.ts'
 
 const RANGE_KEYS = ['pessimistic', 'base', 'optimistic'] as const
 const SENSITIVITY_TOP_N = 10 // P5-8: 感度分析は上位10行
-
-function formatDataStatus(status: DataStatus | 'unknown'): string {
-  if (status === 'dummy') return 'ダミーデータ(実データではない)'
-  if (status === 'production') return '実データ'
-  return '不明(未取得)'
-}
-
-/** スカラー入力1件を [ラベル, 値, 単位] の行に変換する。文字列フィールド(select/text)は値をそのまま出力する。 */
-function scalarFieldRow(inputs: unknown, path: string, entry: FieldLabelEntry): SheetRow {
-  const raw = getByPath(inputs, path)
-  if (typeof raw === 'string') return [entry.label, raw, entry.unit]
-  if (typeof raw !== 'number') return [entry.label, '', entry.unit]
-  const value = entry.format === 'ratio' ? raw * 100 : raw
-  return [entry.label, value, entry.unit]
-}
-
-function buildAssumptionsSheetRows(scenario: Scenario, benchmarkDataStatus: DataStatus | 'unknown'): SheetRow[] {
-  const rows: SheetRow[] = []
-  rows.push(['シナリオ名', scenario.name])
-  rows.push(['セクター', SECTOR_LABELS[scenario.sector]])
-  rows.push(['schemaVersion', scenario.schemaVersion])
-  rows.push(['ベンチマークデータの状態', formatDataStatus(benchmarkDataStatus)])
-  rows.push([])
-
-  const table = FIELD_LABEL_TABLES[scenario.sector]
-  rows.push(['入力(スカラー)'])
-  rows.push(['項目', '値', '単位'])
-  for (const [path, entry] of Object.entries(table.scalars)) {
-    rows.push(scalarFieldRow(scenario.inputs, path, entry))
-  }
-
-  for (const [arrayField, arrayLabels] of Object.entries(table.arrays)) {
-    const items = getByPath(scenario.inputs, arrayField)
-    if (!Array.isArray(items)) continue
-    rows.push([])
-    if (arrayLabels.kind === 'assetBlock') {
-      items.forEach((item: unknown, i: number) => {
-        const name = typeof (item as { name?: unknown }).name === 'string' ? (item as { name: string }).name : `品目${i + 1}`
-        rows.push([`品目${i + 1}: ${name}`])
-        for (const [path, entry] of Object.entries(arrayLabels.itemFields)) {
-          rows.push(scalarFieldRow(item, path, entry))
-        }
-        // 導出(license)時のマイルストーンは疎な二段ネストのため、既存のPHASE_LABELSと
-        // 「金額」表記を直接使って展開する(独立したラベルエントリは設けない。C2実装判断参照)。
-        const commercialization = (item as { commercialization?: { type?: string; milestones?: { phase: string; amount: number }[] } })
-          .commercialization
-        if (commercialization?.type === 'license' && Array.isArray(commercialization.milestones)) {
-          for (const m of commercialization.milestones) {
-            const timing = m.phase === 'launch' ? '上市時' : `${PHASE_LABELS[m.phase as keyof typeof PHASE_LABELS]}完了時`
-            rows.push([`マイルストーン(${timing})`, m.amount, '百万円'])
-          }
-        }
-      })
-    } else {
-      rows.push(Object.values(arrayLabels.itemFields).map((f) => `${f.label}(${f.unit})`))
-      for (const item of items) {
-        rows.push(Object.keys(arrayLabels.itemFields).map((path) => {
-          const raw = getByPath(item, path)
-          return typeof raw === 'number' ? raw : ''
-        }))
-      }
-    }
-  }
-  return rows
-}
 
 function buildResultsSheetRows(scenario: Scenario): SheetRow[] {
   const rows: SheetRow[] = []
@@ -221,6 +152,10 @@ function buildResultsSheetRows(scenario: Scenario): SheetRow[] {
 export function buildScenarioWorkbook(scenario: Scenario, benchmarkDataStatus: DataStatus | 'unknown'): WorkBook {
   const workbook = XLSX.utils.book_new()
   XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(buildResultsSheetRows(scenario)), '結果')
-  XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(buildAssumptionsSheetRows(scenario, benchmarkDataStatus)), '前提条件')
+  XLSX.utils.book_append_sheet(
+    workbook,
+    XLSX.utils.aoa_to_sheet(buildScenarioAssumptionRows(scenario, benchmarkDataStatus)),
+    '前提条件',
+  )
   return workbook
 }

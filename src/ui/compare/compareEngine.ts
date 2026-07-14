@@ -4,7 +4,7 @@
  * 数表とチャートは同じ計算結果(evaluateScenario)を共有し、式の二重評価をしない(§2.3)。
  */
 import type { EngineResult, Ratio, SectorValuationResult } from '../../engine/index.ts'
-import { validateDilutionInputs, simulateDilution } from '../../engine/index.ts'
+import { computeVcMethod, validateDilutionInputs, simulateDilution } from '../../engine/index.ts'
 import type { DilutionInputs } from '../../engine/index.ts'
 import type { Scenario, SectorId } from '../../store/scenarioTypes.ts'
 import { SENSITIVITY_REGISTRY } from '../sensitivity/sensitivityRegistry.ts'
@@ -16,6 +16,18 @@ import { KEY_METRICS_LABELS } from '../scenarioEvaluation/keyMetricsLabels.ts'
 
 /** 比較件数上限(P5-6裁定)。 */
 export const MAX_COMPARE_SCENARIOS = 4
+
+/** VC法の含意IRR。exitEnterpriseValueに依存しない式のため、評価不能なシナリオでも算出できる(計算はcomputeVcMethodへ委譲)。 */
+export function impliedIrrFor(scenario: Scenario): Ratio {
+  return computeVcMethod({
+    exitEnterpriseValue: 0,
+    netDebtAtExit: scenario.vcMethod.netDebtAtExit,
+    targetMultiple: scenario.vcMethod.targetMultiple,
+    yearsToExit: scenario.vcMethod.yearsToExit,
+    investment: scenario.vcMethod.investment,
+    dilutionRetention: scenario.vcMethod.dilutionRetention,
+  }).impliedIrr
+}
 
 export interface ExpectedReturns {
   irr: Ratio | null

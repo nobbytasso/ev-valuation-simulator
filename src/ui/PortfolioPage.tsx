@@ -1,8 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
+import { StaticJsonSource } from '../adapters/benchmarks/StaticJsonSource.ts'
+import type { DataStatus } from '../adapters/benchmarks/types.ts'
 import { usePortfolioStore } from '../store/portfolioStore.ts'
 import { useScenarioStore } from '../store/scenarioStore.ts'
 import { SECTOR_IDS, SECTOR_LABELS } from '../store/scenarioTypes.ts'
 import type { PortfolioHolding, SectorId } from '../store/scenarioTypes.ts'
+import { buildPortfolioWorkbook } from './excel/buildPortfolioWorkbook.ts'
+import { downloadXlsxFile } from './excel/downloadXlsxFile.ts'
 import { aggregatePortfolio, evaluateHolding } from './portfolio/portfolioAggregation.ts'
 import './PortfolioPage.css'
 
@@ -37,6 +41,7 @@ export function PortfolioPage() {
   const [round, setRound] = useState('シリーズA')
   const [ownershipPct, setOwnershipPct] = useState(0)
   const [investmentDate, setInvestmentDate] = useState('')
+  const [benchmarkStatusBySector, setBenchmarkStatusBySector] = useState<Partial<Record<SectorId, DataStatus | 'unknown'>>>({})
 
   useEffect(() => {
     if (!isLoaded) void loadAll()
@@ -48,6 +53,20 @@ export function PortfolioPage() {
   // 評価基準日=今日(P5-4裁定)。new Date() はこのコンポーネントに閉じ、集計ロジックには文字列で渡す。
   const evalDateIso = useMemo(() => new Date().toISOString(), [])
   const scenarioById = useMemo(() => new Map(scenarios.map((s) => [s.id, s])), [scenarios])
+  const holdingSectors = useMemo(() => Array.from(new Set(holdings.map((h) => h.sector))), [holdings])
+
+  useEffect(() => {
+    if (holdingSectors.length === 0) return
+    let cancelled = false
+    void Promise.all(
+      holdingSectors.map((s) => new StaticJsonSource().fetchSector(s).then((data) => [s, data?.data_status ?? 'unknown'] as const)),
+    ).then((entries) => {
+      if (!cancelled) setBenchmarkStatusBySector(Object.fromEntries(entries))
+    })
+    return () => {
+      cancelled = true
+    }
+  }, [holdingSectors.join(',')])
 
   const handleAdd = async () => {
     if (!companyName) return
@@ -74,9 +93,19 @@ export function PortfolioPage() {
 
   const fundSummary = aggregatePortfolio(holdings, scenarioById, evalDateIso)
 
+  const handleExportXlsx = () => {
+    const workbook = buildPortfolioWorkbook(holdings, scenarioById, evalDateIso, benchmarkStatusBySector)
+    downloadXlsxFile('ポートフォリオサマリ.xlsx', workbook)
+  }
+
   return (
     <section>
       <h1>ポートフォリオ</h1>
+      {isLoaded && holdings.length > 0 && (
+        <button type="button" onClick={handleExportXlsx}>
+          Excelエクスポート
+        </button>
+      )}
 
       <div>
         <input
