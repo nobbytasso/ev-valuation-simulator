@@ -5,6 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VC Valuation Simulator</title>
+    <!--
+      初回描画のテーマ適用フラッシュ(FOUC)対策。テーマトークンは:root[data-theme=...]
+      スコープだが、data-theme属性はThemeProviderのuseEffect(Reactマウント後)でしか
+      付与されないため、描画前にlocalStorageの保存テーマを読んで先付けする。
+      キー文字列はsrc/theme/themeContext.tsのTHEME_STORAGE_KEYと同値(テストで固定)。
+      未保存時・不正値時はThemeProviderのreadStoredThemeと同じ既定'dark'にフォールバックする。
+    -->
+    <script id="theme-fouc-guard">
+      (function () {
+        var stored = window.localStorage.getItem('ev-valuation-simulator:theme')
+        document.documentElement.setAttribute('data-theme', stored === 'light' ? 'light' : 'dark')
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>
