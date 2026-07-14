@@ -1,5 +1,6 @@
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import { ThemeProvider } from './theme/ThemeProvider.tsx'
+import { ScenarioComparePage } from './ui/compare/ScenarioComparePage.tsx'
 import { Layout } from './ui/Layout.tsx'
 import { PortfolioPage } from './ui/PortfolioPage.tsx'
 import { ScenarioDetailPage } from './ui/ScenarioDetailPage.tsx'
@@ -15,6 +16,7 @@ function App() {
             <Route index element={<ScenarioListPage />} />
             <Route path="scenarios/:id" element={<ScenarioDetailPage />} />
             <Route path="portfolio" element={<PortfolioPage />} />
+            <Route path="compare" element={<ScenarioComparePage />} />
           </Route>
         </Routes>
       </HashRouter>

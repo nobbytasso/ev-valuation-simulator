@@ -1,0 +1,14 @@
+.scenario-compare-page section {
+  margin-bottom: 2rem;
+}
+
+.scenario-compare-page table {
+  border-collapse: collapse;
+}
+
+.scenario-compare-page th,
+.scenario-compare-page td {
+  padding: 0.4rem 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
