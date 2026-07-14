@@ -6,6 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>VC Valuation Simulator</title>
     <!--
+      Webフォント(Google Fonts CDN、P6-3裁定)。Stage 1で唯一の外部リクエスト
+      (docs/logs/phase6-rulings-20260714.md)。display=swap指定によりCDN取得中/不達時も
+      トークンのフォールバックチェーン(Hiragino/system-ui/ui-monospace)で判読を維持する
+      (src/theme/tokens.*.css参照。フォント取得の成否にE2Eは依存させない、出典: docs/phase6-spec.md §2)。
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=JetBrains+Mono:wght@400;700&family=M+PLUS+Rounded+1c:wght@400;700&display=swap"
+    />
+    <!--
       初回描画のテーマ適用フラッシュ(FOUC)対策。テーマトークンは:root[data-theme=...]
       スコープだが、data-theme属性はThemeProviderのuseEffect(Reactマウント後)でしか
       付与されないため、描画前にlocalStorageの保存テーマを読んで先付けする。

@@ -15,6 +15,14 @@ h1,
 h2,
 h3 {
   font-family: var(--font-heading);
+  /*
+   * line-heightを明示値に固定する。ブラウザ既定のnormalはフォント自身のメトリクス
+   * (ascent/descent/line-gap)に依存するため、ダーク(見出し=Inter、CDN不達時フォールバックは
+   * Hiragino Sans)とライト(見出し=M PLUS Rounded 1c、フォールバックはHiragino Maru Gothic ProN)で
+   * 異なる書体を使うと、CDN不達時のフォールバック同士でも行送りが数px単位でズレ、テーマ切替時の
+   * レイアウトシフト禁止則(§1)に抵触し得る(E2E C2-1で検出)。数値指定で書体差の影響を吸収する。
+   */
+  line-height: 1.3;
 }
 
 code,
