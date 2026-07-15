@@ -6,6 +6,14 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
+  /*
+   * 本文もline-heightを明示値に固定する(見出しの1.3と同じ理由)。テーマ間で本文書体が
+   * 異なる環境(例: Linux/WindowsはHiraginoが無く、ダーク=Inter/ライト=OSフォールバックに
+   * 分岐する)では、既定のnormalが書体メトリクス依存のため行送りがテーマ毎に数pxズレ、
+   * セクション高の差が下方向に累積してテーマ切替時のレイアウトシフトになる
+   * (CI=ubuntuランナーのE2E C2-1でy=12pxの累積ドリフトとして検出)。
+   */
+  line-height: 1.6;
   transition:
     background-color var(--motion-duration-base) var(--motion-easing),
     color var(--motion-duration-base) var(--motion-easing);
