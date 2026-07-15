@@ -9,6 +9,9 @@ export default defineConfig({
   // CI(2coreランナー)は手元より遅く、タイミング依存の演出系テストがflakeし得るため
   // リトライを許容する。決定的な失敗はリトライしても失敗し、trace/reportで診断できる。
   retries: process.env.CI ? 2 : 0,
+  // CIではgithubレポーター(失敗をアノテーション化。公開APIから失敗テスト名を特定可能)と
+  // htmlレポート(失敗時アーティファクトとして保存)を併用する。
+  reporter: process.env.CI ? [['list'], ['github'], ['html', { open: 'never' }]] : 'list',
   use: {
     browserName: 'chromium',
     baseURL: 'http://localhost:5173',
