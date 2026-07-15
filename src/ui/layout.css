@@ -1,9 +1,15 @@
 /* Phase 2骨格用の最小限のレイアウト。装飾の磨き込みはPhase 6。 */
+
+/* コンテンツ最大幅(両テーマ共通・テーマスコープ外)。§12.2 デザインレビュー第2回指摘対応。 */
+:root {
+  --layout-max-width: 1440px;
+}
+
 .app-header {
   display: flex;
   align-items: center;
   gap: 1.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem max(1.5rem, calc((100% - var(--layout-max-width)) / 2));
   border-bottom: 1px solid var(--color-border);
   background-color: var(--color-bg-elevated);
 }
@@ -29,5 +35,7 @@
 }
 
 .app-main {
+  max-width: var(--layout-max-width);
+  margin-inline: auto;
   padding: 1.5rem;
 }
