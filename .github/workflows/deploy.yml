@@ -76,6 +76,10 @@ jobs:
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
+        with:
+          # Pages未有効のリポジトリでも自動で有効化する(Settings→Pagesの手動設定を不要にする。
+          # run #4 でPages未設定によりConfigure Pagesが失敗したための対応)
+          enablement: true
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
