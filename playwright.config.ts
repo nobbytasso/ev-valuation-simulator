@@ -6,13 +6,17 @@ import { defineConfig } from '@playwright/test'
  */
 export default defineConfig({
   testDir: 'e2e',
+  // CI(2coreランナー)は手元より遅く、タイミング依存の演出系テストがflakeし得るため
+  // リトライを許容する。決定的な失敗はリトライしても失敗し、trace/reportで診断できる。
+  retries: process.env.CI ? 2 : 0,
   use: {
     browserName: 'chromium',
     baseURL: 'http://localhost:5173',
+    trace: 'on-first-retry',
   },
   webServer: {
     command: 'npm run dev',
     url: 'http://localhost:5173',
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
   },
 })
