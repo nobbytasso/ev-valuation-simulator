@@ -835,6 +835,17 @@ ProposedPreMoney基準に統一)。
 `followon-single-tranche` / `followon-multiple-tranches`)に `input.followOns` /
 `expected.followOnResult` を追加(0件/1件/複数件)。他の既存ケースは無変更。
 
+**`cashflows` フィールド(UI再利用用)**: `WorkbenchFollowOnResult.cashflows` は `irr` の算出に
+使った実CF列そのもの(`[{t:0,cf:-初回},...,{t:yearsToExit,cf:+回収}]`)を公開する。投資家CF
+バーチャート(§6.3、C7)がこの配列をそのまま描画に使い、UI側でCF列の組み立てを複製しない
+(CLAUDE.md エンジン変更規則)。新しい金額計算式ではなく既存の中間値の公開のため、
+Python参照実装・golden突合の対象には含めない(`irr`の golden 一致が同じCF列を経由済み)。
+
+**`composeFollowOnProceeds`(円チャート用の内訳)**: 回収額(`proceeds`)と投下資本合計
+(`totalInvested`)の2値を「投下資本の回収分+超過リターン分」(回収≥投資)、または
+「回収+元本毀損分」(回収<投資)に分解する表示専用の派生関数(R-V2-3、`src/engine/workbench/followOn.ts`)。
+新しい金額計算を行わない単純な分解のため、golden突合の対象には含めずTSユニットテストのみで検証する。
+
 ---
 
 *v0.1 — 2026-07-13。Phase 1 実装開始前のレビュー用。*

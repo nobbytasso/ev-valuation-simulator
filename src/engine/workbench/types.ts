@@ -149,6 +149,12 @@ export interface WorkbenchFollowOnResult {
   moic: Money | null
   irr: Ratio | null
   warnings: string[]
+  /**
+   * IRR算出に用いた投資家キャッシュフロー列(t=0: 初回、t=yearOffset_i: 追加出資、
+   * t=yearsToExit: 回収)。UI層のCFチャート(docs/v2-adoption-spec.md §6.3)が
+   * この配列を再利用し、キャッシュフローの組み立てを重複させない。
+   */
+  cashflows: { t: number; cf: Money }[]
 }
 
 export interface WorkbenchClimateTechExitInputs {

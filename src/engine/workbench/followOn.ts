@@ -80,5 +80,31 @@ export function computeFollowOnReturn(
     moic,
     irr,
     warnings,
+    cashflows,
   }
+}
+
+/** Exit回収額の構成(docs/v2-adoption-spec.md §6.3、R-V2-3)。 */
+export interface FollowOnProceedsComposition {
+  /** 回収 ≥ 投資のとき'return'(投下資本回収分+超過リターン分)、回収 < 投資のとき'shortfall'(回収+元本毀損分)。 */
+  kind: 'return' | 'shortfall'
+  /** 投下資本の回収分(kind='return')、または回収そのもの(kind='shortfall')。 */
+  recoveredPrincipal: Money
+  /** 超過リターン分(kind='return'のときのみ正、それ以外0)。 */
+  excessReturn: Money
+  /** 元本毀損分(kind='shortfall'のときのみ正、それ以外0)。 */
+  principalLoss: Money
+}
+
+/**
+ * 回収額(`proceeds`)と投下資本合計(`totalInvested`)から、円チャート表示用の内訳を導出する
+ * (R-V2-3採用推奨: 回収 ≥ 投資 → 「投下資本の回収分」+「超過リターン分」、
+ * 回収 < 投資 → 「回収」+「元本毀損分」)。新しい金額計算は行わず、`computeFollowOnReturn` が
+ * 既に算出した2値の表示用分解のみを行う純粋関数。
+ */
+export function composeFollowOnProceeds(proceeds: Money, totalInvested: Money): FollowOnProceedsComposition {
+  if (totalInvested > 0 && proceeds < totalInvested) {
+    return { kind: 'shortfall', recoveredPrincipal: proceeds, excessReturn: 0, principalLoss: totalInvested - proceeds }
+  }
+  return { kind: 'return', recoveredPrincipal: totalInvested, excessReturn: proceeds - totalInvested, principalLoss: 0 }
 }

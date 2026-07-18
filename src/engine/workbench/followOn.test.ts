@@ -1,6 +1,6 @@
 import fc from 'fast-check'
 import { describe, expect, it } from 'vitest'
-import { computeFollowOnReturn } from './followOn.ts'
+import { composeFollowOnProceeds, computeFollowOnReturn } from './followOn.ts'
 import type { WorkbenchFollowOnCoreInputs } from './followOn.ts'
 import type { WorkbenchFollowOnInput } from './types.ts'
 
@@ -67,6 +67,47 @@ describe('computeFollowOnReturn', () => {
     const result = computeFollowOnReturn(baseCore, [], -500)
     expect(result.proceeds).toBe(0)
     expect(result.moic).toBe(0)
+  })
+
+  it('cashflowsはirrBisectionと同じ実CF列(t=0初回、yearOffset_i、yearsToExit回収)を返す', () => {
+    const followOns: WorkbenchFollowOnInput[] = [{ label: 'B', yearOffset: 2, amount: 500, postMoney: 5000 }]
+    const result = computeFollowOnReturn(baseCore, followOns, 10000)
+    expect(result.cashflows).toEqual([
+      { t: 0, cf: -300 },
+      { t: 2, cf: -500 },
+      { t: 5, cf: result.proceeds },
+    ])
+  })
+})
+
+describe('composeFollowOnProceeds(R-V2-3)', () => {
+  it('回収 ≥ 投資のとき投下資本回収分+超過リターン分に分解する', () => {
+    const composition = composeFollowOnProceeds(1200, 800)
+    expect(composition.kind).toBe('return')
+    expect(composition.recoveredPrincipal).toBe(800)
+    expect(composition.excessReturn).toBe(400)
+    expect(composition.principalLoss).toBe(0)
+  })
+
+  it('回収 = 投資のときも投下資本回収分のみ(超過リターン0)として扱う', () => {
+    const composition = composeFollowOnProceeds(800, 800)
+    expect(composition.kind).toBe('return')
+    expect(composition.recoveredPrincipal).toBe(800)
+    expect(composition.excessReturn).toBe(0)
+  })
+
+  it('回収 < 投資のとき回収+元本毀損分に分解する', () => {
+    const composition = composeFollowOnProceeds(300, 800)
+    expect(composition.kind).toBe('shortfall')
+    expect(composition.recoveredPrincipal).toBe(300)
+    expect(composition.principalLoss).toBe(500)
+    expect(composition.excessReturn).toBe(0)
+  })
+
+  it('totalInvested=0のときは常にreturn扱い(0除算を避ける)', () => {
+    const composition = composeFollowOnProceeds(0, 0)
+    expect(composition.kind).toBe('return')
+    expect(composition.recoveredPrincipal).toBe(0)
   })
 })
 
