@@ -26,9 +26,10 @@ import {
 import { MIGRATION_CASE_FACTORS, migrateLegacyScenario } from '../store/legacyMigration.ts'
 import type { CaseFactorTuple, MigrationCaseFactors } from '../store/legacyMigration.ts'
 import { downloadWorkbenchWorkbook } from '../../ui/excel/buildWorkbenchWorkbook.ts'
-import { formatMoney } from '../../ui/format/money.ts'
+import { formatMoney, formatMoneyValue, moneyAxisLabel } from '../../ui/format/money.ts'
 import { useMoneyUnit } from '../../ui/format/useMoneyUnit.ts'
 import { useStableListKeys } from '../../ui/useStableListKeys.ts'
+import { CategoryBarChart } from '../../ui/charts/CategoryBarChart.tsx'
 import { computeFollowOnReturn } from '../../engine/index.ts'
 import type { WorkbenchFollowOnInput } from '../../engine/index.ts'
 import { displayedValue, storedValue } from './workbenchFieldFormat.ts'
@@ -695,6 +696,16 @@ export function InvestmentWorkbenchPage() {
             <h2>投資ケース比較</h2>
           </div>
           <span>Exit KPIから理論株価・期待IRRまで</span>
+        </div>
+
+        <div className="workbench-topline-chart">
+          <p className="workbench-topline-chart__label">{results[0]?.exitMetricLabel ?? 'Exit KPI'}比較</p>
+          <CategoryBarChart
+            data={state.cases.map((item, index) => ({ name: item.name, value: results[index]?.exitMetric ?? 0 }))}
+            formatValue={(value) => formatMoney(value, unit)}
+            formatAxisValue={(value) => formatMoneyValue(value, unit)}
+            axisLabel={moneyAxisLabel(unit)}
+          />
         </div>
 
         <div className="workbench-table-wrap">
