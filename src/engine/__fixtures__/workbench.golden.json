@@ -3,7 +3,7 @@
   "model": "workbench",
   "generatedAt": "2026-07-18",
   "seed": 20260719,
-  "caseCount": 37,
+  "caseCount": 40,
   "cases": [
     {
       "id": "saas-zero-growth",
@@ -650,6 +650,244 @@
           "要求リターンから逆算した許容Pre-moneyが0未満です。",
           "要求持分が100%を超えており、この条件では投資が成立しません。"
         ]
+      }
+    },
+    {
+      "id": "followon-zero-tranches",
+      "tags": [
+        "boundary",
+        "follow-on",
+        "follow-on-zero"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 1000.0,
+          "arrGrowth": 0.35,
+          "growthDecay": 0.9,
+          "exitOperatingMargin": 0.15,
+          "exitMultiple": 10.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        },
+        "followOns": []
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 3516.6345698009823,
+        "exitEnterpriseValue": 35166.34569800982,
+        "exitEquityValue": 35166.34569800982,
+        "currentAllowablePostMoney": 3516.634569800982,
+        "currentAllowablePreMoney": 3216.634569800982,
+        "theoreticalSharePrice": 321.6634569800982,
+        "requiredEntryOwnership": 0.08530883549182024,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": 0.07221152326699398,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 2237.858362600625,
+        "expectedMoic": 7.459527875335416,
+        "expectedIrr": 0.49465950484361754,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.22963499999999998,
+          "ruleOf40": 37.963499999999996
+        },
+        "warnings": [],
+        "followOnResult": {
+          "tranches": [],
+          "initialOwnershipShare": 0.09090909090909091,
+          "totalOwnershipShare": 0.09090909090909091,
+          "exitOwnershipShare": 0.06363636363636363,
+          "totalInvested": 300.0,
+          "proceeds": 2237.858362600625,
+          "moic": 7.459527875335416,
+          "irr": 0.494659504843618,
+          "warnings": []
+        }
+      }
+    },
+    {
+      "id": "followon-single-tranche",
+      "tags": [
+        "boundary",
+        "follow-on",
+        "follow-on-single"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 1000.0,
+          "arrGrowth": 0.35,
+          "growthDecay": 0.9,
+          "exitOperatingMargin": 0.15,
+          "exitMultiple": 10.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        },
+        "followOns": [
+          {
+            "label": "シリーズB",
+            "yearOffset": 2,
+            "amount": 500.0,
+            "postMoney": 5000.0
+          }
+        ]
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 3516.6345698009823,
+        "exitEnterpriseValue": 35166.34569800982,
+        "exitEquityValue": 35166.34569800982,
+        "currentAllowablePostMoney": 3516.634569800982,
+        "currentAllowablePreMoney": 3216.634569800982,
+        "theoreticalSharePrice": 321.6634569800982,
+        "requiredEntryOwnership": 0.08530883549182024,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": 0.07221152326699398,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 2237.858362600625,
+        "expectedMoic": 7.459527875335416,
+        "expectedIrr": 0.49465950484361754,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.22963499999999998,
+          "ruleOf40": 37.963499999999996
+        },
+        "warnings": [],
+        "followOnResult": {
+          "tranches": [
+            {
+              "label": "シリーズB",
+              "yearOffset": 2,
+              "amount": 500.0,
+              "postMoney": 5000.0,
+              "ownershipShare": 0.1,
+              "multipleOfPreviousPostMoney": 1.5151515151515151
+            }
+          ],
+          "initialOwnershipShare": 0.09090909090909091,
+          "totalOwnershipShare": 0.19090909090909092,
+          "exitOwnershipShare": 0.13363636363636364,
+          "totalInvested": 800.0,
+          "proceeds": 4699.502561461312,
+          "moic": 5.874378201826641,
+          "irr": 0.5623560573861087,
+          "warnings": []
+        }
+      }
+    },
+    {
+      "id": "followon-multiple-tranches",
+      "tags": [
+        "boundary",
+        "follow-on",
+        "follow-on-multiple"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 1000.0,
+          "arrGrowth": 0.35,
+          "growthDecay": 0.9,
+          "exitOperatingMargin": 0.15,
+          "exitMultiple": 10.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        },
+        "followOns": [
+          {
+            "label": "シリーズB",
+            "yearOffset": 2,
+            "amount": 500.0,
+            "postMoney": 5000.0
+          },
+          {
+            "label": "シリーズC",
+            "yearOffset": 4,
+            "amount": 800.0,
+            "postMoney": 4000.0
+          }
+        ]
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 3516.6345698009823,
+        "exitEnterpriseValue": 35166.34569800982,
+        "exitEquityValue": 35166.34569800982,
+        "currentAllowablePostMoney": 3516.634569800982,
+        "currentAllowablePreMoney": 3216.634569800982,
+        "theoreticalSharePrice": 321.6634569800982,
+        "requiredEntryOwnership": 0.08530883549182024,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": 0.07221152326699398,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 2237.858362600625,
+        "expectedMoic": 7.459527875335416,
+        "expectedIrr": 0.49465950484361754,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.22963499999999998,
+          "ruleOf40": 37.963499999999996
+        },
+        "warnings": [],
+        "followOnResult": {
+          "tranches": [
+            {
+              "label": "シリーズB",
+              "yearOffset": 2,
+              "amount": 500.0,
+              "postMoney": 5000.0,
+              "ownershipShare": 0.1,
+              "multipleOfPreviousPostMoney": 1.5151515151515151
+            },
+            {
+              "label": "シリーズC",
+              "yearOffset": 4,
+              "amount": 800.0,
+              "postMoney": 4000.0,
+              "ownershipShare": 0.2,
+              "multipleOfPreviousPostMoney": 0.8
+            }
+          ],
+          "initialOwnershipShare": 0.09090909090909091,
+          "totalOwnershipShare": 0.390909090909091,
+          "exitOwnershipShare": 0.2736363636363637,
+          "totalInvested": 1600.0,
+          "proceeds": 9622.790959182688,
+          "moic": 6.01424434948918,
+          "irr": 0.7808831611118837,
+          "warnings": []
+        }
       }
     },
     {
