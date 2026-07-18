@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx'
-import type { CaseResult, WorkbenchState } from '../domain/types.ts'
-import { getSectorDefinition } from '../domain/sectorDefinitions.ts'
+import type { CaseResult, WorkbenchState } from '../../v2/domain/types.ts'
+import { getSectorDefinition } from '../../v2/domain/sectorDefinitions.ts'
 
 function percent(value: number | null): string {
   return value === null ? '—' : `${(value * 100).toFixed(1)}%`

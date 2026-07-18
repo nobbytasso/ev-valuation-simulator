@@ -14,13 +14,16 @@ import {
 } from '../domain/sectorDefinitions.ts'
 import {
   exportWorkbenchJson,
-  importWorkbenchJson,
   loadWorkbench,
+  parseWorkbenchImport,
   saveWorkbench,
 } from '../store/workbenchStorage.ts'
-import { downloadWorkbenchWorkbook } from './workbenchExcel.ts'
+import { MIGRATION_CASE_FACTORS, migrateLegacyScenario } from '../store/legacyMigration.ts'
+import type { CaseFactorTuple, MigrationCaseFactors } from '../store/legacyMigration.ts'
+import { downloadWorkbenchWorkbook } from '../../ui/excel/buildWorkbenchWorkbook.ts'
 import { formatMoney } from '../../ui/format/money.ts'
 import { useMoneyUnit } from '../../ui/format/useMoneyUnit.ts'
+import { displayedValue, storedValue } from './workbenchFieldFormat.ts'
 import './InvestmentWorkbenchPage.css'
 
 function formatPercent(value: number | null): string {
@@ -35,18 +38,6 @@ function formatSharePrice(value: number | null): string {
   return value === null || !Number.isFinite(value)
     ? '—'
     : `${value.toLocaleString('ja-JP', { maximumFractionDigits: 1 })} 円`
-}
-
-function displayedValue(value: number | string | undefined, field: FieldDefinition): number | string {
-  if (value === undefined) return ''
-  if (typeof value === 'string') return value
-  return field.format === 'percent' ? value * 100 : value
-}
-
-function storedValue(raw: string, field: FieldDefinition): number | string {
-  if (field.kind === 'select') return raw
-  const value = Number(raw)
-  return field.format === 'percent' ? value / 100 : value
 }
 
 interface DynamicFieldProps {
@@ -92,10 +83,64 @@ function downloadText(filename: string, text: string): void {
   URL.revokeObjectURL(url)
 }
 
+// 移行係数パネル(docs/v2-adoption-spec.md §3、裁定③)で編集する「主要係数」1本(4ケース分)を
+// セクターごとに選ぶ。定数表 MIGRATION_CASE_FACTORS のうち、成長率・成功確率など
+// 展開結果に最も影響する係数を割り当てる。
+const PRIMARY_FACTOR_LABEL: Record<V2SectorId, string> = {
+  saas_jp: 'ARR成長率 係数',
+  ec_d2c: '売上成長率 係数',
+  media_tech: 'MAU成長率 係数',
+  medical_device: '対象手技数成長率 係数',
+  drug_discovery: '上市成功確率 係数',
+  climate_tech: '量産化到達確率・オフテイクカバー率 係数',
+}
+
+function getPrimaryFactorTuple(factors: MigrationCaseFactors, sector: V2SectorId): CaseFactorTuple {
+  switch (sector) {
+    case 'saas_jp':
+      return factors.saas_jp.growthFactor
+    case 'ec_d2c':
+      return factors.ec_d2c.growthFactor
+    case 'media_tech':
+      return factors.media_tech.growthFactor
+    case 'medical_device':
+      return factors.medical_device.growthFactor
+    case 'drug_discovery':
+      return factors.drug_discovery.posFactor
+    case 'climate_tech':
+      return factors.climate_tech.probabilityFactor
+  }
+}
+
+function withPrimaryFactorTuple(
+  factors: MigrationCaseFactors,
+  sector: V2SectorId,
+  tuple: CaseFactorTuple,
+): MigrationCaseFactors {
+  switch (sector) {
+    case 'saas_jp':
+      return { ...factors, saas_jp: { ...factors.saas_jp, growthFactor: tuple } }
+    case 'ec_d2c':
+      return { ...factors, ec_d2c: { ...factors.ec_d2c, growthFactor: tuple } }
+    case 'media_tech':
+      return { ...factors, media_tech: { ...factors.media_tech, growthFactor: tuple } }
+    case 'medical_device':
+      return { ...factors, medical_device: { ...factors.medical_device, growthFactor: tuple } }
+    case 'drug_discovery':
+      return { ...factors, drug_discovery: { ...factors.drug_discovery, posFactor: tuple } }
+    case 'climate_tech':
+      return { ...factors, climate_tech: { ...factors.climate_tech, probabilityFactor: tuple } }
+  }
+}
+
 export function InvestmentWorkbenchPage() {
   const { unit } = useMoneyUnit()
   const [state, setState] = useState<WorkbenchState>(() => loadWorkbench())
   const [importError, setImportError] = useState<string | null>(null)
+  const [legacyRaw, setLegacyRaw] = useState<unknown | null>(null)
+  const [migrationFactors, setMigrationFactors] = useState<MigrationCaseFactors>(() =>
+    structuredClone(MIGRATION_CASE_FACTORS),
+  )
   const importRef = useRef<HTMLInputElement | null>(null)
   const definition = getSectorDefinition(state.company.sector)
   const results = useMemo(
@@ -152,11 +197,25 @@ export function InvestmentWorkbenchPage() {
 
   const handleImport = async (file: File) => {
     try {
-      const imported = importWorkbenchJson(await file.text())
+      const defaultFactors = structuredClone(MIGRATION_CASE_FACTORS)
+      const { state: imported, legacyRaw: raw } = parseWorkbenchImport(await file.text(), defaultFactors)
       setState(imported)
+      setLegacyRaw(raw)
+      setMigrationFactors(defaultFactors)
       setImportError(null)
     } catch (error) {
       setImportError(`インポートに失敗しました: ${(error as Error).message}`)
+    }
+  }
+
+  const handleReExpand = () => {
+    if (legacyRaw === null) return
+    try {
+      const reExpanded = migrateLegacyScenario(legacyRaw, migrationFactors)
+      setState(reExpanded)
+      setImportError(null)
+    } catch (error) {
+      setImportError(`再展開に失敗しました: ${(error as Error).message}`)
     }
   }
 
@@ -232,6 +291,47 @@ export function InvestmentWorkbenchPage() {
             確認済みにする
           </button>
         </section>
+      )}
+
+      {legacyRaw !== null && (
+        <details className="panel workbench-migration-factors">
+          <summary>移行係数(旧Scenarioからの近似展開)</summary>
+          <p>
+            旧Scenarioの悲観・ベース・楽観を4つの独立ケースへ近似展開する際の係数です。既定値は
+            セクター毎の定数表(MIGRATION_CASE_FACTORS)。編集後「この係数で再展開」を押すと、
+            直前にインポートした旧JSONをこの係数で再展開します(係数自体は保存されません)。
+          </p>
+          <div className="workbench-grid workbench-grid--company">
+            {state.cases.map((item, index) => (
+              <label key={item.id} className="workbench-field">
+                <span>
+                  {item.name}: {PRIMARY_FACTOR_LABEL[state.company.sector]}
+                </span>
+                <input
+                  type="number"
+                  step="0.01"
+                  value={getPrimaryFactorTuple(migrationFactors, state.company.sector)[index]}
+                  onChange={(event) => {
+                    const tuple = [...getPrimaryFactorTuple(migrationFactors, state.company.sector)] as CaseFactorTuple
+                    tuple[index] = Number(event.target.value)
+                    setMigrationFactors((current) => withPrimaryFactorTuple(current, state.company.sector, tuple))
+                  }}
+                />
+              </label>
+            ))}
+          </div>
+          <div className="investment-workbench__actions">
+            <button type="button" onClick={handleReExpand}>
+              この係数で再展開
+            </button>
+            <button
+              type="button"
+              onClick={() => setMigrationFactors(structuredClone(MIGRATION_CASE_FACTORS))}
+            >
+              係数を既定値に戻す
+            </button>
+          </div>
+        </details>
       )}
 
       <section className="panel">

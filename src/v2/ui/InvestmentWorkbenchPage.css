@@ -201,6 +201,15 @@
   border-color: var(--color-warning);
 }
 
+.workbench-migration-factors summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.workbench-migration-factors p {
+  margin: 0.75rem 0;
+}
+
 @media (max-width: 840px) {
   .investment-workbench__hero {
     flex-direction: column;
