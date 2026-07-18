@@ -132,12 +132,21 @@ def build_workbench_cases() -> List[Dict[str, Any]]:
     cases: List[Dict[str, Any]] = []
 
     for case_id, tags, case_input in workbench.boundary_cases():
+        expected = workbench.compute(case_input)
+        follow_ons = case_input.get("followOns")
+        if follow_ons is not None:
+            expected = {
+                **expected,
+                "followOnResult": workbench.follow_on_return(
+                    case_input["coreInputs"], follow_ons, expected["exitEquityValue"]
+                ),
+            }
         cases.append(
             {
                 "id": case_id,
                 "tags": tags,
                 "input": case_input,
-                "expected": workbench.compute(case_input),
+                "expected": expected,
             }
         )
 

@@ -107,6 +107,50 @@ export interface WorkbenchDrugDiscoveryExitInputs {
   exitMultiple: number
 }
 
+/** 追加出資1件の入力(docs/v2-adoption-spec.md §6.2)。 */
+export interface WorkbenchFollowOnInput {
+  label: string
+  /** 初回投資からの経過年数。 */
+  yearOffset: number
+  amount: Money
+  postMoney: Money
+}
+
+/** 追加出資1件分の計算結果(表示用の倍率を含む)。 */
+export interface WorkbenchFollowOnTrancheResult {
+  label: string
+  yearOffset: number
+  amount: Money
+  postMoney: Money
+  /** e_i = amount / postMoney。 */
+  ownershipShare: Ratio
+  /**
+   * 前回ラウンド(初回投資、または直前の追加出資)のPost-moneyに対する倍率
+   * (R-V2-2: 初回の「前回」は提示Post-money = proposedPreMoney + investmentAmount)。
+   * 前回Post-moneyが0以下のときはnull。
+   */
+  multipleOfPreviousPostMoney: number | null
+}
+
+/** 初回投資+追加出資を通算した投資家リターン(docs/v2-adoption-spec.md §6.2)。 */
+export interface WorkbenchFollowOnResult {
+  /** 追加出資のみ(初回投資は含まない)。 */
+  tranches: WorkbenchFollowOnTrancheResult[]
+  /** e_0 = investmentAmount / (proposedPreMoney + investmentAmount)。 */
+  initialOwnershipShare: Ratio
+  /** Σ e_i(初回+全追加出資)。 */
+  totalOwnershipShare: Ratio
+  /** totalOwnershipShare × dilutionRetention。 */
+  exitOwnershipShare: Ratio
+  /** Σ amount(初回+全追加出資)。 */
+  totalInvested: Money
+  /** max(0, exitEquityValue) × exitOwnershipShare。 */
+  proceeds: Money
+  moic: Money | null
+  irr: Ratio | null
+  warnings: string[]
+}
+
 export interface WorkbenchClimateTechExitInputs {
   currentProjectNpv: Money
   annualCapacity: number

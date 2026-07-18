@@ -5,6 +5,7 @@ import fc from 'fast-check'
 import { describe, expect, it } from 'vitest'
 import { closeEnough } from '../types.ts'
 import { buildWorkbenchCaseResult } from './valuation.ts'
+import { computeFollowOnReturn } from './followOn.ts'
 import {
   workbenchClimateTechExit,
   workbenchDrugDiscoveryExit,
@@ -19,6 +20,8 @@ import type {
   WorkbenchClimateTechExitInputs,
   WorkbenchDrugDiscoveryExitInputs,
   WorkbenchEcD2cExitInputs,
+  WorkbenchFollowOnInput,
+  WorkbenchFollowOnResult,
   WorkbenchMediaTechExitInputs,
   WorkbenchMedicalDeviceExitInputs,
   WorkbenchSaasExitInputs,
@@ -41,8 +44,9 @@ interface GoldenCase {
     sector: WorkbenchSector
     exitInputs: Record<string, unknown>
     coreInputs: WorkbenchCaseCoreInputs
+    followOns?: WorkbenchFollowOnInput[]
   }
-  expected: WorkbenchCaseResult
+  expected: WorkbenchCaseResult & { followOnResult?: WorkbenchFollowOnResult }
 }
 
 interface GoldenFile {
@@ -123,6 +127,34 @@ describe('V2 Workbench golden fixtures', () => {
     }
 
     expect([...result.warnings].sort()).toEqual([...c.expected.warnings].sort())
+  })
+})
+
+describe('V2 Workbench 追加出資 golden fixtures(0件/1件/複数件)', () => {
+  const golden = loadGolden()
+  const followOnCases = golden.cases.filter((c) => c.input.followOns !== undefined)
+  it('golden fixtureに追加出資ケース(0件/1件/複数件)が含まれる', () => {
+    expect(followOnCases.length).toBeGreaterThanOrEqual(3)
+  })
+
+  it.each(followOnCases.map((c) => [c.id, c] as const))('%s: 追加出資golden一致', (_id, c) => {
+    const exitEquityValue = computeWorkbenchCase(c.input).exitEquityValue
+    const result = computeFollowOnReturn(c.input.coreInputs, c.input.followOns ?? [], exitEquityValue)
+    const expected = c.expected.followOnResult as WorkbenchFollowOnResult
+
+    expect(closeEnough(result.initialOwnershipShare, expected.initialOwnershipShare)).toBe(true)
+    expect(closeEnough(result.totalOwnershipShare, expected.totalOwnershipShare)).toBe(true)
+    expect(closeEnough(result.exitOwnershipShare, expected.exitOwnershipShare)).toBe(true)
+    expect(closeEnough(result.totalInvested, expected.totalInvested)).toBe(true)
+    expect(closeEnough(result.proceeds, expected.proceeds)).toBe(true)
+    expectNullableCloseEnough(result.moic, expected.moic)
+    expectNullableCloseEnough(result.irr, expected.irr)
+    expect(result.tranches).toHaveLength(expected.tranches.length)
+    result.tranches.forEach((tranche, i) => {
+      expect(closeEnough(tranche.ownershipShare, expected.tranches[i].ownershipShare)).toBe(true)
+      expectNullableCloseEnough(tranche.multipleOfPreviousPostMoney, expected.tranches[i].multipleOfPreviousPostMoney)
+    })
+    expect([...result.warnings].sort()).toEqual([...expected.warnings].sort())
   })
 })
 

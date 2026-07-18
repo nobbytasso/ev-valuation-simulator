@@ -9,9 +9,9 @@ Bridge」の組み合わせのため、既存の `boundary_cases.py` / `random_i
 ケース形状(`sector` / `exitInputs` / `coreInputs`)が異なる)。
 """
 
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
-from .common import gordon_terminal_value, pv
+from .common import gordon_terminal_value, irr_bisection, pv
 
 WorkbenchCase = Tuple[str, List[str], Dict[str, Any]]
 
@@ -244,6 +244,65 @@ def compute(case_input: Dict[str, Any]) -> Dict[str, Any]:
     return build_case_result(case_input["coreInputs"], exit_valuation)
 
 
+def follow_on_return(
+    core: Dict[str, Any], follow_ons: List[Dict[str, Any]], exit_equity_value: float
+) -> Dict[str, Any]:
+    """追加出資を含む投資家リターン(docs/v2-adoption-spec.md §6.2、docs/engine-spec.md §5.5)。
+
+    初回: e_0 = investmentAmount / (proposedPreMoney + investmentAmount)
+    追加出資 i: e_i = amount_i / postMoney_i
+    Exit持分 = (Σ e_i) × dilutionRetention、回収 = max(0, exitEquityValue) × Exit持分
+    MOIC = 回収 / Σ amount、IRR = irrBisection([(0,-初回), (yearOffset_i,-amount_i)..., (yearsToExit,+回収)])
+    """
+    proposed_post_money = core["proposedPreMoney"] + core["investmentAmount"]
+    initial_ownership_share = core["investmentAmount"] / proposed_post_money if proposed_post_money > 0 else 0.0
+
+    tranches: List[Dict[str, Any]] = []
+    previous_post_money = proposed_post_money
+    for item in follow_ons:
+        ownership_share = item["amount"] / item["postMoney"] if item["postMoney"] > 0 else 0.0
+        multiple = item["postMoney"] / previous_post_money if previous_post_money > 0 else None
+        tranches.append(
+            {
+                "label": item["label"],
+                "yearOffset": item["yearOffset"],
+                "amount": item["amount"],
+                "postMoney": item["postMoney"],
+                "ownershipShare": ownership_share,
+                "multipleOfPreviousPostMoney": multiple,
+            }
+        )
+        previous_post_money = item["postMoney"]
+
+    total_ownership_share = initial_ownership_share + sum(t["ownershipShare"] for t in tranches)
+    exit_ownership_share = total_ownership_share * core["dilutionRetention"]
+    proceeds = max(0.0, exit_equity_value) * exit_ownership_share
+    total_invested = core["investmentAmount"] + sum(item["amount"] for item in follow_ons)
+    moic_value: Optional[float] = proceeds / total_invested if total_invested > 0 else None
+
+    cashflows: List[Tuple[int, float]] = [(0, -core["investmentAmount"])]
+    for item in follow_ons:
+        cashflows.append((item["yearOffset"], -item["amount"]))
+    cashflows.append((core["yearsToExit"], proceeds))
+    irr_value = irr_bisection(cashflows)
+
+    warnings: List[str] = []
+    if total_ownership_share > 1:
+        warnings.append("追加出資を含む持分合計が100%を超えています。")
+
+    return {
+        "tranches": tranches,
+        "initialOwnershipShare": initial_ownership_share,
+        "totalOwnershipShare": total_ownership_share,
+        "exitOwnershipShare": exit_ownership_share,
+        "totalInvested": total_invested,
+        "proceeds": proceeds,
+        "moic": moic_value,
+        "irr": irr_value,
+        "warnings": warnings,
+    }
+
+
 # --- ケース生成(境界値・シード固定ランダム) -------------------------------------------
 
 _DEFAULT_CORE = {
@@ -268,9 +327,15 @@ _DEFAULT_SAAS_EXIT = {
 
 def boundary_cases() -> List[WorkbenchCase]:
     def case(case_id: str, tags: List[str], sector: str, exit_inputs: Dict[str, Any], core_overrides: Dict[str, Any]) -> WorkbenchCase:
-        core = {**_DEFAULT_CORE, **core_overrides}
+        # followOns は coreInputs ではなくケース直下のキー(追加出資テストケース専用、§6.2)。
+        overrides = dict(core_overrides)
+        follow_ons = overrides.pop("followOns", None)
+        core = {**_DEFAULT_CORE, **overrides}
         exit_inputs = {**exit_inputs, "yearsToExit": core["yearsToExit"]}
-        return (case_id, tags, {"sector": sector, "exitInputs": exit_inputs, "coreInputs": core})
+        payload: Dict[str, Any] = {"sector": sector, "exitInputs": exit_inputs, "coreInputs": core}
+        if follow_ons is not None:
+            payload["followOns"] = follow_ons
+        return (case_id, tags, payload)
 
     cases: List[WorkbenchCase] = [
         case("saas-zero-growth", ["boundary", "zero-growth"], "saas_jp", {**_DEFAULT_SAAS_EXIT, "arrGrowth": 0.0}, {}),
@@ -384,6 +449,32 @@ def boundary_cases() -> List[WorkbenchCase]:
                 "exitMultiple": 0.8,
             },
             {},
+        ),
+        case(
+            "followon-zero-tranches",
+            ["boundary", "follow-on", "follow-on-zero"],
+            "saas_jp",
+            _DEFAULT_SAAS_EXIT,
+            {"followOns": []},
+        ),
+        case(
+            "followon-single-tranche",
+            ["boundary", "follow-on", "follow-on-single"],
+            "saas_jp",
+            _DEFAULT_SAAS_EXIT,
+            {"followOns": [{"label": "シリーズB", "yearOffset": 2, "amount": 500.0, "postMoney": 5000.0}]},
+        ),
+        case(
+            "followon-multiple-tranches",
+            ["boundary", "follow-on", "follow-on-multiple"],
+            "saas_jp",
+            _DEFAULT_SAAS_EXIT,
+            {
+                "followOns": [
+                    {"label": "シリーズB", "yearOffset": 2, "amount": 500.0, "postMoney": 5000.0},
+                    {"label": "シリーズC", "yearOffset": 4, "amount": 800.0, "postMoney": 4000.0},
+                ]
+            },
         ),
         case(
             "climate-tech-fully-diluted-shares-zero",

@@ -1,4 +1,4 @@
-# 計算エンジン仕様書(engine-spec)v0.8
+# 計算エンジン仕様書(engine-spec)v0.9
 
 Phase 1 実装前の数式・型定義。`docs/requirements-rev5.md` §3・§7 を正とし、本書はそれを計算可能なレベルまで具体化したもの。**本書の「未確定事項(U-n)」は実装時に仮の妥当値+TODOコメントで進め、確定後に本書と実装を同時更新する。**
 
@@ -639,6 +639,7 @@ EV_k = Σ_{t < m} −NetCapex(t)/(1+r_k)^t
 | P18 | V2 Workbench | セクター別Exit評価: 成長率(arrGrowth等)↑ ⇒ Exit企業価値 単調非減少(指標・マルチプルが正のとき) |
 | P19 | V2 Workbench | targetMoic ↑ ⇒ currentAllowablePostMoney 単調非増加(Exit株式価値が正のとき) |
 | P20 | V2 Workbench | expectedMoic と expectedIrr の整合(expectedIrr = expectedMoic^(1/yearsToExit) − 1) |
+| P21 | V2 Workbench | 追加出資: 各トランシェ持分 e_i = amount/postMoney は amount∈[0,postMoney] のとき[0,1]、回収 = max(0,exitEquityValue) × Exit持分 が恒等的に成立 |
 
 境界値(要件§7): ゼロ成長、成功確率 0/1、単一ラウンド、`peakSales = 0`、`delta = 0` を golden fixture に含める。
 V2 Workbench(§5)の境界値: 成長率0/負、targetMoic=1、yearsToExit=1、fullyDilutedShares=0、Exit Net Debtで Exit株式価値≤0、持分残存率が定義域外。
@@ -790,6 +791,50 @@ CurrentAllowablePreMoney<0 / RequiredEntryOwnership>1 / DilutionRetention が (0
 (ベンチマークマッピング表と同じ役割分担)。`src/v2/domain/valuation.ts` は engine への薄い結線のみ
 (CompanyProfile/InvestmentCase → `WorkbenchCaseCoreInputs` への変換 + `buildWorkbenchCaseResult` 呼び出し)。
 
+### 5.5 追加出資を含む投資家リターン(`computeFollowOnReturn`)【v0.9追加】
+
+出典: `docs/v2-adoption-spec.md` §6.2(追加開発C)。実装: `src/engine/workbench/followOn.ts`。
+リファレンス実装: `tools/reference/workbench.py` の `follow_on_return`。
+
+Valuation Bridge(§5.3)とは独立に、初回投資+追加出資トランシェを通算した投資家リターン
+(通算Exit持分・MOIC・IRR)を計算する。`buildWorkbenchCaseResult` が返す `exitEquityValue` を
+入力として受け取る(セクター別Exit評価・Valuation Bridgeの計算結果を再利用し、Exit評価式を
+複製しない)。
+
+```text
+初回:        e_0 = InvestmentAmount / (ProposedPreMoney + InvestmentAmount)
+                    (ProposedPreMoney + InvestmentAmount > 0 のときのみ、それ以外0)
+追加出資 i:  e_i = Amount_i / PostMoney_i               (PostMoney_i > 0 のときのみ、それ以外0)
+
+前回ラウンドPost-money比(表示用):
+  倍率_i = PostMoney_i / 前回PostMoney_i
+  前回PostMoney_1(1件目の追加出資) = ProposedPreMoney + InvestmentAmount   ← R-V2-2裁定
+  前回PostMoney_i(i≥2)            = PostMoney_{i-1}
+  (前回PostMoneyが0以下のときはnull)
+
+TotalOwnershipShare = e_0 + Σ e_i                        (全トランシェの持分合計)
+ExitOwnershipShare  = TotalOwnershipShare × DilutionRetention
+Proceeds             = max(0, ExitEquityValue) × ExitOwnershipShare
+TotalInvested        = InvestmentAmount + Σ Amount_i
+MOIC                 = Proceeds / TotalInvested            (TotalInvested > 0 のときのみ、それ以外null)
+IRR = irrBisection([(0, −InvestmentAmount), (YearOffset_i, −Amount_i)…, (YearsToExit, +Proceeds)])
+```
+
+**警告**: `TotalOwnershipShare > 1` のとき「追加出資を含む持分合計が100%を超えています。」を
+`warnings` に追加する(初回+追加出資の合計が資本政策上ありえない状態であることをUIに伝える。
+資本政策シミュレーター(`simulateDilution`)のような希薄化の自動整合は行わない — ユーザー指示
+により追加出資機能は資本政策シミュレーターを使わない簡易モデルとする)。
+
+**R-V2-2裁定(推奨案採用)**: 1件目の追加出資における「前回Post-money」は、初回投資そのものの
+Post-moneyではなく提示条件(`ProposedPreMoney + InvestmentAmount`)とする。初回投資の理論上の
+Post-money(Valuation Bridgeの`currentAllowablePostMoney`)ではなく提示条件を基準にするのは、
+「提示条件からの実際の資金調達の積み上がり」を表現する趣旨(§5.3の期待リターン順算と同じ
+ProposedPreMoney基準に統一)。
+
+**golden fixture**: `workbench.golden.json` の一部ケース(`followon-zero-tranches` /
+`followon-single-tranche` / `followon-multiple-tranches`)に `input.followOns` /
+`expected.followOnResult` を追加(0件/1件/複数件)。他の既存ケースは無変更。
+
 ---
 
 *v0.1 — 2026-07-13。Phase 1 実装開始前のレビュー用。*
@@ -800,3 +845,4 @@ CurrentAllowablePreMoney<0 / RequiredEntryOwnership>1 / DilutionRetention が (0
 *v0.6 — 2026-07-14。Phase 4-B C5: §1.4 に `validateDilutionInputs` の入力ドメイン検証(P16/P17新設)とExit年の持ち方(U-22新設・確定、vcMethod.yearsToExit共用)を追記(`docs/phase4-spec.md` §6 C5、P4-5裁定)。`simulateDilution` のシグネチャ・golden・既存テストへの影響なし。*
 *v0.7 — 2026-07-14。Phase 5-B C1: §0.1・§1.3 に `Cashflow.t` の非負実数許容(年フラクション)を追記(ポートフォリオ未実現IRR用途、実装変更なし・回帰テストのみ)。§4 未確定事項表に U-23(ポートフォリオ時価=EV×持分)・U-24(未紐付け銘柄=コスト評価)を確定として追加(`docs/phase5-spec.md` §7、P5-1/P5-2裁定)。*
 *v0.8 — 2026-07-18。V2本採用 Batch 1 C1: 新 §5「V2 Investment Case Workbench モデル」を追加(`src/v2/domain/valuation.ts`・`sectorDefinitions.ts` の計算部分を `src/engine/workbench/` へ移設。`presentValue`/`terminalValue` は既存 `common/npv.ts` を再利用し重複実装を削除。医療機器の rate≤g⇒0 というv2独自仕様は既存 `terminalValue`(EngineResult版)をガードして吸収)。Pythonリファレンス `tools/reference/workbench.py`、golden `workbench.golden.json`(境界値: 成長率0/負・targetMoic=1・yearsToExit=1・fullyDilutedShares=0・Exit Net DebtでExit株式価値≤0・持分残存率が定義域外)を追加。§3 に P18〜P20 を追加(`docs/v2-adoption-spec.md` §1、裁定①)。既存 v1 エンジン・6セクター golden は無変更。*
+*v0.9 — 2026-07-18。V2本採用 Batch 2 C5: §5.5「追加出資を含む投資家リターン」を追加(`src/engine/workbench/followOn.ts`・`tools/reference/workbench.py` の `follow_on_return`)。R-V2-2裁定(1件目の追加出資の「前回Post-money」は提示条件基準)を明記。§3にP21を追加。golden `workbench.golden.json` に追加出資ケース3件(0件/1件/複数件)を追加(既存ケースは無変更、`docs/v2-adoption-spec.md` §6.2)。*
