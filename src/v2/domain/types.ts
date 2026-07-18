@@ -47,6 +47,22 @@ export interface WorkbenchState {
   cases: InvestmentCase[]
   notices: string[]
   updatedAt: string
+  /**
+   * ケース比較のクリック選択で採用されたケースのid(docs/v2-adoption-spec.md §6.3)。
+   * ポートフォリオ連動(§6.1)・投資家CF/円チャート(§6.3)の両方が参照する。未選択はnull。
+   * 旧データ(このフィールドがない状態)は読み込み時にnull補完する(欠落時null補完)。
+   */
+  adoptedCaseId: string | null
+}
+
+/**
+ * workbenchStorage の永続化形状(裁定B、docs/v2-adoption-spec.md §6.1)。
+ * `activeCompanyId` は `workbenches` のいずれかのキーを指す(不変条件はstore層が保証)。
+ * 旧単一WorkbenchState形式(このフィールドがない状態)は読み込み時に1社として包む(後方互換)。
+ */
+export interface WorkbenchCollection {
+  activeCompanyId: string
+  workbenches: Record<string, WorkbenchState>
 }
 
 export type FieldFormat = 'number' | 'money' | 'percent' | 'multiple' | 'yen' | 'millionShares'

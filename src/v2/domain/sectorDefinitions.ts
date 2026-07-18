@@ -337,6 +337,7 @@ export function createDefaultWorkbench(
     cases: createDefaultCases(definition),
     notices: [],
     updatedAt: now.toISOString(),
+    adoptedCaseId: null,
   }
 }
 

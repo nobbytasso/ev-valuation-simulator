@@ -4,6 +4,7 @@ import {
   type FieldDefinition,
   type InvestmentCase,
   type V2SectorId,
+  type WorkbenchCollection,
   type WorkbenchState,
 } from '../domain/types.ts'
 import {
@@ -13,10 +14,14 @@ import {
   V2_SECTOR_LABELS,
 } from '../domain/sectorDefinitions.ts'
 import {
+  addCompanyToCollection,
+  duplicateCompanyInCollection,
   exportWorkbenchJson,
-  loadWorkbench,
+  loadWorkbenchCollection,
   parseWorkbenchImport,
-  saveWorkbench,
+  removeCompanyFromCollection,
+  saveWorkbenchCollection,
+  withActiveWorkbenchUpdated,
 } from '../store/workbenchStorage.ts'
 import { MIGRATION_CASE_FACTORS, migrateLegacyScenario } from '../store/legacyMigration.ts'
 import type { CaseFactorTuple, MigrationCaseFactors } from '../store/legacyMigration.ts'
@@ -38,6 +43,13 @@ function formatSharePrice(value: number | null): string {
   return value === null || !Number.isFinite(value)
     ? '—'
     : `${value.toLocaleString('ja-JP', { maximumFractionDigits: 1 })} 円`
+}
+
+/** 会社を新しい既定値に差し替える系の操作(セクター変更・リセット・JSONインポート)は、
+ *  会社idをコレクション内のスロットキーとして保っている必要がある(activeCompanyIdが
+ *  指すスロットを差し替えるだけにし、新しい会社が増殖しないようにする)。 */
+function preserveCompanyId(fresh: WorkbenchState, id: string): WorkbenchState {
+  return { ...fresh, company: { ...fresh.company, id } }
 }
 
 interface DynamicFieldProps {
@@ -135,13 +147,20 @@ function withPrimaryFactorTuple(
 
 export function InvestmentWorkbenchPage() {
   const { unit } = useMoneyUnit()
-  const [state, setState] = useState<WorkbenchState>(() => loadWorkbench())
+  const [collection, setCollection] = useState<WorkbenchCollection>(() => loadWorkbenchCollection())
   const [importError, setImportError] = useState<string | null>(null)
   const [legacyRaw, setLegacyRaw] = useState<unknown | null>(null)
   const [migrationFactors, setMigrationFactors] = useState<MigrationCaseFactors>(() =>
     structuredClone(MIGRATION_CASE_FACTORS),
   )
   const importRef = useRef<HTMLInputElement | null>(null)
+
+  const companies = useMemo(
+    () => Object.values(collection.workbenches).sort((a, b) => a.company.name.localeCompare(b.company.name, 'ja')),
+    [collection.workbenches],
+  )
+  const state = collection.workbenches[collection.activeCompanyId] ?? companies[0]
+
   const definition = getSectorDefinition(state.company.sector)
   const results = useMemo(
     () => state.cases.map((investmentCase) => definition.evaluate(state.company, investmentCase)),
@@ -149,57 +168,72 @@ export function InvestmentWorkbenchPage() {
   )
 
   useEffect(() => {
-    saveWorkbench(state)
-  }, [state])
+    saveWorkbenchCollection(collection)
+  }, [collection])
+
+  const updateActive = (updater: (current: WorkbenchState) => WorkbenchState) => {
+    setCollection((current) => withActiveWorkbenchUpdated(current, updater))
+  }
 
   const updateCompany = (patch: Partial<WorkbenchState['company']>) => {
-    setState((current) => ({
-      ...current,
-      company: { ...current.company, ...patch },
-      updatedAt: new Date().toISOString(),
-    }))
+    updateActive((current) => ({ ...current, company: { ...current.company, ...patch } }))
   }
 
   const updateCompanyFact = (key: string, value: number | string) => {
-    setState((current) => ({
+    updateActive((current) => ({
       ...current,
-      company: {
-        ...current.company,
-        facts: { ...current.company.facts, [key]: value },
-      },
-      updatedAt: new Date().toISOString(),
+      company: { ...current.company, facts: { ...current.company.facts, [key]: value } },
     }))
   }
 
   const updateCase = (caseId: string, patch: Partial<InvestmentCase>) => {
-    setState((current) => ({
+    updateActive((current) => ({
       ...current,
       cases: current.cases.map((item) => (item.id === caseId ? { ...item, ...patch } : item)),
-      updatedAt: new Date().toISOString(),
     }))
   }
 
   const updateCaseAssumption = (caseId: string, key: string, value: number | string) => {
-    setState((current) => ({
+    updateActive((current) => ({
       ...current,
       cases: current.cases.map((item) =>
         item.id === caseId
           ? { ...item, assumptions: { ...item.assumptions, [key]: value } }
           : item,
       ),
-      updatedAt: new Date().toISOString(),
     }))
   }
 
   const handleSectorChange = (sector: V2SectorId) => {
-    setState((current) => resetForSector(current, sector))
+    updateActive((current) => preserveCompanyId(resetForSector(current, sector), current.company.id))
+  }
+
+  const handleSwitchCompany = (companyId: string) => {
+    if (!collection.workbenches[companyId]) return
+    setCollection((current) => ({ ...current, activeCompanyId: companyId }))
+  }
+
+  const handleAddCompany = () => {
+    setCollection((current) => addCompanyToCollection(current))
+  }
+
+  const handleDuplicateCompany = () => {
+    setCollection((current) => duplicateCompanyInCollection(current, current.activeCompanyId))
+  }
+
+  const handleRemoveCompany = () => {
+    if (companies.length <= 1) return
+    if (!window.confirm(`「${state.company.name}」を削除しますか？この操作は取り消せません。`)) return
+    setCollection((current) => removeCompanyFromCollection(current, current.activeCompanyId))
   }
 
   const handleImport = async (file: File) => {
     try {
       const defaultFactors = structuredClone(MIGRATION_CASE_FACTORS)
       const { state: imported, legacyRaw: raw } = parseWorkbenchImport(await file.text(), defaultFactors)
-      setState(imported)
+      // インポートは現在アクティブな会社スロットを差し替える(会社idは維持し、コレクションに
+      // 空の会社スロットが増殖しないようにする)。他の会社には影響しない。
+      updateActive(() => preserveCompanyId(imported, state.company.id))
       setLegacyRaw(raw)
       setMigrationFactors(defaultFactors)
       setImportError(null)
@@ -212,7 +246,7 @@ export function InvestmentWorkbenchPage() {
     if (legacyRaw === null) return
     try {
       const reExpanded = migrateLegacyScenario(legacyRaw, migrationFactors)
-      setState(reExpanded)
+      updateActive(() => preserveCompanyId(reExpanded, state.company.id))
       setImportError(null)
     } catch (error) {
       setImportError(`再展開に失敗しました: ${(error as Error).message}`)
@@ -271,7 +305,9 @@ export function InvestmentWorkbenchPage() {
             type="button"
             onClick={() => {
               if (window.confirm('現在の入力をセクター既定値に戻しますか？')) {
-                setState(createDefaultWorkbench(state.company.sector, state.company.name))
+                updateActive((current) =>
+                  preserveCompanyId(createDefaultWorkbench(current.company.sector, current.company.name), current.company.id),
+                )
               }
             }}
           >
@@ -280,6 +316,30 @@ export function InvestmentWorkbenchPage() {
         </div>
       </header>
 
+      <section className="panel workbench-company-switcher" aria-label="会社の切り替え">
+        <label className="workbench-field">
+          <span>会社（{companies.length}社）</span>
+          <select value={state.company.id} onChange={(event) => handleSwitchCompany(event.target.value)}>
+            {companies.map((c) => (
+              <option key={c.company.id} value={c.company.id}>
+                {c.company.name}（{V2_SECTOR_LABELS[c.company.sector]}）
+              </option>
+            ))}
+          </select>
+        </label>
+        <div className="investment-workbench__actions">
+          <button type="button" onClick={handleAddCompany}>
+            会社を追加
+          </button>
+          <button type="button" onClick={handleDuplicateCompany}>
+            会社を複製
+          </button>
+          <button type="button" onClick={handleRemoveCompany} disabled={companies.length <= 1}>
+            会社を削除
+          </button>
+        </div>
+      </section>
+
       {importError && <p className="status-bad" role="alert">{importError}</p>}
       {state.notices.length > 0 && (
         <section className="panel workbench-notices">
@@ -287,7 +347,7 @@ export function InvestmentWorkbenchPage() {
           <ul>
             {state.notices.map((notice) => <li key={notice}>{notice}</li>)}
           </ul>
-          <button type="button" onClick={() => setState((current) => ({ ...current, notices: [] }))}>
+          <button type="button" onClick={() => updateActive((current) => ({ ...current, notices: [] }))}>
             確認済みにする
           </button>
         </section>

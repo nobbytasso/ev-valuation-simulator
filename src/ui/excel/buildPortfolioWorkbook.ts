@@ -9,6 +9,7 @@ import { SECTOR_LABELS } from '../../store/scenarioTypes.ts'
 import type { PortfolioHolding, Scenario, SectorId } from '../../store/scenarioTypes.ts'
 import { formatUnavailable } from '../format/unavailable.ts'
 import { aggregatePortfolio, evaluateHolding } from '../portfolio/portfolioAggregation.ts'
+import type { V2LinkedValuation } from '../portfolio/v2Linking.ts'
 import { formatDataStatus } from './excelSheetHelpers.ts'
 import type { SheetRow } from './excelSheetHelpers.ts'
 
@@ -17,17 +18,29 @@ function resolveScenario(holding: PortfolioHolding, scenarioById: Map<string, Sc
 }
 
 function scenarioNameCell(holding: PortfolioHolding, linkedScenario: Scenario | null): string {
+  if (holding.v2CompanyId) return `(V2会社連動: ${holding.v2CompanyId})`
   if (linkedScenario) return linkedScenario.name
   return holding.scenarioId ? '(削除済み)' : '(未紐付け)'
 }
 
 function costBasisReason(holding: PortfolioHolding, linkedScenario: Scenario | null): string {
+  if (holding.v2CompanyId) return '採用ケース未選択、またはV2会社削除済み'
   if (!holding.scenarioId) return '未紐付け'
   if (!linkedScenario) return 'シナリオ削除済み'
   return '評価不能(入力エラー)'
 }
 
-function buildSummarySheetRows(holdings: PortfolioHolding[], scenarioById: Map<string, Scenario>, evalDateIso: string): SheetRow[] {
+function evaluationMethodCell(holding: PortfolioHolding, isCostBasis: boolean): string {
+  if (isCostBasis) return 'コスト評価'
+  return holding.v2CompanyId ? 'V2採用ケース' : 'シナリオ'
+}
+
+function buildSummarySheetRows(
+  holdings: PortfolioHolding[],
+  scenarioById: Map<string, Scenario>,
+  evalDateIso: string,
+  v2ValuationByCompanyId: Map<string, V2LinkedValuation | null>,
+): SheetRow[] {
   const rows: SheetRow[] = []
   rows.push([
     '企業名',
@@ -45,7 +58,8 @@ function buildSummarySheetRows(holdings: PortfolioHolding[], scenarioById: Map<s
   ])
   for (const h of holdings) {
     const linkedScenario = resolveScenario(h, scenarioById)
-    const valuation = evaluateHolding(h, linkedScenario, evalDateIso)
+    const v2Valuation = h.v2CompanyId ? (v2ValuationByCompanyId.get(h.v2CompanyId) ?? null) : null
+    const valuation = evaluateHolding(h, linkedScenario, evalDateIso, v2Valuation)
     rows.push([
       h.companyName,
       SECTOR_LABELS[h.sector],
@@ -58,12 +72,12 @@ function buildSummarySheetRows(holdings: PortfolioHolding[], scenarioById: Map<s
       valuation.marketValue.optimistic,
       valuation.moic ?? formatUnavailable(valuation.moicUnavailableReason),
       valuation.irr !== null ? valuation.irr * 100 : formatUnavailable(valuation.irrUnavailableReason),
-      valuation.isCostBasis ? 'コスト評価' : 'シナリオ',
+      evaluationMethodCell(h, valuation.isCostBasis),
     ])
   }
   rows.push([])
 
-  const summary = aggregatePortfolio(holdings, scenarioById, evalDateIso)
+  const summary = aggregatePortfolio(holdings, scenarioById, evalDateIso, v2ValuationByCompanyId)
   rows.push([
     'ファンド合計',
     '',
@@ -86,6 +100,7 @@ function buildPortfolioAssumptionsSheetRows(
   scenarioById: Map<string, Scenario>,
   evalDateIso: string,
   benchmarkStatusBySector: Partial<Record<SectorId, DataStatus | 'unknown'>>,
+  v2ValuationByCompanyId: Map<string, V2LinkedValuation | null>,
 ): SheetRow[] {
   const rows: SheetRow[] = []
   rows.push(['評価基準日', evalDateIso.slice(0, 10)])
@@ -103,7 +118,8 @@ function buildPortfolioAssumptionsSheetRows(
   rows.push(['企業名', '理由'])
   for (const h of holdings) {
     const linkedScenario = resolveScenario(h, scenarioById)
-    const valuation = evaluateHolding(h, linkedScenario, evalDateIso)
+    const v2Valuation = h.v2CompanyId ? (v2ValuationByCompanyId.get(h.v2CompanyId) ?? null) : null
+    const valuation = evaluateHolding(h, linkedScenario, evalDateIso, v2Valuation)
     if (valuation.isCostBasis) rows.push([h.companyName, costBasisReason(h, linkedScenario)])
   }
   rows.push([])
@@ -122,12 +138,19 @@ export function buildPortfolioWorkbook(
   scenarioById: Map<string, Scenario>,
   evalDateIso: string,
   benchmarkStatusBySector: Partial<Record<SectorId, DataStatus | 'unknown'>> = {},
+  v2ValuationByCompanyId: Map<string, V2LinkedValuation | null> = new Map(),
 ): WorkBook {
   const workbook = XLSX.utils.book_new()
-  XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(buildSummarySheetRows(holdings, scenarioById, evalDateIso)), 'サマリ')
   XLSX.utils.book_append_sheet(
     workbook,
-    XLSX.utils.aoa_to_sheet(buildPortfolioAssumptionsSheetRows(holdings, scenarioById, evalDateIso, benchmarkStatusBySector)),
+    XLSX.utils.aoa_to_sheet(buildSummarySheetRows(holdings, scenarioById, evalDateIso, v2ValuationByCompanyId)),
+    'サマリ',
+  )
+  XLSX.utils.book_append_sheet(
+    workbook,
+    XLSX.utils.aoa_to_sheet(
+      buildPortfolioAssumptionsSheetRows(holdings, scenarioById, evalDateIso, benchmarkStatusBySector, v2ValuationByCompanyId),
+    ),
     '前提条件',
   )
   return workbook

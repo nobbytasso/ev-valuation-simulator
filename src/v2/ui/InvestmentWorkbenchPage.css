@@ -66,6 +66,18 @@
   padding: 0.5rem 0.6rem;
 }
 
+.workbench-company-switcher {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.workbench-company-switcher .workbench-field {
+  min-width: 18rem;
+}
+
 .workbench-section-heading {
   display: flex;
   justify-content: space-between;
