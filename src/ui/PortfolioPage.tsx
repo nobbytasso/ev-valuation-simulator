@@ -13,8 +13,24 @@ import { formatMoney, formatMoneyValue, moneyAxisLabel } from './format/money.ts
 import { formatUnavailable } from './format/unavailable.ts'
 import { useMoneyUnit } from './format/useMoneyUnit.ts'
 import { aggregatePortfolio, evaluateHolding } from './portfolio/portfolioAggregation.ts'
+import { buildFundFollowOnCashflows, buildV2ValuationMap, listV2CompanyOptions } from './portfolio/v2Linking.ts'
+import { loadWorkbenchCollection } from '../v2/store/workbenchStorage.ts'
 import { SectionHeading } from './SectionHeading.tsx'
+import { CashflowChart } from './cashflow/CashflowChart.tsx'
+import { CompositionPieChart } from './charts/CompositionPieChart.tsx'
+import type { CompositionSlice } from './charts/CompositionPieChart.tsx'
 import './PortfolioPage.css'
+
+const HOLDING_CHART_COLORS = [
+  'var(--color-chart-1)',
+  'var(--color-chart-2)',
+  'var(--color-chart-3)',
+  'var(--color-chart-4)',
+  'var(--color-chart-5)',
+  'var(--color-chart-6)',
+]
+
+const V2_OPTION_PREFIX = 'v2:'
 
 function formatPct(value: number | null): string {
   if (value === null) return '—'
@@ -49,6 +65,9 @@ export function PortfolioPage() {
   const [ownershipPct, setOwnershipPct] = useState(0)
   const [investmentDate, setInvestmentDate] = useState('')
   const [benchmarkStatusBySector, setBenchmarkStatusBySector] = useState<Partial<Record<SectorId, DataStatus | 'unknown'>>>({})
+  // V2会社コレクションはInvestment Case Workbenchページと同じlocalStorageキーから読む(§6.1)。
+  // ページ遷移のたびにマウントされるため、Workbench側の更新はポートフォリオ再訪問時に反映される。
+  const [workbenchCollection, setWorkbenchCollection] = useState(() => loadWorkbenchCollection())
 
   useEffect(() => {
     if (!isLoaded) void loadAll()
@@ -56,11 +75,16 @@ export function PortfolioPage() {
   useEffect(() => {
     if (!scenariosLoaded) void loadScenarios()
   }, [scenariosLoaded, loadScenarios])
+  useEffect(() => {
+    setWorkbenchCollection(loadWorkbenchCollection())
+  }, [])
 
   // 評価基準日=今日(P5-4裁定)。new Date() はこのコンポーネントに閉じ、集計ロジックには文字列で渡す。
   const evalDateIso = useMemo(() => new Date().toISOString(), [])
   const scenarioById = useMemo(() => new Map(scenarios.map((s) => [s.id, s])), [scenarios])
   const holdingSectors = useMemo(() => Array.from(new Set(holdings.map((h) => h.sector))), [holdings])
+  const v2CompanyOptions = useMemo(() => listV2CompanyOptions(workbenchCollection), [workbenchCollection])
+  const v2ValuationByCompanyId = useMemo(() => buildV2ValuationMap(workbenchCollection), [workbenchCollection])
 
   useEffect(() => {
     if (holdingSectors.length === 0) return
@@ -91,17 +115,52 @@ export function PortfolioPage() {
     setInvestmentDate('')
   }
 
-  const linkScenario = (holding: PortfolioHolding, scenarioId: string) => {
-    void updateHolding({ ...holding, scenarioId: scenarioId || undefined })
+  /** 単一の紐付けセレクトで旧シナリオ("<id>")とV2会社("v2:<companyId>")を両方扱う(§6.1)。 */
+  const linkTarget = (holding: PortfolioHolding, rawValue: string) => {
+    if (rawValue.startsWith(V2_OPTION_PREFIX)) {
+      const companyId = rawValue.slice(V2_OPTION_PREFIX.length)
+      void updateHolding({ ...holding, v2CompanyId: companyId, scenarioId: undefined })
+      return
+    }
+    void updateHolding({ ...holding, v2CompanyId: null, scenarioId: rawValue || undefined })
   }
   const setHoldingInvestmentDate = (holding: PortfolioHolding, value: string) => {
     void updateHolding({ ...holding, investmentDate: value || null })
   }
 
-  const fundSummary = aggregatePortfolio(holdings, scenarioById, evalDateIso)
+  const fundSummary = aggregatePortfolio(holdings, scenarioById, evalDateIso, v2ValuationByCompanyId)
+
+  // ファンドCFバーチャート(V2連動+採用ケースが解決できる銘柄のみ。§6.3)。
+  const fundCashflows = useMemo(
+    () => buildFundFollowOnCashflows(holdings, workbenchCollection),
+    [holdings, workbenchCollection],
+  )
+  const v2CfExcludedCount = holdings.filter((h) => {
+    if (!h.v2CompanyId) return false
+    const state = workbenchCollection.workbenches[h.v2CompanyId]
+    return !state?.adoptedCaseId
+  }).length
+
+  // 時価構成円チャート(銘柄別、V2連動・非連動を問わず全銘柄。§6.3)。
+  const marketValueSlices: CompositionSlice[] = holdings.map((h, index) => {
+    const linkedScenario = h.scenarioId ? (scenarioById.get(h.scenarioId) ?? null) : null
+    const v2Valuation = h.v2CompanyId ? (v2ValuationByCompanyId.get(h.v2CompanyId) ?? null) : null
+    const valuation = evaluateHolding(h, linkedScenario, evalDateIso, v2Valuation)
+    return {
+      name: h.companyName,
+      value: valuation.marketValue.base,
+      color: HOLDING_CHART_COLORS[index % HOLDING_CHART_COLORS.length],
+    }
+  })
 
   const handleExportXlsx = () => {
-    const workbook = buildPortfolioWorkbook(holdings, scenarioById, evalDateIso, benchmarkStatusBySector)
+    const workbook = buildPortfolioWorkbook(
+      holdings,
+      scenarioById,
+      evalDateIso,
+      benchmarkStatusBySector,
+      v2ValuationByCompanyId,
+    )
     downloadXlsxFile('ポートフォリオサマリ.xlsx', workbook)
   }
 
@@ -175,23 +234,41 @@ export function PortfolioPage() {
             <tbody>
               {holdings.map((h) => {
                 const linkedScenario = h.scenarioId ? (scenarioById.get(h.scenarioId) ?? null) : null
-                const isDangling = Boolean(h.scenarioId) && !linkedScenario
+                const isDanglingScenario = Boolean(h.scenarioId) && !linkedScenario
+                const isDanglingV2 = Boolean(h.v2CompanyId) && !workbenchCollection.workbenches[h.v2CompanyId as string]
+                const isDangling = isDanglingScenario || isDanglingV2
                 const candidateScenarios = scenarios.filter((s) => s.sector === h.sector)
-                const valuation = evaluateHolding(h, linkedScenario, evalDateIso)
+                const v2Valuation = h.v2CompanyId ? (v2ValuationByCompanyId.get(h.v2CompanyId) ?? null) : null
+                const valuation = evaluateHolding(h, linkedScenario, evalDateIso, v2Valuation)
+                const selectValue = h.v2CompanyId
+                  ? isDanglingV2
+                    ? ''
+                    : `${V2_OPTION_PREFIX}${h.v2CompanyId}`
+                  : isDanglingScenario
+                    ? ''
+                    : (h.scenarioId ?? '')
                 return (
                   <tr key={h.id}>
                     <td>{h.companyName}</td>
                     <td>{SECTOR_LABELS[h.sector]}</td>
                     <td>
-                      <select value={isDangling ? '' : (h.scenarioId ?? '')} onChange={(e) => linkScenario(h, e.target.value)}>
+                      <select value={selectValue} onChange={(e) => linkTarget(h, e.target.value)}>
                         <option value="">(未紐付け)</option>
                         {candidateScenarios.map((s) => (
                           <option key={s.id} value={s.id}>
                             {s.name}
                           </option>
                         ))}
+                        {v2CompanyOptions.map((c) => (
+                          <option key={c.id} value={`${V2_OPTION_PREFIX}${c.id}`}>
+                            V2: {c.name}
+                          </option>
+                        ))}
                       </select>
                       {isDangling && <span className="portfolio-page__dangling"> (削除済み)</span>}
+                      {h.v2CompanyId && !isDanglingV2 && v2Valuation === null && (
+                        <span className="portfolio-page__cost-badge">採用ケース未選択</span>
+                      )}
                     </td>
                     <td>
                       <input
@@ -260,6 +337,29 @@ export function PortfolioPage() {
               </tr>
             </tbody>
           </table>
+
+          <div className="portfolio-page__charts">
+            <div>
+              <h3>ファンドCF(V2連動・採用ケース確定銘柄)</h3>
+              {fundCashflows.length > 0 ? (
+                <CashflowChart cashflows={fundCashflows} />
+              ) : (
+                <p className="status-caution">
+                  V2連動かつ採用ケースが選択された銘柄がありません。
+                </p>
+              )}
+              {v2CfExcludedCount > 0 && (
+                <p className="portfolio-page__summary-caption">
+                  V2連動だが採用ケース未選択の銘柄{v2CfExcludedCount}件、および旧シナリオ/コスト評価銘柄は
+                  投資日不明分としてCFバーから除外しています(時価構成には含みます)。
+                </p>
+              )}
+            </div>
+            <div>
+              <h3>時価構成(銘柄別)</h3>
+              <CompositionPieChart data={marketValueSlices} formatValue={(value) => formatMoney(value, unit)} />
+            </div>
+          </div>
         </section>
       )}
     </section>

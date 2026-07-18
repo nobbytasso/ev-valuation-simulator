@@ -21,3 +21,10 @@
   font-size: 0.85rem;
   max-width: 60rem;
 }
+
+.portfolio-page__charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.25rem;
+  margin-top: 1.25rem;
+}

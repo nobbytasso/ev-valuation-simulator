@@ -1,0 +1,12 @@
+{
+  "id": "legacy-holding-0002",
+  "companyName": "V2移行前株式会社",
+  "sector": "ec_d2c",
+  "investmentAmount": 500,
+  "round": "シリーズB",
+  "ownershipPct": 0.12,
+  "investmentDate": "2026-02-01",
+  "schemaVersion": 2,
+  "createdAt": "2026-07-15T10:00:00.000Z",
+  "updatedAt": "2026-07-15T10:00:00.000Z"
+}

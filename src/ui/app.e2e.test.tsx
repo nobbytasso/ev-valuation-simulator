@@ -20,6 +20,9 @@ beforeEach(() => {
   window.localStorage.clear()
   document.documentElement.removeAttribute('data-theme')
   useScenarioStore.setState({ scenarios: [], isLoaded: false })
+  // V2導入後、ルート(/)はInvestment Case Workbench。旧シナリオ一覧の回帰テストは
+  // /legacy で行う(e2e/helpers.ts のPlaywright側と同じ互換方針)。
+  window.location.hash = '#/legacy'
 })
 
 afterEach(() => {

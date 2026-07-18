@@ -36,8 +36,9 @@ export function Header() {
       </div>
       <nav className="app-header__nav">
         <NavLink to="/" end>
-          シナリオ
+          投資ケース
         </NavLink>
+        <NavLink to="/legacy">旧シナリオ</NavLink>
         <NavLink to="/portfolio">ポートフォリオ</NavLink>
       </nav>
       <MoneyUnitToggle />

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { createScenario } from '../../store/defaultInputs.ts'
 import type { PortfolioHolding, Scenario } from '../../store/scenarioTypes.ts'
 import { aggregatePortfolio, computeYearsElapsed, evaluateHolding } from './portfolioAggregation.ts'
+import type { V2LinkedValuation } from './v2Linking.ts'
 
 const EVAL_DATE = '2026-07-14T00:00:00.000Z'
 
@@ -92,6 +93,35 @@ describe('evaluateHolding(コスト評価分岐、P5-1裁定)', () => {
   })
 })
 
+describe('evaluateHolding(V2連動、R-V2-1)', () => {
+  const v2Valuation: V2LinkedValuation = {
+    companyId: 'company-1',
+    companyName: 'V2株式会社',
+    currentAllowablePostMoney: 4000,
+  }
+
+  it('V2会社に紐付き採用ケースがある銘柄は currentAllowablePostMoney × ownershipPct を単一値の時価とする', () => {
+    const holding = makeHolding({ scenarioId: undefined, v2CompanyId: 'company-1', ownershipPct: 0.2 })
+    const result = evaluateHolding(holding, null, EVAL_DATE, v2Valuation)
+    expect(result.isCostBasis).toBe(false)
+    expect(result.marketValue).toEqual({ pessimistic: 800, base: 800, optimistic: 800 })
+  })
+
+  it('V2会社に紐付くが採用ケース未選択(v2Valuation=null)のときはコスト評価にフォールバックする', () => {
+    const holding = makeHolding({ scenarioId: undefined, v2CompanyId: 'company-1', investmentAmount: 300 })
+    const result = evaluateHolding(holding, null, EVAL_DATE, null)
+    expect(result.isCostBasis).toBe(true)
+    expect(result.marketValue).toEqual({ pessimistic: 300, base: 300, optimistic: 300 })
+  })
+
+  it('v2CompanyIdが設定されていればscenarioIdより優先する', () => {
+    const scenario = createScenario('saas_jp', 'OK') as Extract<Scenario, { sector: 'saas_jp' }>
+    const holding = makeHolding({ scenarioId: scenario.id, v2CompanyId: 'company-1', ownershipPct: 0.1 })
+    const result = evaluateHolding(holding, scenario, EVAL_DATE, v2Valuation)
+    expect(result.marketValue.base).toBeCloseTo(400, 6) // 4000 * 0.1、シナリオEVは無視される
+  })
+})
+
 describe('aggregatePortfolio(ファンド単位集計、§3.4)', () => {
   it('時価総額は3点、投資額合計・ファンドMOICを算出する', () => {
     const scenario = createScenario('saas_jp', 'OK')
@@ -132,5 +162,15 @@ describe('aggregatePortfolio(ファンド単位集計、§3.4)', () => {
     expect(summary.fundMoic).toBeNull()
     expect(summary.fundIrr).toBeNull()
     expect(summary.fundIrrUnavailableReason).toBe('銘柄がありません')
+  })
+
+  it('V2連動銘柄を含む集計はv2ValuationByCompanyIdから時価を解決する', () => {
+    const holdingA = makeHolding({ id: 'a', investmentAmount: 300, ownershipPct: 0.1, v2CompanyId: 'company-1' })
+    const v2ValuationByCompanyId = new Map<string, V2LinkedValuation | null>([
+      ['company-1', { companyId: 'company-1', companyName: 'V2株式会社', currentAllowablePostMoney: 5000 }],
+    ])
+    const summary = aggregatePortfolio([holdingA], new Map(), EVAL_DATE, v2ValuationByCompanyId)
+    expect(summary.totalMarketValue.base).toBeCloseTo(500, 6) // 5000 * 0.1
+    expect(summary.hasCostBasisHoldings).toBe(false)
   })
 })

@@ -26,9 +26,19 @@ function migrateV1ToV2(raw: RawRecord): RawRecord {
   return { ...raw, investmentDate: null }
 }
 
+/**
+ * v2 → v3: v2CompanyId を null で補完する。
+ * 出典: docs/v2-adoption-spec.md §6.1(V2企業とポートフォリオの連動、CLAUDE.md設計原則6)。
+ */
+function migrateV2ToV3(raw: RawRecord): RawRecord {
+  if ('v2CompanyId' in raw) return raw
+  return { ...raw, v2CompanyId: null }
+}
+
 /** キー: 移行前バージョン。値: そのバージョンから次バージョンへの変換手順。 */
 const MIGRATIONS: Record<number, (raw: RawRecord) => RawRecord> = {
   1: migrateV1ToV2,
+  2: migrateV2ToV3,
 }
 
 export function migratePortfolioHolding(raw: unknown): PortfolioHolding {

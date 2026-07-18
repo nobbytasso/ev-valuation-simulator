@@ -1,6 +1,6 @@
 # CLAUDE.md — VC Valuation Simulator プロジェクト規約
 
-このファイルは Claude Code が毎セッション参照する恒久ルール。要件の詳細は `docs/requirements-rev5.md` を正とする(旧版 rev4 は履歴として保持)。
+このファイルは Claude Code が毎セッション参照する恒久ルール。要件の詳細は `docs/requirements-rev6.md` を正とする(旧版 rev4/rev5 は履歴として保持)。
 
 ## プロジェクト概要
 
@@ -43,7 +43,7 @@ tools/
 data/
   benchmarks/        # benchmark.schema.json, benchmarks.dummy.json
 docs/
-  requirements-rev5.md   # 要件の正。engine-spec.md(計算仕様)、phase4-spec.md(Phase 4設計)
+  requirements-rev6.md   # 要件の正。engine-spec.md(計算仕様)、phase4-spec.md(Phase 4設計)
   logs/                  # レビュー報告・監査報告・修正完了報告(セッション成果物)
 ```
 

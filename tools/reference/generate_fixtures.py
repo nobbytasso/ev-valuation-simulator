@@ -21,7 +21,7 @@ from pathlib import Path
 from random import Random
 from typing import Any, Callable, Dict, List
 
-from . import boundary_cases, random_inputs
+from . import boundary_cases, random_inputs, workbench
 from .domain_check import check_domain
 from .sectors import climate_tech, drug_discovery, ec_d2c, media_tech, medical_device, saas
 
@@ -117,6 +117,54 @@ def build_cases(entry: Dict[str, Any]) -> List[Dict[str, Any]]:
     return cases
 
 
+WORKBENCH_SEED = BASE_SEED + 6
+WORKBENCH_RANDOM_CASES = 24
+
+
+def build_workbench_cases() -> List[Dict[str, Any]]:
+    """V2 Investment Case Workbench(docs/engine-spec.md §5)の golden ケース。
+
+    6セクターモデルとは異なり `sector` / `exitInputs` / `coreInputs` の組を1ケースとする
+    (`workbench.compute` がディスパッチする)。ドメイン制約は6セクターモデルほど厳格ではない
+    (v2は警告方式)ため `check_domain` は適用しない。
+    """
+    rng = Random(WORKBENCH_SEED)
+    cases: List[Dict[str, Any]] = []
+
+    for case_id, tags, case_input in workbench.boundary_cases():
+        expected = workbench.compute(case_input)
+        follow_ons = case_input.get("followOns")
+        if follow_ons is not None:
+            expected = {
+                **expected,
+                "followOnResult": workbench.follow_on_return(
+                    case_input["coreInputs"], follow_ons, expected["exitEquityValue"]
+                ),
+            }
+        cases.append(
+            {
+                "id": case_id,
+                "tags": tags,
+                "input": case_input,
+                "expected": expected,
+            }
+        )
+
+    for i in range(WORKBENCH_RANDOM_CASES):
+        case_input = workbench.gen_random(rng)
+        case_id = f"random-{i:02d}"
+        cases.append(
+            {
+                "id": case_id,
+                "tags": ["random", case_input["sector"]],
+                "input": case_input,
+                "expected": workbench.compute(case_input),
+            }
+        )
+
+    return cases
+
+
 def main() -> None:
     FIXTURES_DIR.mkdir(parents=True, exist_ok=True)
     gitkeep = FIXTURES_DIR / ".gitkeep"
@@ -142,6 +190,22 @@ def main() -> None:
             f.write("\n")
 
         print(f"wrote {out_path.relative_to(REPO_ROOT)} ({len(cases)} cases)")
+
+    workbench_cases = build_workbench_cases()
+    assert len(workbench_cases) >= 20, f"workbench: expected >=20 cases, got {len(workbench_cases)}"
+    workbench_payload = {
+        "schemaVersion": "1.0",
+        "model": "workbench",
+        "generatedAt": date.today().isoformat(),
+        "seed": WORKBENCH_SEED,
+        "caseCount": len(workbench_cases),
+        "cases": workbench_cases,
+    }
+    workbench_out_path = FIXTURES_DIR / "workbench.golden.json"
+    with workbench_out_path.open("w", encoding="utf-8") as f:
+        json.dump(workbench_payload, f, ensure_ascii=False, indent=2, sort_keys=False)
+        f.write("\n")
+    print(f"wrote {workbench_out_path.relative_to(REPO_ROOT)} ({len(workbench_cases)} cases)")
 
 
 if __name__ == "__main__":
