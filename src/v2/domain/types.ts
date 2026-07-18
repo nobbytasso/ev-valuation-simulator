@@ -1,3 +1,5 @@
+import type { WorkbenchCaseResult } from '../../engine/workbench/types.ts'
+
 export const V2_SECTOR_IDS = [
   'saas_jp',
   'drug_discovery',
@@ -36,27 +38,8 @@ export interface InvestmentCase {
   assumptions: ValueBag
 }
 
-export interface CaseResult {
-  exitMetricLabel: string
-  exitMetric: number
-  exitEnterpriseValue: number
-  exitEquityValue: number
-  currentAllowablePostMoney: number
-  currentAllowablePreMoney: number
-  theoreticalSharePrice: number | null
-  requiredEntryOwnership: number
-  impliedTargetIrr: number
-  proposedPricePerShare: number | null
-  valuationGapToProposed: number | null
-  expectedEntryOwnership: number
-  expectedExitOwnership: number
-  expectedProceeds: number
-  expectedMoic: number | null
-  expectedIrr: number | null
-  intrinsicValue?: number
-  diagnostics: Record<string, number>
-  warnings: string[]
-}
+// Valuation Bridge の計算結果型は src/engine/workbench/ が単一の定義元(裁定①)。
+export type CaseResult = WorkbenchCaseResult
 
 export interface WorkbenchState {
   schemaVersion: 2

@@ -1,4 +1,4 @@
-# 計算エンジン仕様書(engine-spec)v0.4
+# 計算エンジン仕様書(engine-spec)v0.8
 
 Phase 1 実装前の数式・型定義。`docs/requirements-rev5.md` §3・§7 を正とし、本書はそれを計算可能なレベルまで具体化したもの。**本書の「未確定事項(U-n)」は実装時に仮の妥当値+TODOコメントで進め、確定後に本書と実装を同時更新する。**
 
@@ -636,8 +636,12 @@ EV_k = Σ_{t < m} −NetCapex(t)/(1+r_k)^t
 | P15 | 全セクター | レンジの順序: pessimistic ≤ base ≤ optimistic(入力レンジが順序整合のとき) |
 | P16 | 希薄化 | validateDilutionInputs が空を返す入力 ⇒ 全ラウンド後の全保有者 ownership ∈ [0,1] |
 | P17 | 希薄化 | ドメイン外入力 ⇒ 該当 field の ValidationIssue が列挙される |
+| P18 | V2 Workbench | セクター別Exit評価: 成長率(arrGrowth等)↑ ⇒ Exit企業価値 単調非減少(指標・マルチプルが正のとき) |
+| P19 | V2 Workbench | targetMoic ↑ ⇒ currentAllowablePostMoney 単調非増加(Exit株式価値が正のとき) |
+| P20 | V2 Workbench | expectedMoic と expectedIrr の整合(expectedIrr = expectedMoic^(1/yearsToExit) − 1) |
 
 境界値(要件§7): ゼロ成長、成功確率 0/1、単一ラウンド、`peakSales = 0`、`delta = 0` を golden fixture に含める。
+V2 Workbench(§5)の境界値: 成長率0/負、targetMoic=1、yearsToExit=1、fullyDilutedShares=0、Exit Net Debtで Exit株式価値≤0、持分残存率が定義域外。
 
 ---
 
@@ -674,6 +678,120 @@ EV_k = Σ_{t < m} −NetCapex(t)/(1+r_k)^t
 
 ---
 
+## 5. V2 Investment Case Workbench モデル【v0.8追加】
+
+出典: `docs/redesign-v2.md`、`docs/v2-adoption-spec.md` §1(裁定①、2026-07-18)。対応する実装:
+`src/engine/workbench/`(依存ゼロの純粋関数)。リファレンス実装: `tools/reference/workbench.py`。
+golden fixture: `src/engine/__fixtures__/workbench.golden.json`。
+
+V2 は「1社=CompanyProfile + 独立4ケース(会社計画/引受/Downside/Severe Downside)」の構造を取り、
+悲観/ベース/楽観の `Range3<T>` は使わない(ケースそのものが列として独立した投資ストーリーを表す)。
+§0〜§4 の型・共通コンポーネント(NPV/IRR/MOIC)はそのまま再利用する。
+
+### 5.1 成長投影(`projectMetric`)
+
+セクター共通の年次成長率減衰モデル。ARR・MAU・売上等の指標投影に使う:
+
+```text
+g_t     = initialGrowth × growthDecay^(t−1)          (t = 1..years)
+value_t = value_{t−1} × (1 + g_t)                     (value_0 = currentValue)
+```
+
+`finalGrowth` は `g_years`(最終年の成長率、Rule of 40 等の派生指標に使用)。`years ≤ 0` のとき
+`value = currentValue`(投影なし)。
+
+### 5.2 セクター別 Exit 評価
+
+各関数はプレーンな数値引数を取り、`{ exitMetricLabel, exitMetric, exitEnterpriseValue,
+intrinsicValue?, diagnostics?, warnings? }`(`WorkbenchExitValuation`)を返す。
+
+- **SaaS** (`workbenchSaasExit`): `projectMetric` で ARR を投影。`ExitEnterpriseValue = ExitARR × exitMultiple`。
+  `ruleOf40 = (finalGrowth + exitOperatingMargin) × 100`。
+- **EC/D2C** (`workbenchEcD2cExit`): `projectMetric` で売上を投影。`multipleBasis = 'grossProfit'` のとき
+  `metric = ExitRevenue × exitGrossMargin`、それ以外は `metric = ExitRevenue`。`ExitEnterpriseValue = metric × exitMultiple`。
+- **メディアテック** (`workbenchMediaTechExit`): MAU と月次ARPUを独立に `projectMetric` で投影(ARPUは
+  `growthDecay = 1` 固定、逓減なし)。`ExitRevenue = MAU_exit × ARPU_exit × 12 ÷ 1e6`。
+  `ExitEnterpriseValue = ExitRevenue × exitMultiple`。
+- **医療機器** (`workbenchMedicalDeviceExit`): 線形浸透ランプ + DCF(現在価値算出は `common/npv.ts` の
+  `presentValue`/`terminalValue`/`presentValueOfTerminalValue` を再利用)。
+
+  ```text
+  procedures_t  = annualProcedures × (1 + procedureGrowth)^t
+  penetration_t = 0                                                  (t < effectiveLaunchYear)
+                = min(peakPenetration, peakPenetration × (t − effectiveLaunchYear + 1) / yearsToPeak)
+  effectiveLaunchYear = launchYear + approvalDelayYears
+  deviceRevenue_t = procedures_t × penetration_t × pricePerProcedure ÷ 1e6
+  totalRevenue_t  = deviceRevenue_t / (1 − recurringRatio)            (recurringRatio < 1、それ以外0)
+  FCF_t           = totalRevenue_t × operatingMargin
+  ```
+
+  `projectionYears = max(10, yearsToExit)`。`intrinsicValue = PV(FCF, discountRate) + PV(TV)`。
+  `ExitRevenue = totalRevenue_{yearsToExit}`、`ExitEnterpriseValue = ExitRevenue × exitMultiple`。
+  **v2独自仕様**: `discountRate ≤ terminalGrowth` のとき(v1のように `ValidationIssue` を返すのではなく)
+  `terminalValue = 0` として計算を継続し、`warnings` に日本語メッセージを1件追加する(全域関数として
+  ケース比較を止めない設計)。実装は既存 `terminalValue`(EngineResult版)をガードして同一挙動を再現する
+  (`terminalValueGuarded`、`src/engine/workbench/sectors.ts`)。
+- **創薬** (`workbenchDrugDiscoveryExit`): `PeakSalesAtExit = currentPeakSales × (1 + peakSalesGrowth)^yearsToExit`。
+  `RiskAdjustedEconomicValue = PeakSalesAtExit × posAtExit × valueCaptureRate`。
+  `ExitEnterpriseValue = RiskAdjustedEconomicValue × exitMultiple`。`intrinsicValue = currentRnpv`(現状分離、
+  Exit側はイベント取引価値の簡易モデルである旨を `warnings` に常時含める)。
+- **クライメートテック** (`workbenchClimateTechExit`):
+
+  ```text
+  realization        = offtakeCoverage + (1 − offtakeCoverage) × merchantRealization
+  unitCostAtExit      = unitCost × (1 − costDeclineRate)^yearsToExit
+  operatingContribution = annualCapacity × realization × (unitPrice − unitCostAtExit) ÷ 1e6
+  carbonRevenue       = carbonCreditVolume × carbonCreditPrice ÷ 1e6
+  EBITDA              = operatingContribution + carbonRevenue − fixedOpex
+  RiskAdjustedEBITDA  = EBITDA × massProductionProbability
+  ExitEnterpriseValue = RiskAdjustedEBITDA × exitMultiple
+  ```
+
+  `intrinsicValue = currentProjectNpv`。
+
+### 5.3 Valuation Bridge(`buildWorkbenchCaseResult`)
+
+出典: `docs/redesign-v2.md` §4。セクター別Exit評価の出力と、ケース・会社の数値
+(`WorkbenchCaseCoreInputs`: fullyDilutedShares・proposedPreMoney・investmentAmount・targetMoic・
+yearsToExit・dilutionRetention・exitNetDebt)から、現在の許容評価額・理論株価・期待リターンまでを
+一気通貫で計算する:
+
+```text
+ExitEquityValue           = ExitEnterpriseValue − ExitNetDebt
+CurrentAllowablePostMoney = ExitEquityValue / TargetMOIC          (ExitEquityValue>0 かつ TargetMOIC>0、それ以外0)
+CurrentAllowablePreMoney  = CurrentAllowablePostMoney − InvestmentAmount
+RequiredEntryOwnership    = InvestmentAmount / CurrentAllowablePostMoney   (CurrentAllowablePostMoney>0、それ以外0)
+ImpliedTargetIrr          = TargetMOIC^(1/YearsToExit) − 1         (TargetMOIC>0 かつ YearsToExit>0、それ以外0)
+
+TheoreticalSharePrice   = CurrentAllowablePreMoney / FullyDilutedShares   (株式数>0、それ以外null)
+ProposedPricePerShare   = ProposedPreMoney / FullyDilutedShares          (株式数>0、それ以外null)
+ValuationGapToProposed  = CurrentAllowablePreMoney / ProposedPreMoney − 1 (ProposedPreMoney>0、それ以外null)
+```
+
+提示条件からの期待リターン順算:
+
+```text
+ProposedPostMoney       = ProposedPreMoney + InvestmentAmount
+ExpectedEntryOwnership  = InvestmentAmount / ProposedPostMoney            (ProposedPostMoney>0、それ以外0)
+ExpectedExitOwnership   = ExpectedEntryOwnership × DilutionRetention
+ExpectedProceeds        = max(0, ExitEquityValue) × ExpectedExitOwnership
+ExpectedMOIC            = ExpectedProceeds / InvestmentAmount             (InvestmentAmount>0、それ以外null)
+ExpectedIRR             = ExpectedMOIC^(1/YearsToExit) − 1     (ExpectedMOIC≥0 かつ YearsToExit>0、それ以外null)
+```
+
+**警告(`warnings`、常時全件評価・重複除去)**: ExitEnterpriseValue≤0 / ExitEquityValue≤0 /
+CurrentAllowablePreMoney<0 / RequiredEntryOwnership>1 / DilutionRetention が (0,1] の範囲外、の5件
++ セクター別Exit評価が返す `warnings`(医療機器の割引率ガード、創薬の簡易モデル注記等)。
+
+### 5.4 UI層との境界
+
+`ValueBag`(`Record<string, number|string>`)からの値取り出し(`numberValue`/`stringValue`)、
+`FieldDefinition`・既定値・ケース名等のUI定義は `src/v2/domain/sectorDefinitions.ts` に残す
+(ベンチマークマッピング表と同じ役割分担)。`src/v2/domain/valuation.ts` は engine への薄い結線のみ
+(CompanyProfile/InvestmentCase → `WorkbenchCaseCoreInputs` への変換 + `buildWorkbenchCaseResult` 呼び出し)。
+
+---
+
 *v0.1 — 2026-07-13。Phase 1 実装開始前のレビュー用。*
 *v0.2 — 2026-07-13。レビュー反映: U-1/U-4/U-6/U-10/U-11/U-14 を確定。U-14 は「未消化プール無視(Exit時再正規化)」に変更し §1.4 を改定。*
 *v0.3 — 2026-07-13。Python(`tools/reference/`)/TypeScript(`src/engine/`)の独立クロスチェックで、創薬モデルの `modelHorizonYears` がPython参照実装で絶対年として誤実装されていたことを検出・修正(§2.2に明確化注記を追加)。golden fixtureを再生成。TSエンジンはこの時点でgolden全ケース一致・fast-checkプロパティ約60件Green。*
@@ -681,3 +799,4 @@ EV_k = Σ_{t < m} −NetCapex(t)/(1+r_k)^t
 *v0.5 — 2026-07-14。Phase 4-B C2: §1.5 に感度対象ドライバーの選定基準(base EVに無関係な構造的span=0ドライバーの除外、U-21新設・確定)と消費側契約(UI層レジストリ)を追記。SaaS `discountRate`/`fcfMargin`、メディア `monthlyChurn`/`cpa`、EC/D2C `f2Rate`/`aov` を各 `SENSITIVITY_DRIVERS` から削除(`docs/phase4-spec.md` §6 C2、P4-1裁定)。*
 *v0.6 — 2026-07-14。Phase 4-B C5: §1.4 に `validateDilutionInputs` の入力ドメイン検証(P16/P17新設)とExit年の持ち方(U-22新設・確定、vcMethod.yearsToExit共用)を追記(`docs/phase4-spec.md` §6 C5、P4-5裁定)。`simulateDilution` のシグネチャ・golden・既存テストへの影響なし。*
 *v0.7 — 2026-07-14。Phase 5-B C1: §0.1・§1.3 に `Cashflow.t` の非負実数許容(年フラクション)を追記(ポートフォリオ未実現IRR用途、実装変更なし・回帰テストのみ)。§4 未確定事項表に U-23(ポートフォリオ時価=EV×持分)・U-24(未紐付け銘柄=コスト評価)を確定として追加(`docs/phase5-spec.md` §7、P5-1/P5-2裁定)。*
+*v0.8 — 2026-07-18。V2本採用 Batch 1 C1: 新 §5「V2 Investment Case Workbench モデル」を追加(`src/v2/domain/valuation.ts`・`sectorDefinitions.ts` の計算部分を `src/engine/workbench/` へ移設。`presentValue`/`terminalValue` は既存 `common/npv.ts` を再利用し重複実装を削除。医療機器の rate≤g⇒0 というv2独自仕様は既存 `terminalValue`(EngineResult版)をガードして吸収)。Pythonリファレンス `tools/reference/workbench.py`、golden `workbench.golden.json`(境界値: 成長率0/負・targetMoic=1・yearsToExit=1・fullyDilutedShares=0・Exit Net DebtでExit株式価値≤0・持分残存率が定義域外)を追加。§3 に P18〜P20 を追加(`docs/v2-adoption-spec.md` §1、裁定①)。既存 v1 エンジン・6セクター golden は無変更。*

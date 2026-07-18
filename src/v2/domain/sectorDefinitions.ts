@@ -1,3 +1,11 @@
+import {
+  workbenchClimateTechExit,
+  workbenchDrugDiscoveryExit,
+  workbenchEcD2cExit,
+  workbenchMediaTechExit,
+  workbenchMedicalDeviceExit,
+  workbenchSaasExit,
+} from '../../engine/workbench/sectors.ts'
 import type {
   InvestmentCase,
   SectorDefinition,
@@ -5,14 +13,7 @@ import type {
   ValueBag,
   WorkbenchState,
 } from './types.ts'
-import {
-  buildCaseResult,
-  numberValue,
-  presentValue,
-  projectMetric,
-  stringValue,
-  terminalValue,
-} from './valuation.ts'
+import { buildCaseResult, numberValue, stringValue } from './valuation.ts'
 
 const commonCaseNames = ['会社計画', '引受ケース', 'Downside', 'Severe Downside'] as const
 
@@ -44,22 +45,15 @@ const definitions: Record<V2SectorId, SectorDefinition> = {
       { arrGrowth: 0.02, growthDecay: 0.75, exitOperatingMargin: -0.05, exitMultiple: 2.5 },
     ]),
     evaluate(company, investmentCase) {
-      const projection = projectMetric(
-        numberValue(company.facts, 'currentArr'),
-        numberValue(investmentCase.assumptions, 'arrGrowth'),
-        numberValue(investmentCase.assumptions, 'growthDecay', 1),
-        investmentCase.yearsToExit,
-      )
-      const exitMultiple = numberValue(investmentCase.assumptions, 'exitMultiple')
-      const exitEv = projection.value * exitMultiple
-      const ruleOf40 =
-        (projection.finalGrowth + numberValue(investmentCase.assumptions, 'exitOperatingMargin')) * 100
-      return buildCaseResult(company, investmentCase, {
-        exitMetricLabel: 'Exit ARR',
-        exitMetric: projection.value,
-        exitEnterpriseValue: exitEv,
-        diagnostics: { exitGrowthRate: projection.finalGrowth, ruleOf40 },
+      const exit = workbenchSaasExit({
+        currentArr: numberValue(company.facts, 'currentArr'),
+        arrGrowth: numberValue(investmentCase.assumptions, 'arrGrowth'),
+        growthDecay: numberValue(investmentCase.assumptions, 'growthDecay', 1),
+        exitOperatingMargin: numberValue(investmentCase.assumptions, 'exitOperatingMargin'),
+        exitMultiple: numberValue(investmentCase.assumptions, 'exitMultiple'),
+        yearsToExit: investmentCase.yearsToExit,
       })
+      return buildCaseResult(company, investmentCase, exit)
     },
   },
 
@@ -95,22 +89,19 @@ const definitions: Record<V2SectorId, SectorDefinition> = {
       { revenueGrowth: -0.05, growthDecay: 0.8, exitGrossMargin: 0.35, multipleBasis: 'grossProfit', exitMultiple: 1.5 },
     ]),
     evaluate(company, investmentCase) {
-      const projection = projectMetric(
-        numberValue(company.facts, 'currentRevenue'),
-        numberValue(investmentCase.assumptions, 'revenueGrowth'),
-        numberValue(investmentCase.assumptions, 'growthDecay', 1),
-        investmentCase.yearsToExit,
-      )
-      const grossMargin = numberValue(investmentCase.assumptions, 'exitGrossMargin')
-      const basis = stringValue(investmentCase.assumptions, 'multipleBasis', 'revenue')
-      const metric = basis === 'grossProfit' ? projection.value * grossMargin : projection.value
-      const exitEv = metric * numberValue(investmentCase.assumptions, 'exitMultiple')
-      return buildCaseResult(company, investmentCase, {
-        exitMetricLabel: basis === 'grossProfit' ? 'Exit粗利' : 'Exit売上',
-        exitMetric: metric,
-        exitEnterpriseValue: exitEv,
-        diagnostics: { exitRevenue: projection.value, exitGrossMargin: grossMargin },
+      const basis = stringValue(investmentCase.assumptions, 'multipleBasis', 'revenue') as
+        | 'revenue'
+        | 'grossProfit'
+      const exit = workbenchEcD2cExit({
+        currentRevenue: numberValue(company.facts, 'currentRevenue'),
+        revenueGrowth: numberValue(investmentCase.assumptions, 'revenueGrowth'),
+        growthDecay: numberValue(investmentCase.assumptions, 'growthDecay', 1),
+        exitGrossMargin: numberValue(investmentCase.assumptions, 'exitGrossMargin'),
+        multipleBasis: basis,
+        exitMultiple: numberValue(investmentCase.assumptions, 'exitMultiple'),
+        yearsToExit: investmentCase.yearsToExit,
       })
+      return buildCaseResult(company, investmentCase, exit)
     },
   },
 
@@ -137,26 +128,16 @@ const definitions: Record<V2SectorId, SectorDefinition> = {
       { mauGrowth: -0.08, growthDecay: 0.8, arpuGrowth: -0.03, exitMultiple: 1.2 },
     ]),
     evaluate(company, investmentCase) {
-      const mau = projectMetric(
-        numberValue(company.facts, 'currentMau'),
-        numberValue(investmentCase.assumptions, 'mauGrowth'),
-        numberValue(investmentCase.assumptions, 'growthDecay', 1),
-        investmentCase.yearsToExit,
-      )
-      const arpu = projectMetric(
-        numberValue(company.facts, 'currentMonthlyArpu'),
-        numberValue(investmentCase.assumptions, 'arpuGrowth'),
-        1,
-        investmentCase.yearsToExit,
-      )
-      const exitRevenue = (mau.value * arpu.value * 12) / 1e6
-      const exitEv = exitRevenue * numberValue(investmentCase.assumptions, 'exitMultiple')
-      return buildCaseResult(company, investmentCase, {
-        exitMetricLabel: 'Exit売上',
-        exitMetric: exitRevenue,
-        exitEnterpriseValue: exitEv,
-        diagnostics: { exitMau: mau.value, exitMonthlyArpu: arpu.value },
+      const exit = workbenchMediaTechExit({
+        currentMau: numberValue(company.facts, 'currentMau'),
+        mauGrowth: numberValue(investmentCase.assumptions, 'mauGrowth'),
+        growthDecay: numberValue(investmentCase.assumptions, 'growthDecay', 1),
+        currentMonthlyArpu: numberValue(company.facts, 'currentMonthlyArpu'),
+        arpuGrowth: numberValue(investmentCase.assumptions, 'arpuGrowth'),
+        exitMultiple: numberValue(investmentCase.assumptions, 'exitMultiple'),
+        yearsToExit: investmentCase.yearsToExit,
       })
+      return buildCaseResult(company, investmentCase, exit)
     },
   },
 
@@ -194,41 +175,22 @@ const definitions: Record<V2SectorId, SectorDefinition> = {
       { procedureGrowth: 0, approvalDelayYears: 4, peakPenetration: 0.1, yearsToPeak: 6, operatingMargin: 0.05, discountRate: 0.16, terminalGrowth: 0.01, exitMultiple: 1.2 },
     ]),
     evaluate(company, investmentCase) {
-      const annualProcedures = numberValue(company.facts, 'annualProcedures')
-      const price = numberValue(company.facts, 'pricePerProcedure')
-      const launch = numberValue(company.facts, 'launchYear') + numberValue(investmentCase.assumptions, 'approvalDelayYears')
-      const recurringRatio = numberValue(company.facts, 'recurringRatio')
-      const growth = numberValue(investmentCase.assumptions, 'procedureGrowth')
-      const peak = numberValue(investmentCase.assumptions, 'peakPenetration')
-      const yearsToPeak = Math.max(1, numberValue(investmentCase.assumptions, 'yearsToPeak', 1))
-      const margin = numberValue(investmentCase.assumptions, 'operatingMargin')
-      const discount = numberValue(investmentCase.assumptions, 'discountRate')
-      const terminalGrowthRate = numberValue(investmentCase.assumptions, 'terminalGrowth')
-      const projectionYears = Math.max(10, investmentCase.yearsToExit)
-      const cashflows: number[] = []
-      let exitRevenue = 0
-
-      for (let year = 1; year <= projectionYears; year += 1) {
-        const procedures = annualProcedures * Math.pow(1 + growth, year)
-        const penetration =
-          year < launch ? 0 : Math.min(peak, (peak * (year - launch + 1)) / yearsToPeak)
-        const deviceRevenue = (procedures * penetration * price) / 1e6
-        const totalRevenue = recurringRatio < 1 ? deviceRevenue / (1 - recurringRatio) : 0
-        cashflows.push(totalRevenue * margin)
-        if (year === investmentCase.yearsToExit) exitRevenue = totalRevenue
-      }
-
-      const tv = terminalValue(cashflows.at(-1) ?? 0, discount, terminalGrowthRate)
-      const intrinsic = presentValue(discount, cashflows) + tv / Math.pow(1 + discount, projectionYears)
-      const exitEv = exitRevenue * numberValue(investmentCase.assumptions, 'exitMultiple')
-      return buildCaseResult(company, investmentCase, {
-        exitMetricLabel: 'Exit売上',
-        exitMetric: exitRevenue,
-        exitEnterpriseValue: exitEv,
-        intrinsicValue: intrinsic,
-        diagnostics: { effectiveLaunchYear: launch, exitRevenue },
-        warnings: discount <= terminalGrowthRate ? ['割引率は永久成長率を上回る必要があります。'] : [],
+      const exit = workbenchMedicalDeviceExit({
+        annualProcedures: numberValue(company.facts, 'annualProcedures'),
+        pricePerProcedure: numberValue(company.facts, 'pricePerProcedure'),
+        launchYear: numberValue(company.facts, 'launchYear'),
+        recurringRatio: numberValue(company.facts, 'recurringRatio'),
+        procedureGrowth: numberValue(investmentCase.assumptions, 'procedureGrowth'),
+        approvalDelayYears: numberValue(investmentCase.assumptions, 'approvalDelayYears'),
+        peakPenetration: numberValue(investmentCase.assumptions, 'peakPenetration'),
+        yearsToPeak: Math.max(1, numberValue(investmentCase.assumptions, 'yearsToPeak', 1)),
+        operatingMargin: numberValue(investmentCase.assumptions, 'operatingMargin'),
+        discountRate: numberValue(investmentCase.assumptions, 'discountRate'),
+        terminalGrowth: numberValue(investmentCase.assumptions, 'terminalGrowth'),
+        exitMultiple: numberValue(investmentCase.assumptions, 'exitMultiple'),
+        yearsToExit: investmentCase.yearsToExit,
       })
+      return buildCaseResult(company, investmentCase, exit)
     },
   },
 
@@ -255,20 +217,16 @@ const definitions: Record<V2SectorId, SectorDefinition> = {
       { peakSalesGrowth: -0.1, posAtExit: 0.05, valueCaptureRate: 0.25, exitMultiple: 0.8 },
     ]),
     evaluate(company, investmentCase) {
-      const peakSales = numberValue(company.facts, 'currentPeakSales') *
-        Math.pow(1 + numberValue(investmentCase.assumptions, 'peakSalesGrowth'), investmentCase.yearsToExit)
-      const pos = numberValue(investmentCase.assumptions, 'posAtExit')
-      const capture = numberValue(investmentCase.assumptions, 'valueCaptureRate')
-      const riskAdjustedEconomicValue = peakSales * pos * capture
-      const exitEv = riskAdjustedEconomicValue * numberValue(investmentCase.assumptions, 'exitMultiple')
-      return buildCaseResult(company, investmentCase, {
-        exitMetricLabel: 'リスク調整後経済価値',
-        exitMetric: riskAdjustedEconomicValue,
-        exitEnterpriseValue: exitEv,
-        intrinsicValue: numberValue(company.facts, 'currentRnpv'),
-        diagnostics: { peakSalesAtExit: peakSales, posAtExit: pos },
-        warnings: ['Exit価値はイベント取引価値の簡易モデルです。案件固有の導出・M&A条件で調整してください。'],
+      const exit = workbenchDrugDiscoveryExit({
+        currentRnpv: numberValue(company.facts, 'currentRnpv'),
+        currentPeakSales: numberValue(company.facts, 'currentPeakSales'),
+        peakSalesGrowth: numberValue(investmentCase.assumptions, 'peakSalesGrowth'),
+        yearsToExit: investmentCase.yearsToExit,
+        posAtExit: numberValue(investmentCase.assumptions, 'posAtExit'),
+        valueCaptureRate: numberValue(investmentCase.assumptions, 'valueCaptureRate'),
+        exitMultiple: numberValue(investmentCase.assumptions, 'exitMultiple'),
       })
+      return buildCaseResult(company, investmentCase, exit)
     },
   },
 
@@ -308,31 +266,22 @@ const definitions: Record<V2SectorId, SectorDefinition> = {
       { massProductionProbability: 0.15, offtakeCoverage: 0.1, merchantRealization: 0.5, costDeclineRate: 0.02, carbonCreditPrice: 1500, exitMultiple: 2.5 },
     ]),
     evaluate(company, investmentCase) {
-      const years = investmentCase.yearsToExit
-      const capacity = numberValue(company.facts, 'annualCapacity')
-      const realization =
-        numberValue(investmentCase.assumptions, 'offtakeCoverage') +
-        (1 - numberValue(investmentCase.assumptions, 'offtakeCoverage')) *
-          numberValue(investmentCase.assumptions, 'merchantRealization')
-      const costAtExit = numberValue(company.facts, 'unitCost') *
-        Math.pow(1 - numberValue(investmentCase.assumptions, 'costDeclineRate'), years)
-      const unitMargin = numberValue(company.facts, 'unitPrice') - costAtExit
-      const operatingContribution = (capacity * realization * unitMargin) / 1e6
-      const carbonRevenue =
-        (numberValue(company.facts, 'carbonCreditVolume') *
-          numberValue(investmentCase.assumptions, 'carbonCreditPrice')) /
-        1e6
-      const ebitda = operatingContribution + carbonRevenue - numberValue(company.facts, 'fixedOpex')
-      const probability = numberValue(investmentCase.assumptions, 'massProductionProbability')
-      const riskAdjustedEbitda = ebitda * probability
-      const exitEv = riskAdjustedEbitda * numberValue(investmentCase.assumptions, 'exitMultiple')
-      return buildCaseResult(company, investmentCase, {
-        exitMetricLabel: '確率調整後Exit EBITDA',
-        exitMetric: riskAdjustedEbitda,
-        exitEnterpriseValue: exitEv,
-        intrinsicValue: numberValue(company.facts, 'currentProjectNpv'),
-        diagnostics: { exitUnitCost: costAtExit, unadjustedExitEbitda: ebitda },
+      const exit = workbenchClimateTechExit({
+        currentProjectNpv: numberValue(company.facts, 'currentProjectNpv'),
+        annualCapacity: numberValue(company.facts, 'annualCapacity'),
+        unitPrice: numberValue(company.facts, 'unitPrice'),
+        unitCost: numberValue(company.facts, 'unitCost'),
+        fixedOpex: numberValue(company.facts, 'fixedOpex'),
+        carbonCreditVolume: numberValue(company.facts, 'carbonCreditVolume'),
+        massProductionProbability: numberValue(investmentCase.assumptions, 'massProductionProbability'),
+        offtakeCoverage: numberValue(investmentCase.assumptions, 'offtakeCoverage'),
+        merchantRealization: numberValue(investmentCase.assumptions, 'merchantRealization'),
+        costDeclineRate: numberValue(investmentCase.assumptions, 'costDeclineRate'),
+        carbonCreditPrice: numberValue(investmentCase.assumptions, 'carbonCreditPrice'),
+        exitMultiple: numberValue(investmentCase.assumptions, 'exitMultiple'),
+        yearsToExit: investmentCase.yearsToExit,
       })
+      return buildCaseResult(company, investmentCase, exit)
     },
   },
 }

@@ -14,3 +14,7 @@ export * from './sectors/medicalDevice.ts'
 export * from './sectors/mediaTech.ts'
 export * from './sectors/ecD2c.ts'
 export * from './sectors/climateTech.ts'
+
+export * from './workbench/types.ts'
+export * from './workbench/valuation.ts'
+export * from './workbench/sectors.ts'
