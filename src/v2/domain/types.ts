@@ -1,4 +1,4 @@
-import type { WorkbenchCaseResult } from '../../engine/workbench/types.ts'
+import type { WorkbenchCaseResult, WorkbenchFollowOnInput } from '../../engine/workbench/types.ts'
 
 export const V2_SECTOR_IDS = [
   'saas_jp',
@@ -36,6 +36,11 @@ export interface InvestmentCase {
   dilutionRetention: number
   exitNetDebt: number
   assumptions: ValueBag
+  /**
+   * 追加出資(docs/v2-adoption-spec.md §6.2)。欠落時 [] 補完(後方互換)。
+   * 資本政策シミュレーターとは別の、ケース単独の投資家リターン計算専用。
+   */
+  followOns: WorkbenchFollowOnInput[]
 }
 
 // Valuation Bridge の計算結果型は src/engine/workbench/ が単一の定義元(裁定①)。

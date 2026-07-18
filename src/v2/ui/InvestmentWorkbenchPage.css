@@ -157,6 +157,52 @@
   border-top: 1px solid var(--color-border);
 }
 
+.workbench-followon {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.workbench-followon__heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.workbench-followon__heading > span {
+  color: var(--color-text-muted);
+  font-size: 0.83rem;
+}
+
+.workbench-followon__empty {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.workbench-followon__row {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.6rem;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.workbench-followon__label {
+  font-weight: 600;
+}
+
+.workbench-followon__multiple {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.workbench-followon__summary {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
 .workbench-table-wrap {
   overflow-x: auto;
 }

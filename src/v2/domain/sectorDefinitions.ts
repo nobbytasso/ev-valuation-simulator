@@ -313,6 +313,7 @@ function createDefaultCases(definition: SectorDefinition): InvestmentCase[] {
     dilutionRetention: index < 2 ? 0.7 : index === 2 ? 0.6 : 0.5,
     exitNetDebt: 0,
     assumptions: structuredClone(definition.defaultCaseAssumptions[index]),
+    followOns: [],
   }))
 }
 

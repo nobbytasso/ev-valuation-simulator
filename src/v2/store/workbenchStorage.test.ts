@@ -33,6 +33,32 @@ describe('normalizeWorkbenchState', () => {
     expect(normalizeWorkbenchState(withAdopted).adoptedCaseId).toBe(state.cases[1].id)
     expect(normalizeWorkbenchState(normalizeWorkbenchState(withAdopted))).toEqual(normalizeWorkbenchState(withAdopted))
   })
+
+  it('各ケースのfollowOnsが欠落したデータを[]で補完する(docs/v2-adoption-spec.md §6.2)', () => {
+    const state = createDefaultWorkbench()
+    const withoutFollowOns: WorkbenchState = {
+      ...state,
+      cases: state.cases.map((item) => {
+        const { followOns: _omit, ...rest } = item
+        return rest as typeof item
+      }),
+    }
+    const normalized = normalizeWorkbenchState(withoutFollowOns)
+    expect(normalized.cases.every((item) => Array.isArray(item.followOns) && item.followOns.length === 0)).toBe(true)
+  })
+
+  it('既にfollowOnsがある場合は上書きしない(冪等)', () => {
+    const state = createDefaultWorkbench()
+    const withFollowOn: WorkbenchState = {
+      ...state,
+      cases: state.cases.map((item, i) =>
+        i === 0 ? { ...item, followOns: [{ label: 'A', yearOffset: 1, amount: 100, postMoney: 3000 }] } : item,
+      ),
+    }
+    const normalized = normalizeWorkbenchState(withFollowOn)
+    expect(normalized.cases[0].followOns).toHaveLength(1)
+    expect(normalizeWorkbenchState(normalized)).toEqual(normalized)
+  })
 })
 
 describe('loadWorkbenchCollection: 後方互換ロード', () => {

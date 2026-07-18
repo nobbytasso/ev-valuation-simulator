@@ -28,8 +28,19 @@ import type { CaseFactorTuple, MigrationCaseFactors } from '../store/legacyMigra
 import { downloadWorkbenchWorkbook } from '../../ui/excel/buildWorkbenchWorkbook.ts'
 import { formatMoney } from '../../ui/format/money.ts'
 import { useMoneyUnit } from '../../ui/format/useMoneyUnit.ts'
+import { useStableListKeys } from '../../ui/useStableListKeys.ts'
+import { computeFollowOnReturn } from '../../engine/index.ts'
+import type { WorkbenchFollowOnInput } from '../../engine/index.ts'
 import { displayedValue, storedValue } from './workbenchFieldFormat.ts'
 import './InvestmentWorkbenchPage.css'
+
+function createDefaultFollowOn(index: number): WorkbenchFollowOnInput {
+  return { label: `追加出資${index + 1}`, yearOffset: 1, amount: 100, postMoney: 3000 }
+}
+
+function formatFollowOnMultiple(value: number | null): string {
+  return value === null || !Number.isFinite(value) ? '—' : `×${value.toFixed(2)}`
+}
 
 function formatPercent(value: number | null): string {
   return value === null || !Number.isFinite(value) ? '—' : `${(value * 100).toFixed(1)}%`
@@ -167,6 +178,42 @@ export function InvestmentWorkbenchPage() {
     [definition, state.company, state.cases],
   )
 
+  // 追加出資行のReact keyはケース毎に独立管理する(ケースは常に4件固定なのでフック数は不変)。
+  // 出典: docs/v2-adoption-spec.md §6.2、CapitalPolicySection.tsx と同じuseStableListKeysパターン。
+  const followOnKeys = [
+    useStableListKeys(state.cases[0]?.followOns.length ?? 0),
+    useStableListKeys(state.cases[1]?.followOns.length ?? 0),
+    useStableListKeys(state.cases[2]?.followOns.length ?? 0),
+    useStableListKeys(state.cases[3]?.followOns.length ?? 0),
+  ]
+  const lastSyncedCompanyId = useRef<string | null>(null)
+  useEffect(() => {
+    if (lastSyncedCompanyId.current !== state.company.id) {
+      state.cases.forEach((item, index) => followOnKeys[index]?.reset(item.followOns.length))
+      lastSyncedCompanyId.current = state.company.id
+    }
+    // followOnKeysは会社切替のたびに新しいフック配列参照になるため依存配列には含めない
+    // (companyId変化時のみ同期する。CapitalPolicySection.tsxと同じ設計)。
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.company.id])
+
+  const followOnResults = useMemo(
+    () =>
+      state.cases.map((item, index) =>
+        computeFollowOnReturn(
+          {
+            investmentAmount: item.investmentAmount,
+            proposedPreMoney: state.company.proposedPreMoney,
+            yearsToExit: item.yearsToExit,
+            dilutionRetention: item.dilutionRetention,
+          },
+          item.followOns,
+          results[index]?.exitEquityValue ?? 0,
+        ),
+      ),
+    [state.cases, state.company.proposedPreMoney, results],
+  )
+
   useEffect(() => {
     saveWorkbenchCollection(collection)
   }, [collection])
@@ -202,6 +249,37 @@ export function InvestmentWorkbenchPage() {
           : item,
       ),
     }))
+  }
+
+  const addFollowOn = (caseIndex: number, caseId: string) => {
+    updateActive((current) => ({
+      ...current,
+      cases: current.cases.map((item) =>
+        item.id === caseId ? { ...item, followOns: [...item.followOns, createDefaultFollowOn(item.followOns.length)] } : item,
+      ),
+    }))
+    followOnKeys[caseIndex]?.push()
+  }
+
+  const updateFollowOn = (caseId: string, rowIndex: number, patch: Partial<WorkbenchFollowOnInput>) => {
+    updateActive((current) => ({
+      ...current,
+      cases: current.cases.map((item) =>
+        item.id === caseId
+          ? { ...item, followOns: item.followOns.map((row, i) => (i === rowIndex ? { ...row, ...patch } : row)) }
+          : item,
+      ),
+    }))
+  }
+
+  const removeFollowOn = (caseIndex: number, caseId: string, rowIndex: number) => {
+    updateActive((current) => ({
+      ...current,
+      cases: current.cases.map((item) =>
+        item.id === caseId ? { ...item, followOns: item.followOns.filter((_, i) => i !== rowIndex) } : item,
+      ),
+    }))
+    followOnKeys[caseIndex]?.removeAt(rowIndex)
   }
 
   const handleSectorChange = (sector: V2SectorId) => {
@@ -479,7 +557,9 @@ export function InvestmentWorkbenchPage() {
         </div>
 
         <div className="workbench-case-grid">
-          {state.cases.map((item) => (
+          {state.cases.map((item, caseIndex) => {
+            const followOnResult = followOnResults[caseIndex]
+            return (
             <article key={item.id} className="workbench-case-card">
               <input
                 className="workbench-case-card__title"
@@ -522,8 +602,89 @@ export function InvestmentWorkbenchPage() {
                   onChange={(value) => updateCaseAssumption(item.id, field.id, value)}
                 />
               ))}
+              <hr />
+              <div className="workbench-followon">
+                <div className="workbench-followon__heading">
+                  <span>追加出資</span>
+                  <button type="button" onClick={() => addFollowOn(caseIndex, item.id)}>
+                    ＋ 追加出資を追加
+                  </button>
+                </div>
+                {item.followOns.length === 0 ? (
+                  <p className="workbench-followon__empty">初回投資のみ(追加出資なし)</p>
+                ) : (
+                  item.followOns.map((row, rowIndex) => {
+                    const tranche = followOnResult?.tranches[rowIndex]
+                    const multiple = tranche?.multipleOfPreviousPostMoney ?? null
+                    return (
+                      <div
+                        key={followOnKeys[caseIndex]?.keys[rowIndex] ?? String(rowIndex)}
+                        className="workbench-followon__row"
+                      >
+                        <input
+                          className="workbench-followon__label"
+                          value={row.label}
+                          onChange={(event) => updateFollowOn(item.id, rowIndex, { label: event.target.value })}
+                        />
+                        <label className="workbench-field">
+                          <span>初回投資からの経過年数</span>
+                          <input
+                            type="number"
+                            step={1}
+                            min={0}
+                            value={row.yearOffset}
+                            onChange={(event) => updateFollowOn(item.id, rowIndex, { yearOffset: Number(event.target.value) })}
+                          />
+                        </label>
+                        <label className="workbench-field">
+                          <span>追加出資額（百万円）</span>
+                          <input
+                            type="number"
+                            step={10}
+                            min={0}
+                            value={row.amount}
+                            onChange={(event) => updateFollowOn(item.id, rowIndex, { amount: Number(event.target.value) })}
+                          />
+                        </label>
+                        <label className="workbench-field">
+                          <span>ラウンドPost-money（百万円）</span>
+                          <input
+                            type="number"
+                            step={100}
+                            min={0}
+                            value={row.postMoney}
+                            onChange={(event) => updateFollowOn(item.id, rowIndex, { postMoney: Number(event.target.value) })}
+                          />
+                        </label>
+                        <p
+                          className={`workbench-followon__multiple ${
+                            multiple === null ? '' : multiple >= 1 ? 'status-good' : 'status-bad'
+                          }`}
+                        >
+                          前回Post-money比: {formatFollowOnMultiple(multiple)}
+                        </p>
+                        <button type="button" onClick={() => removeFollowOn(caseIndex, item.id, rowIndex)}>
+                          この追加出資を削除
+                        </button>
+                      </div>
+                    )
+                  })
+                )}
+                {followOnResult && followOnResult.totalOwnershipShare > 1 && (
+                  <p className="status-bad" role="alert">
+                    初回+追加出資の持分合計が{formatPercent(followOnResult.totalOwnershipShare)}
+                    となり100%を超えています。
+                  </p>
+                )}
+                {followOnResult && (
+                  <p className="workbench-followon__summary">
+                    通算MOIC: {formatMultiple(followOnResult.moic)} / 通算IRR: {formatPercent(followOnResult.irr)}
+                  </p>
+                )}
+              </div>
             </article>
-          ))}
+            )
+          })}
         </div>
       </section>
 

@@ -15,11 +15,13 @@ function isWorkbenchStateShape(value: unknown): value is WorkbenchState {
  * 欠落フィールドの補完(冪等)。`WorkbenchState` に永続化される型を拡張するたびに、ここへ
  * 補完ステップを追加する(CLAUDE.md 設計原則6: 型拡張には必ずマイグレーションを同伴)。
  * - adoptedCaseId: 欠落時 null 補完(docs/v2-adoption-spec.md §6.1)
+ * - cases[].followOns: 欠落時 [] 補完(§6.2)
  */
 export function normalizeWorkbenchState(raw: WorkbenchState): WorkbenchState {
   return {
     ...raw,
     adoptedCaseId: raw.adoptedCaseId ?? null,
+    cases: raw.cases.map((item) => ({ ...item, followOns: item.followOns ?? [] })),
   }
 }
 

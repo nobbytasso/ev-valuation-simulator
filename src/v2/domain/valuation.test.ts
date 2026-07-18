@@ -24,6 +24,7 @@ const investmentCase: InvestmentCase = {
   dilutionRetention: 0.7,
   exitNetDebt: 0,
   assumptions: {},
+  followOns: [],
 }
 
 describe('projectMetric', () => {
