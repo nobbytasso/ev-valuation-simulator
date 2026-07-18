@@ -6,10 +6,6 @@ import { DummyDataBadge } from './DummyDataBadge.tsx'
 import { MoneyUnitToggle } from './MoneyUnitToggle.tsx'
 import { ThemeToggle } from './ThemeToggle.tsx'
 
-/**
- * 全セクターのベンチマークデータを走査し、1件でもdata_status: "dummy"があれば
- * ヘッダーに常設バッジを出す。CLAUDE.md設計原則5「常時バッジ」のアプリレベル充足(D-5)。
- */
 function useHasDummyBenchmarkData(): boolean {
   const [hasDummyData, setHasDummyData] = useState(false)
   useEffect(() => {
@@ -36,8 +32,9 @@ export function Header() {
       </div>
       <nav className="app-header__nav">
         <NavLink to="/" end>
-          シナリオ
+          投資ケース
         </NavLink>
+        <NavLink to="/legacy">旧シナリオ</NavLink>
         <NavLink to="/portfolio">ポートフォリオ</NavLink>
       </nav>
       <MoneyUnitToggle />
