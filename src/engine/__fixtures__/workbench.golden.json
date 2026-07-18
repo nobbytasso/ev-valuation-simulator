@@ -1,0 +1,2064 @@
+{
+  "schemaVersion": "1.0",
+  "model": "workbench",
+  "generatedAt": "2026-07-18",
+  "seed": 20260719,
+  "caseCount": 37,
+  "cases": [
+    {
+      "id": "saas-zero-growth",
+      "tags": [
+        "boundary",
+        "zero-growth"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 1000.0,
+          "arrGrowth": 0.0,
+          "growthDecay": 0.9,
+          "exitOperatingMargin": 0.15,
+          "exitMultiple": 10.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 1000.0,
+        "exitEnterpriseValue": 10000.0,
+        "exitEquityValue": 10000.0,
+        "currentAllowablePostMoney": 1000.0,
+        "currentAllowablePreMoney": 700.0,
+        "theoreticalSharePrice": 70.0,
+        "requiredEntryOwnership": 0.3,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": -0.7666666666666666,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 636.3636363636363,
+        "expectedMoic": 2.1212121212121207,
+        "expectedIrr": 0.1622962056186248,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.0,
+          "ruleOf40": 15.0
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "saas-negative-growth",
+      "tags": [
+        "boundary",
+        "negative-growth"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 1000.0,
+          "arrGrowth": -0.2,
+          "growthDecay": 0.9,
+          "exitOperatingMargin": 0.15,
+          "exitMultiple": 10.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 407.95967736972796,
+        "exitEnterpriseValue": 4079.59677369728,
+        "exitEquityValue": 4079.59677369728,
+        "currentAllowablePostMoney": 407.95967736972796,
+        "currentAllowablePreMoney": 107.95967736972796,
+        "theoreticalSharePrice": 10.795967736972795,
+        "requiredEntryOwnership": 0.7353667939297696,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": -0.9640134408767573,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 259.61070378073595,
+        "expectedMoic": 0.8653690126024531,
+        "expectedIrr": -0.028505675104050665,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": -0.13122,
+          "ruleOf40": 1.8779999999999992
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "saas-target-moic-one",
+      "tags": [
+        "boundary",
+        "target-moic-one"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 1000.0,
+          "arrGrowth": 0.35,
+          "growthDecay": 0.9,
+          "exitOperatingMargin": 0.15,
+          "exitMultiple": 10.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 1.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 3516.6345698009823,
+        "exitEnterpriseValue": 35166.34569800982,
+        "exitEquityValue": 35166.34569800982,
+        "currentAllowablePostMoney": 35166.34569800982,
+        "currentAllowablePreMoney": 34866.34569800982,
+        "theoreticalSharePrice": 3486.634569800982,
+        "requiredEntryOwnership": 0.008530883549182024,
+        "impliedTargetIrr": 0.0,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": 10.62211523266994,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 2237.858362600625,
+        "expectedMoic": 7.459527875335416,
+        "expectedIrr": 0.49465950484361754,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.22963499999999998,
+          "ruleOf40": 37.963499999999996
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "saas-years-to-exit-one",
+      "tags": [
+        "boundary",
+        "years-to-exit-one"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 1000.0,
+          "arrGrowth": 0.35,
+          "growthDecay": 0.9,
+          "exitOperatingMargin": 0.15,
+          "exitMultiple": 10.0,
+          "yearsToExit": 1
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 1,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 1350.0,
+        "exitEnterpriseValue": 13500.0,
+        "exitEquityValue": 13500.0,
+        "currentAllowablePostMoney": 1350.0,
+        "currentAllowablePreMoney": 1050.0,
+        "theoreticalSharePrice": 105.0,
+        "requiredEntryOwnership": 0.2222222222222222,
+        "impliedTargetIrr": 9.0,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": -0.65,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 859.090909090909,
+        "expectedMoic": 2.8636363636363633,
+        "expectedIrr": 1.8636363636363633,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.35,
+          "ruleOf40": 50.0
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "saas-fully-diluted-shares-zero",
+      "tags": [
+        "boundary",
+        "fully-diluted-shares-zero"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 1000.0,
+          "arrGrowth": 0.35,
+          "growthDecay": 0.9,
+          "exitOperatingMargin": 0.15,
+          "exitMultiple": 10.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 3516.6345698009823,
+        "exitEnterpriseValue": 35166.34569800982,
+        "exitEquityValue": 35166.34569800982,
+        "currentAllowablePostMoney": 3516.634569800982,
+        "currentAllowablePreMoney": 3216.634569800982,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.08530883549182024,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": 0.07221152326699398,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 2237.858362600625,
+        "expectedMoic": 7.459527875335416,
+        "expectedIrr": 0.49465950484361754,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.22963499999999998,
+          "ruleOf40": 37.963499999999996
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "saas-exit-net-debt-equity-non-positive",
+      "tags": [
+        "boundary",
+        "exit-equity-non-positive"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 1000.0,
+          "arrGrowth": 0.05,
+          "growthDecay": 0.9,
+          "exitOperatingMargin": 0.15,
+          "exitMultiple": 2.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 1000000.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 1222.1214360496322,
+        "exitEnterpriseValue": 2444.2428720992643,
+        "exitEquityValue": -997555.7571279007,
+        "currentAllowablePostMoney": 0.0,
+        "currentAllowablePreMoney": -300.0,
+        "theoreticalSharePrice": -30.0,
+        "requiredEntryOwnership": 0.0,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": -1.1,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 0.0,
+        "expectedMoic": 0.0,
+        "expectedIrr": -1.0,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.032805,
+          "ruleOf40": 18.2805
+        },
+        "warnings": [
+          "Exit株式価値が0以下です。",
+          "要求リターンから逆算した許容Pre-moneyが0未満です。"
+        ]
+      }
+    },
+    {
+      "id": "saas-dilution-retention-out-of-range",
+      "tags": [
+        "boundary",
+        "dilution-retention-invalid"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 1000.0,
+          "arrGrowth": 0.35,
+          "growthDecay": 0.9,
+          "exitOperatingMargin": 0.15,
+          "exitMultiple": 10.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.0,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 3516.6345698009823,
+        "exitEnterpriseValue": 35166.34569800982,
+        "exitEquityValue": 35166.34569800982,
+        "currentAllowablePostMoney": 3516.634569800982,
+        "currentAllowablePreMoney": 3216.634569800982,
+        "theoreticalSharePrice": 321.6634569800982,
+        "requiredEntryOwnership": 0.08530883549182024,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": 0.07221152326699398,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.0,
+        "expectedProceeds": 0.0,
+        "expectedMoic": 0.0,
+        "expectedIrr": -1.0,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.22963499999999998,
+          "ruleOf40": 37.963499999999996
+        },
+        "warnings": [
+          "持分残存率は0%超100%以下にしてください。"
+        ]
+      }
+    },
+    {
+      "id": "ec-d2c-zero-growth-gross-profit-basis",
+      "tags": [
+        "boundary",
+        "zero-growth"
+      ],
+      "input": {
+        "sector": "ec_d2c",
+        "exitInputs": {
+          "currentRevenue": 2000.0,
+          "revenueGrowth": 0.0,
+          "growthDecay": 0.9,
+          "exitGrossMargin": 0.5,
+          "multipleBasis": "grossProfit",
+          "exitMultiple": 2.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit粗利",
+        "exitMetric": 1000.0,
+        "exitEnterpriseValue": 2000.0,
+        "exitEquityValue": 2000.0,
+        "currentAllowablePostMoney": 200.0,
+        "currentAllowablePreMoney": -100.0,
+        "theoreticalSharePrice": -10.0,
+        "requiredEntryOwnership": 1.5,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": -1.0333333333333334,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 127.27272727272727,
+        "expectedMoic": 0.4242424242424242,
+        "expectedIrr": -0.15759134699787136,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitRevenue": 2000.0,
+          "exitGrossMargin": 0.5
+        },
+        "warnings": [
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    },
+    {
+      "id": "media-tech-negative-growth",
+      "tags": [
+        "boundary",
+        "negative-growth"
+      ],
+      "input": {
+        "sector": "media_tech",
+        "exitInputs": {
+          "currentMau": 2000000.0,
+          "mauGrowth": -0.1,
+          "growthDecay": 0.9,
+          "currentMonthlyArpu": 170.0,
+          "arpuGrowth": -0.05,
+          "exitMultiple": 1.5,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 2058.412287342526,
+        "exitEnterpriseValue": 3087.6184310137887,
+        "exitEquityValue": 3087.6184310137887,
+        "currentAllowablePostMoney": 308.7618431013789,
+        "currentAllowablePreMoney": 8.761843101378872,
+        "theoreticalSharePrice": 0.8761843101378872,
+        "requiredEntryOwnership": 0.9716226493099991,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": -0.9970793856328737,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 196.484809246332,
+        "expectedMoic": 0.6549493641544399,
+        "expectedIrr": -0.08115650520822248,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitMau": 1304019.758241018,
+          "exitMonthlyArpu": 131.54275937499995
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "medical-device-years-to-exit-one",
+      "tags": [
+        "boundary",
+        "years-to-exit-one"
+      ],
+      "input": {
+        "sector": "medical_device",
+        "exitInputs": {
+          "annualProcedures": 15000.0,
+          "pricePerProcedure": 150000.0,
+          "launchYear": 2,
+          "recurringRatio": 0.2,
+          "procedureGrowth": 0.08,
+          "approvalDelayYears": 0,
+          "peakPenetration": 0.4,
+          "yearsToPeak": 3,
+          "operatingMargin": 0.22,
+          "discountRate": 0.1,
+          "terminalGrowth": 0.02,
+          "exitMultiple": 5.0,
+          "yearsToExit": 1
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 1,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 0.0,
+        "exitEnterpriseValue": 0.0,
+        "exitEquityValue": 0.0,
+        "currentAllowablePostMoney": 0.0,
+        "currentAllowablePreMoney": -300.0,
+        "theoreticalSharePrice": -30.0,
+        "requiredEntryOwnership": 0.0,
+        "impliedTargetIrr": 9.0,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": -1.1,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 0.0,
+        "expectedMoic": 0.0,
+        "expectedIrr": -1.0,
+        "intrinsicValue": 4386.998506365809,
+        "diagnostics": {
+          "effectiveLaunchYear": 2,
+          "exitRevenue": 0.0
+        },
+        "warnings": [
+          "Exit企業価値が0以下です。",
+          "Exit株式価値が0以下です。",
+          "要求リターンから逆算した許容Pre-moneyが0未満です。"
+        ]
+      }
+    },
+    {
+      "id": "medical-device-discount-rate-at-terminal-growth",
+      "tags": [
+        "boundary",
+        "terminal-growth-guard"
+      ],
+      "input": {
+        "sector": "medical_device",
+        "exitInputs": {
+          "annualProcedures": 15000.0,
+          "pricePerProcedure": 150000.0,
+          "launchYear": 2,
+          "recurringRatio": 0.2,
+          "procedureGrowth": 0.08,
+          "approvalDelayYears": 0,
+          "peakPenetration": 0.4,
+          "yearsToPeak": 3,
+          "operatingMargin": 0.22,
+          "discountRate": 0.02,
+          "terminalGrowth": 0.02,
+          "exitMultiple": 5.0,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 1652.9940864000007,
+        "exitEnterpriseValue": 8264.970432000004,
+        "exitEquityValue": 8264.970432000004,
+        "currentAllowablePostMoney": 826.4970432000003,
+        "currentAllowablePreMoney": 526.4970432000003,
+        "theoreticalSharePrice": 52.64970432000003,
+        "requiredEntryOwnership": 0.3629777050846682,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": -0.8245009855999998,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 525.9526638545457,
+        "expectedMoic": 1.7531755461818188,
+        "expectedIrr": 0.11883251943097295,
+        "intrinsicValue": 2890.145319931145,
+        "diagnostics": {
+          "effectiveLaunchYear": 2,
+          "exitRevenue": 1652.9940864000007
+        },
+        "warnings": [
+          "割引率は永久成長率を上回る必要があります。"
+        ]
+      }
+    },
+    {
+      "id": "drug-discovery-negative-peak-sales-growth",
+      "tags": [
+        "boundary",
+        "negative-growth"
+      ],
+      "input": {
+        "sector": "drug_discovery",
+        "exitInputs": {
+          "currentRnpv": 1200.0,
+          "currentPeakSales": 5000.0,
+          "peakSalesGrowth": -0.1,
+          "yearsToExit": 5,
+          "posAtExit": 0.05,
+          "valueCaptureRate": 0.25,
+          "exitMultiple": 0.8
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 10.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "リスク調整後経済価値",
+        "exitMetric": 36.90562500000001,
+        "exitEnterpriseValue": 29.524500000000007,
+        "exitEquityValue": 29.524500000000007,
+        "currentAllowablePostMoney": 2.9524500000000007,
+        "currentAllowablePreMoney": -297.04755,
+        "theoreticalSharePrice": -29.704755,
+        "requiredEntryOwnership": 101.61052685058169,
+        "impliedTargetIrr": 0.5848931924611136,
+        "proposedPricePerShare": 300.0,
+        "valuationGapToProposed": -1.09901585,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 1.8788318181818184,
+        "expectedMoic": 0.006262772727272728,
+        "expectedIrr": -0.6374621704854955,
+        "intrinsicValue": 1200.0,
+        "diagnostics": {
+          "peakSalesAtExit": 2952.4500000000003,
+          "posAtExit": 0.05
+        },
+        "warnings": [
+          "Exit価値はイベント取引価値の簡易モデルです。案件固有の導出・M&A条件で調整してください。",
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    },
+    {
+      "id": "climate-tech-fully-diluted-shares-zero",
+      "tags": [
+        "boundary",
+        "fully-diluted-shares-zero"
+      ],
+      "input": {
+        "sector": "climate_tech",
+        "exitInputs": {
+          "currentProjectNpv": 800.0,
+          "annualCapacity": 450000.0,
+          "unitPrice": 8000.0,
+          "unitCost": 9000.0,
+          "fixedOpex": 500.0,
+          "carbonCreditVolume": 100000.0,
+          "massProductionProbability": 0.15,
+          "offtakeCoverage": 0.1,
+          "merchantRealization": 0.5,
+          "costDeclineRate": 0.02,
+          "carbonCreditPrice": 1500.0,
+          "exitMultiple": 2.5,
+          "yearsToExit": 7
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 3000.0,
+          "investmentAmount": 300.0,
+          "targetMoic": 10.0,
+          "yearsToExit": 7,
+          "dilutionRetention": 0.7,
+          "exitNetDebt": 0.0
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "確率調整後Exit EBITDA",
+        "exitMetric": -45.56244379606028,
+        "exitEnterpriseValue": -113.9061094901507,
+        "exitEquityValue": -113.9061094901507,
+        "currentAllowablePostMoney": 0.0,
+        "currentAllowablePreMoney": -300.0,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.0,
+        "impliedTargetIrr": 0.3894954943731377,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -1.1,
+        "expectedEntryOwnership": 0.09090909090909091,
+        "expectedExitOwnership": 0.06363636363636363,
+        "expectedProceeds": 0.0,
+        "expectedMoic": 0.0,
+        "expectedIrr": -1.0,
+        "intrinsicValue": 800.0,
+        "diagnostics": {
+          "exitUnitCost": 7813.129799220479,
+          "unadjustedExitEbitda": -303.7496253070685
+        },
+        "warnings": [
+          "Exit企業価値が0以下です。",
+          "Exit株式価値が0以下です。",
+          "要求リターンから逆算した許容Pre-moneyが0未満です。"
+        ]
+      }
+    },
+    {
+      "id": "random-00",
+      "tags": [
+        "random",
+        "media_tech"
+      ],
+      "input": {
+        "sector": "media_tech",
+        "exitInputs": {
+          "currentMau": 1480144.8096800218,
+          "mauGrowth": 0.0028588420455710195,
+          "growthDecay": 0.5906515258006557,
+          "currentMonthlyArpu": 21.61535181700025,
+          "arpuGrowth": 0.2587171414580198,
+          "exitMultiple": 3.0307392432186786,
+          "yearsToExit": 6
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 9.249471057880356,
+          "proposedPreMoney": 3623.417402822194,
+          "investmentAmount": 843.122168323861,
+          "targetMoic": 19.49544113955826,
+          "yearsToExit": 6,
+          "dilutionRetention": 0.2305361629254639,
+          "exitNetDebt": 223.74555281838343
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 1537.156903741279,
+        "exitEnterpriseValue": 4658.721751153211,
+        "exitEquityValue": 4434.976198334827,
+        "currentAllowablePostMoney": 227.48786070481898,
+        "currentAllowablePreMoney": -615.634307619042,
+        "theoreticalSharePrice": -66.55886631425636,
+        "requiredEntryOwnership": 3.7062292718021976,
+        "impliedTargetIrr": 0.640547632611195,
+        "proposedPricePerShare": 391.74320132988777,
+        "valuationGapToProposed": -1.1699043304090606,
+        "expectedEntryOwnership": 0.18876406553530814,
+        "expectedExitOwnership": 0.04351694336672074,
+        "expectedProceeds": 192.99660805569113,
+        "expectedMoic": 0.22890704966205686,
+        "expectedIrr": -0.21787435168547764,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitMau": 1490066.8948378074,
+          "exitMonthlyArpu": 85.9668844995377
+        },
+        "warnings": [
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    },
+    {
+      "id": "random-01",
+      "tags": [
+        "random",
+        "media_tech"
+      ],
+      "input": {
+        "sector": "media_tech",
+        "exitInputs": {
+          "currentMau": 331794.5824666546,
+          "mauGrowth": -0.2813882584858424,
+          "growthDecay": 0.6437618966787961,
+          "currentMonthlyArpu": 454.3642010719023,
+          "arpuGrowth": -0.16915032129549845,
+          "exitMultiple": 6.989681886012919,
+          "yearsToExit": 2
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 18.188628614614487,
+          "proposedPreMoney": 6996.632976337265,
+          "investmentAmount": 861.8106093479614,
+          "targetMoic": 11.191797996380064,
+          "yearsToExit": 2,
+          "dilutionRetention": 0.21120726054318117,
+          "exitNetDebt": 1825.6582694063682
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 734.8518439618039,
+        "exitEnterpriseValue": 5136.380622643012,
+        "exitEquityValue": 3310.7223532366443,
+        "currentAllowablePostMoney": 295.816843219247,
+        "currentAllowablePreMoney": -565.9937661287145,
+        "theoreticalSharePrice": -31.118001149022355,
+        "requiredEntryOwnership": 2.913325015469872,
+        "impliedTargetIrr": 2.345414473033209,
+        "proposedPricePerShare": 384.670726121457,
+        "valuationGapToProposed": -1.080895163151035,
+        "expectedEntryOwnership": 0.1096668315998116,
+        "expectedExitOwnership": 0.02316243107464658,
+        "expectedProceeds": 76.6843783141355,
+        "expectedMoic": 0.08898054570499457,
+        "expectedIrr": -0.7017039294509655,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitMau": 195240.32563350679,
+          "exitMonthlyArpu": 313.65269170076704
+        },
+        "warnings": [
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    },
+    {
+      "id": "random-02",
+      "tags": [
+        "random",
+        "drug_discovery"
+      ],
+      "input": {
+        "sector": "drug_discovery",
+        "exitInputs": {
+          "currentRnpv": 708.1129277644549,
+          "currentPeakSales": 5555.638793312925,
+          "peakSalesGrowth": -0.02742131022970118,
+          "yearsToExit": 3,
+          "posAtExit": 0.2630813823057402,
+          "valueCaptureRate": 0.6471243200439981,
+          "exitMultiple": 0.4615235392540903
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 2824.8716402487116,
+          "investmentAmount": 1809.9640125861026,
+          "targetMoic": 18.975383880759058,
+          "yearsToExit": 3,
+          "dilutionRetention": 0.6075199526406707,
+          "exitNetDebt": 417.89721116498663
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "リスク調整後経済価値",
+        "exitMetric": 870.1338962323151,
+        "exitEnterpriseValue": 401.5872754140894,
+        "exitEquityValue": -16.30993575089724,
+        "currentAllowablePostMoney": 0.0,
+        "currentAllowablePreMoney": -1809.9640125861026,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.0,
+        "impliedTargetIrr": 1.6672487701124545,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -1.64072433833728,
+        "expectedEntryOwnership": 0.3905130943486789,
+        "expectedExitOwnership": 0.2372444965842712,
+        "expectedProceeds": 0.0,
+        "expectedMoic": 0.0,
+        "expectedIrr": -1.0,
+        "intrinsicValue": 708.1129277644549,
+        "diagnostics": {
+          "peakSalesAtExit": 5111.027883104098,
+          "posAtExit": 0.2630813823057402
+        },
+        "warnings": [
+          "Exit価値はイベント取引価値の簡易モデルです。案件固有の導出・M&A条件で調整してください。",
+          "Exit株式価値が0以下です。",
+          "要求リターンから逆算した許容Pre-moneyが0未満です。"
+        ]
+      }
+    },
+    {
+      "id": "random-03",
+      "tags": [
+        "random",
+        "medical_device"
+      ],
+      "input": {
+        "sector": "medical_device",
+        "exitInputs": {
+          "annualProcedures": 12205.877960106263,
+          "pricePerProcedure": 184134.19085152334,
+          "launchYear": 1,
+          "recurringRatio": 0.4405409897893727,
+          "procedureGrowth": 0.25917766504983974,
+          "approvalDelayYears": 1,
+          "peakPenetration": 0.27319010227563845,
+          "yearsToPeak": 3,
+          "operatingMargin": 0.3741630188433451,
+          "discountRate": 0.15581213087860216,
+          "terminalGrowth": 0.0037236902062246532,
+          "exitMultiple": 2.7928289979791763,
+          "yearsToExit": 7
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 6401.0917807736305,
+          "investmentAmount": 482.2748662423628,
+          "targetMoic": 14.051696459154691,
+          "yearsToExit": 7,
+          "dilutionRetention": 0.5848008253778472,
+          "exitNetDebt": 1662.11524488842
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 5508.1940399645855,
+        "exitEnterpriseValue": 15383.444041309163,
+        "exitEquityValue": 13721.328796420743,
+        "currentAllowablePostMoney": 976.4891261568126,
+        "currentAllowablePreMoney": 494.2142599144498,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.49388657110854006,
+        "impliedTargetIrr": 0.45868410778853597,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -0.9227921928257808,
+        "expectedEntryOwnership": 0.07006380612478832,
+        "expectedExitOwnership": 0.04097337165088968,
+        "expectedProceeds": 562.2091043198019,
+        "expectedMoic": 1.1657441506339434,
+        "expectedIrr": 0.022150273741552873,
+        "intrinsicValue": 12211.365117492769,
+        "diagnostics": {
+          "effectiveLaunchYear": 2,
+          "exitRevenue": 5508.1940399645855
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "random-04",
+      "tags": [
+        "random",
+        "climate_tech"
+      ],
+      "input": {
+        "sector": "climate_tech",
+        "exitInputs": {
+          "currentProjectNpv": 905.4828916258014,
+          "annualCapacity": 484205.1682080583,
+          "unitPrice": 9039.018615526938,
+          "unitCost": 15095.442162159234,
+          "fixedOpex": 413.8667367371782,
+          "carbonCreditVolume": 191468.1779467046,
+          "massProductionProbability": 0.6749603969092302,
+          "offtakeCoverage": 0.7023686436110601,
+          "merchantRealization": 0.038330847580680616,
+          "costDeclineRate": 0.006779244907054149,
+          "carbonCreditPrice": 570.8662037814594,
+          "exitMultiple": 8.108704599496981,
+          "yearsToExit": 4
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 2821.6596349352153,
+          "investmentAmount": 1023.6864151298922,
+          "targetMoic": 5.833887853638099,
+          "yearsToExit": 4,
+          "dilutionRetention": 0.4747072385214073,
+          "exitNetDebt": 911.0304751479187
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "確率調整後Exit EBITDA",
+        "exitMetric": -1523.8645145521762,
+        "exitEnterpriseValue": -12356.567198159466,
+        "exitEquityValue": -13267.597673307384,
+        "currentAllowablePostMoney": 0.0,
+        "currentAllowablePreMoney": -1023.6864151298922,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.0,
+        "impliedTargetIrr": 0.5541377839752473,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -1.362795853353658,
+        "expectedEntryOwnership": 0.26621438013688253,
+        "expectedExitOwnership": 0.12637389324946768,
+        "expectedProceeds": 0.0,
+        "expectedMoic": 0.0,
+        "expectedIrr": -1.0,
+        "intrinsicValue": 905.4828916258014,
+        "diagnostics": {
+          "exitUnitCost": 14690.243136424217,
+          "unadjustedExitEbitda": -2257.709521225596
+        },
+        "warnings": [
+          "Exit企業価値が0以下です。",
+          "Exit株式価値が0以下です。",
+          "要求リターンから逆算した許容Pre-moneyが0未満です。"
+        ]
+      }
+    },
+    {
+      "id": "random-05",
+      "tags": [
+        "random",
+        "media_tech"
+      ],
+      "input": {
+        "sector": "media_tech",
+        "exitInputs": {
+          "currentMau": 302324.75920920377,
+          "mauGrowth": 0.29751293232240444,
+          "growthDecay": 0.6338879245148678,
+          "currentMonthlyArpu": 123.10108436103084,
+          "arpuGrowth": -0.005624950201071677,
+          "exitMultiple": 7.8832626116791555,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 36.365055637800936,
+          "proposedPreMoney": 19.884866080567278,
+          "investmentAmount": 812.0917659225415,
+          "targetMoic": 2.0570593825117367,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.46228012596360424,
+          "exitNetDebt": 1094.1253616077993
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 845.184453406983,
+        "exitEnterpriseValue": 6662.811001515753,
+        "exitEquityValue": 5568.685639907953,
+        "currentAllowablePostMoney": 2707.109812799087,
+        "currentAllowablePreMoney": 1895.0180468765457,
+        "theoreticalSharePrice": 52.11096239618296,
+        "requiredEntryOwnership": 0.2999847889742079,
+        "impliedTargetIrr": 0.15517921420567005,
+        "proposedPricePerShare": 0.5468124751030837,
+        "valuationGapToProposed": 94.2995126644818,
+        "expectedEntryOwnership": 0.9760992492869764,
+        "expectedExitOwnership": 0.451231283913363,
+        "expectedProceeds": 2512.765171005573,
+        "expectedMoic": 3.094188706803418,
+        "expectedIrr": 0.25345676713441256,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitMau": 588514.6545381539,
+          "exitMonthlyArpu": 119.6776278055266
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "random-06",
+      "tags": [
+        "random",
+        "medical_device"
+      ],
+      "input": {
+        "sector": "medical_device",
+        "exitInputs": {
+          "annualProcedures": 3823.297879766099,
+          "pricePerProcedure": 444920.7659979438,
+          "launchYear": 3,
+          "recurringRatio": 0.37200776046982786,
+          "procedureGrowth": 0.12632344781383398,
+          "approvalDelayYears": 2,
+          "peakPenetration": 0.2756787147903945,
+          "yearsToPeak": 4,
+          "operatingMargin": -0.2159400494255848,
+          "discountRate": 0.05390832401645576,
+          "terminalGrowth": 0.010213021105336909,
+          "exitMultiple": 1.6648844509051708,
+          "yearsToExit": 3
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 14.191421511172504,
+          "proposedPreMoney": 3452.8099819547488,
+          "investmentAmount": 1553.1736735461554,
+          "targetMoic": 7.225035554780849,
+          "yearsToExit": 3,
+          "dilutionRetention": 0.26012017887821187,
+          "exitNetDebt": 1243.1464674564645
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 0.0,
+        "exitEnterpriseValue": 0.0,
+        "exitEquityValue": -1243.1464674564645,
+        "currentAllowablePostMoney": 0.0,
+        "currentAllowablePreMoney": -1553.1736735461554,
+        "theoreticalSharePrice": -109.44454523624613,
+        "requiredEntryOwnership": 0.0,
+        "impliedTargetIrr": 0.9332142877520699,
+        "proposedPricePerShare": 243.30261624858719,
+        "valuationGapToProposed": -1.4498288876779872,
+        "expectedEntryOwnership": 0.31026343280993857,
+        "expectedExitOwnership": 0.0807057796418893,
+        "expectedProceeds": 0.0,
+        "expectedMoic": 0.0,
+        "expectedIrr": -1.0,
+        "intrinsicValue": -8495.718466123373,
+        "diagnostics": {
+          "effectiveLaunchYear": 5,
+          "exitRevenue": 0.0
+        },
+        "warnings": [
+          "Exit企業価値が0以下です。",
+          "Exit株式価値が0以下です。",
+          "要求リターンから逆算した許容Pre-moneyが0未満です。"
+        ]
+      }
+    },
+    {
+      "id": "random-07",
+      "tags": [
+        "random",
+        "saas_jp"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 169.34202040490842,
+          "arrGrowth": 0.26820993305336344,
+          "growthDecay": 0.8772779305119458,
+          "exitOperatingMargin": 0.03744016777945636,
+          "exitMultiple": 4.768283051816221,
+          "yearsToExit": 3
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 2069.7034930020286,
+          "investmentAmount": 1720.2147769138717,
+          "targetMoic": 2.4764479676138222,
+          "yearsToExit": 3,
+          "dilutionRetention": 0.3247920684911848,
+          "exitNetDebt": 44.22935696458842
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 320.05495034328163,
+        "exitEnterpriseValue": 1526.112595371752,
+        "exitEquityValue": 1481.8832384071634,
+        "currentAllowablePostMoney": 598.3906214815528,
+        "currentAllowablePreMoney": -1121.824155432319,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 2.8747355241878614,
+        "impliedTargetIrr": 0.35293335051949337,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -1.542021675677396,
+        "expectedEntryOwnership": 0.45389231492637017,
+        "expectedExitOwnership": 0.14742062383718804,
+        "expectedProceeds": 218.4601514598565,
+        "expectedMoic": 0.12699585795430848,
+        "expectedIrr": -0.497352895121001,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.20641880800927606,
+          "ruleOf40": 24.38589757887324
+        },
+        "warnings": [
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    },
+    {
+      "id": "random-08",
+      "tags": [
+        "random",
+        "drug_discovery"
+      ],
+      "input": {
+        "sector": "drug_discovery",
+        "exitInputs": {
+          "currentRnpv": 489.4675247172291,
+          "currentPeakSales": 5406.9128122332995,
+          "peakSalesGrowth": -0.26211639854070395,
+          "yearsToExit": 5,
+          "posAtExit": 0.9477800649353354,
+          "valueCaptureRate": 0.9919604151726568,
+          "exitMultiple": 3.609297361033791
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 1118.2918629092787,
+          "investmentAmount": 1166.8980625216348,
+          "targetMoic": 10.242162681616804,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.16680258357286554,
+          "exitNetDebt": 449.4178019690528
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "リスク調整後経済価値",
+        "exitMetric": 1111.9636027755253,
+        "exitEnterpriseValue": 4013.40729706333,
+        "exitEquityValue": 3563.989495094277,
+        "currentAllowablePostMoney": 347.9723575852902,
+        "currentAllowablePreMoney": -818.9257049363446,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 3.35342172182634,
+        "impliedTargetIrr": 0.5924959405212697,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -1.7323005130394835,
+        "expectedEntryOwnership": 0.5106350459258195,
+        "expectedExitOwnership": 0.08517524492327555,
+        "expectedProceeds": 303.5636781486362,
+        "expectedMoic": 0.2601458412679539,
+        "expectedIrr": -0.23608792036908677,
+        "intrinsicValue": 489.4675247172291,
+        "diagnostics": {
+          "peakSalesAtExit": 1182.7382998883575,
+          "posAtExit": 0.9477800649353354
+        },
+        "warnings": [
+          "Exit価値はイベント取引価値の簡易モデルです。案件固有の導出・M&A条件で調整してください。",
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    },
+    {
+      "id": "random-09",
+      "tags": [
+        "random",
+        "medical_device"
+      ],
+      "input": {
+        "sector": "medical_device",
+        "exitInputs": {
+          "annualProcedures": 3703.2144256042375,
+          "pricePerProcedure": 448383.78184333944,
+          "launchYear": 4,
+          "recurringRatio": 0.0661544833828282,
+          "procedureGrowth": -0.16321034263492706,
+          "approvalDelayYears": 4,
+          "peakPenetration": 0.5382427491914156,
+          "yearsToPeak": 6,
+          "operatingMargin": 0.3170929356577144,
+          "discountRate": 0.21491553108473535,
+          "terminalGrowth": 0.02819742290035751,
+          "exitMultiple": 4.5337860913768875,
+          "yearsToExit": 4
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 28.960170098377645,
+          "proposedPreMoney": 3739.9271982064442,
+          "investmentAmount": 1829.7957001083826,
+          "targetMoic": 19.854021754471944,
+          "yearsToExit": 4,
+          "dilutionRetention": 0.7522592428967246,
+          "exitNetDebt": 351.68982903080064
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 0.0,
+        "exitEnterpriseValue": 0.0,
+        "exitEquityValue": -351.68982903080064,
+        "currentAllowablePostMoney": 0.0,
+        "currentAllowablePreMoney": -1829.7957001083826,
+        "theoreticalSharePrice": -63.183182070152554,
+        "requiredEntryOwnership": 0.0,
+        "impliedTargetIrr": 1.1108730896635528,
+        "proposedPricePerShare": 129.14037402066074,
+        "valuationGapToProposed": -1.4892597109873948,
+        "expectedEntryOwnership": 0.3285254461513704,
+        "expectedExitOwnership": 0.24713630339413858,
+        "expectedProceeds": 0.0,
+        "expectedMoic": 0.0,
+        "expectedIrr": -1.0,
+        "intrinsicValue": 29.812468004351995,
+        "diagnostics": {
+          "effectiveLaunchYear": 8,
+          "exitRevenue": 0.0
+        },
+        "warnings": [
+          "Exit企業価値が0以下です。",
+          "Exit株式価値が0以下です。",
+          "要求リターンから逆算した許容Pre-moneyが0未満です。"
+        ]
+      }
+    },
+    {
+      "id": "random-10",
+      "tags": [
+        "random",
+        "ec_d2c"
+      ],
+      "input": {
+        "sector": "ec_d2c",
+        "exitInputs": {
+          "currentRevenue": 2319.933543543245,
+          "revenueGrowth": 0.7060030130730601,
+          "growthDecay": 0.6590421465447387,
+          "exitGrossMargin": 0.6345436824699116,
+          "multipleBasis": "revenue",
+          "exitMultiple": 3.4020070952572343,
+          "yearsToExit": 2
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 3595.460428022781,
+          "investmentAmount": 44.84104440055643,
+          "targetMoic": 17.593490276877002,
+          "yearsToExit": 2,
+          "dilutionRetention": 0.8684286818021769,
+          "exitNetDebt": 1460.295452768518
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 5799.327857004185,
+        "exitEnterpriseValue": 19729.35451725117,
+        "exitEquityValue": 18269.05906448265,
+        "currentAllowablePostMoney": 1038.3987927906235,
+        "currentAllowablePreMoney": 993.557748390067,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.04318287416345052,
+        "impliedTargetIrr": 3.1944594737435477,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -0.723663278103037,
+        "expectedEntryOwnership": 0.012317948043656364,
+        "expectedExitOwnership": 0.0106972593820602,
+        "expectedProceeds": 195.42886347894898,
+        "expectedMoic": 4.358258512741597,
+        "expectedIrr": 1.0876442495649483,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitRevenue": 5799.327857004185,
+          "exitGrossMargin": 0.6345436824699116
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "random-11",
+      "tags": [
+        "random",
+        "climate_tech"
+      ],
+      "input": {
+        "sector": "climate_tech",
+        "exitInputs": {
+          "currentProjectNpv": 1359.626586487022,
+          "annualCapacity": 651072.3626346368,
+          "unitPrice": 17078.0258661287,
+          "unitCost": 4399.627752365174,
+          "fixedOpex": 1925.0443047453516,
+          "carbonCreditVolume": 94177.78327169135,
+          "massProductionProbability": 0.2019939686682507,
+          "offtakeCoverage": 0.6949574542617606,
+          "merchantRealization": 0.009921851132422388,
+          "costDeclineRate": 0.18172257702606828,
+          "carbonCreditPrice": 559.1976510168184,
+          "exitMultiple": 5.035765816833413,
+          "yearsToExit": 7
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 3677.614093219097,
+          "investmentAmount": 1704.047648523387,
+          "targetMoic": 11.364963894548426,
+          "yearsToExit": 7,
+          "dilutionRetention": 0.28974556036638344,
+          "exitNetDebt": 490.3441219718176
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "確率調整後Exit EBITDA",
+        "exitMetric": 1090.2417750614377,
+        "exitEnterpriseValue": 5490.202262938171,
+        "exitEquityValue": 4999.858140966353,
+        "currentAllowablePostMoney": 439.93612187054083,
+        "currentAllowablePreMoney": -1264.1115266528461,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 3.87339789530816,
+        "impliedTargetIrr": 0.4151270651718566,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -1.3437314233115583,
+        "expectedEntryOwnership": 0.3166396793960609,
+        "expectedExitOwnership": 0.09174494134084367,
+        "expectedProceeds": 458.71169185549775,
+        "expectedMoic": 0.2691894749850372,
+        "expectedIrr": -0.17095190623408307,
+        "intrinsicValue": 1359.626586487022,
+        "diagnostics": {
+          "exitUnitCost": 1080.736736181991,
+          "unadjustedExitEbitda": 5397.39766612547
+        },
+        "warnings": [
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    },
+    {
+      "id": "random-12",
+      "tags": [
+        "random",
+        "saas_jp"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 4797.906837175132,
+          "arrGrowth": 0.9267240916778343,
+          "growthDecay": 0.5012532237271214,
+          "exitOperatingMargin": 0.029332299400688266,
+          "exitMultiple": 13.055207978852057,
+          "yearsToExit": 7
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 4180.680160499809,
+          "investmentAmount": 1425.9554137860086,
+          "targetMoic": 12.51320653082476,
+          "yearsToExit": 7,
+          "dilutionRetention": 0.7405322549475165,
+          "exitNetDebt": 811.0908802874178
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 20606.277531885113,
+        "exitEnterpriseValue": 269019.23884870636,
+        "exitEquityValue": 268208.14796841895,
+        "currentAllowablePostMoney": 21434.006328251744,
+        "currentAllowablePreMoney": 20008.050914465734,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.06652771264261897,
+        "impliedTargetIrr": 0.43471931369077876,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": 3.785836310442301,
+        "expectedEntryOwnership": 0.25433352942110016,
+        "expectedExitOwnership": 0.18834218205096784,
+        "expectedProceeds": 50514.90783222088,
+        "expectedMoic": 35.425306670774766,
+        "expectedIrr": 0.6646790613726763,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.014699194134440902,
+          "ruleOf40": 4.403149353512917
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "random-13",
+      "tags": [
+        "random",
+        "medical_device"
+      ],
+      "input": {
+        "sector": "medical_device",
+        "exitInputs": {
+          "annualProcedures": 12955.694290059975,
+          "pricePerProcedure": 153946.18453166052,
+          "launchYear": 0,
+          "recurringRatio": 0.46174249682009816,
+          "procedureGrowth": 0.07979355512975816,
+          "approvalDelayYears": 3,
+          "peakPenetration": 0.5508352339318889,
+          "yearsToPeak": 4,
+          "operatingMargin": 0.3930693901597247,
+          "discountRate": 0.09091166812996873,
+          "terminalGrowth": 0.01830566552842743,
+          "exitMultiple": 0.7119393527745626,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 165.08143810467612,
+          "investmentAmount": 103.0425064162888,
+          "targetMoic": 4.753452746293022,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.6112314566213723,
+          "exitNetDebt": 505.18942496222235
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 2247.1194514897693,
+        "exitEnterpriseValue": 1599.8127679007564,
+        "exitEquityValue": 1094.623342938534,
+        "currentAllowablePostMoney": 230.27963069416762,
+        "currentAllowablePreMoney": 127.23712427787882,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.44746687366864274,
+        "impliedTargetIrr": 0.365846317854855,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -0.22924632994050298,
+        "expectedEntryOwnership": 0.3843092290783145,
+        "expectedExitOwnership": 0.23490188988257485,
+        "expectedProceeds": 257.1290919658435,
+        "expectedMoic": 2.495369153066301,
+        "expectedIrr": 0.20067912604245208,
+        "intrinsicValue": 15003.992717542273,
+        "diagnostics": {
+          "effectiveLaunchYear": 3,
+          "exitRevenue": 2247.1194514897693
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "random-14",
+      "tags": [
+        "random",
+        "climate_tech"
+      ],
+      "input": {
+        "sector": "climate_tech",
+        "exitInputs": {
+          "currentProjectNpv": 1725.772402508794,
+          "annualCapacity": 954962.5636558661,
+          "unitPrice": 7854.641713796535,
+          "unitCost": 7776.8286805180505,
+          "fixedOpex": 1350.5954372707051,
+          "carbonCreditVolume": 133426.36690512777,
+          "massProductionProbability": 0.5534013260821395,
+          "offtakeCoverage": 0.6953606677794086,
+          "merchantRealization": 0.5517406916698195,
+          "costDeclineRate": 0.2250414070925456,
+          "carbonCreditPrice": 9885.581539362,
+          "exitMultiple": 7.735597682360895,
+          "yearsToExit": 1
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 4335.67249690976,
+          "investmentAmount": 321.4433849889526,
+          "targetMoic": 3.5457772025675336,
+          "yearsToExit": 1,
+          "dilutionRetention": 0.8634223744716164,
+          "exitNetDebt": 311.21806423066766
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "確率調整後Exit EBITDA",
+        "exitMetric": 816.6124078957108,
+        "exitEnterpriseValue": 6316.985049905211,
+        "exitEquityValue": 6005.766985674543,
+        "currentAllowablePostMoney": 1693.7801341059178,
+        "currentAllowablePreMoney": 1372.3367491169652,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.1897786958982314,
+        "impliedTargetIrr": 2.5457772025675336,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -0.6834777649614692,
+        "expectedEntryOwnership": 0.0690219855250627,
+        "expectedExitOwnership": 0.05959512663279517,
+        "expectedProceeds": 357.9144440383349,
+        "expectedMoic": 1.1134602880399476,
+        "expectedIrr": 0.11346028803994757,
+        "intrinsicValue": 1725.772402508794,
+        "diagnostics": {
+          "exitUnitCost": 6026.7202115366035,
+          "unadjustedExitEbitda": 1475.624234002113
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "random-15",
+      "tags": [
+        "random",
+        "drug_discovery"
+      ],
+      "input": {
+        "sector": "drug_discovery",
+        "exitInputs": {
+          "currentRnpv": 2280.7718351529215,
+          "currentPeakSales": 3070.437210367453,
+          "peakSalesGrowth": -0.1300818134430182,
+          "yearsToExit": 6,
+          "posAtExit": 0.03138262706179262,
+          "valueCaptureRate": 0.1959476595594697,
+          "exitMultiple": 4.2311523338328
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 961.502674695891,
+          "investmentAmount": 363.67562689531917,
+          "targetMoic": 2.5890385347584095,
+          "yearsToExit": 6,
+          "dilutionRetention": 0.42958101413800454,
+          "exitNetDebt": -358.9956399395931
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "リスク調整後経済価値",
+        "exitMetric": 8.182764624096228,
+        "exitEnterpriseValue": 34.62252363644923,
+        "exitEquityValue": 393.6181635760423,
+        "currentAllowablePostMoney": 152.03256278021058,
+        "currentAllowablePreMoney": -211.6430641151086,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 2.3920903538347593,
+        "impliedTargetIrr": 0.17180789325559598,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -1.2201169790630568,
+        "expectedEntryOwnership": 0.2744352412491474,
+        "expectedExitOwnership": 0.11789216925101668,
+        "expectedProceeds": 46.40449916058115,
+        "expectedMoic": 0.1275985953656946,
+        "expectedIrr": -0.29046419559168046,
+        "intrinsicValue": 2280.7718351529215,
+        "diagnostics": {
+          "peakSalesAtExit": 1330.6709704550674,
+          "posAtExit": 0.03138262706179262
+        },
+        "warnings": [
+          "Exit価値はイベント取引価値の簡易モデルです。案件固有の導出・M&A条件で調整してください。",
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    },
+    {
+      "id": "random-16",
+      "tags": [
+        "random",
+        "medical_device"
+      ],
+      "input": {
+        "sector": "medical_device",
+        "exitInputs": {
+          "annualProcedures": 23404.61735575823,
+          "pricePerProcedure": 47942.10178354344,
+          "launchYear": 4,
+          "recurringRatio": 0.23660233753245255,
+          "procedureGrowth": 0.15142804277485267,
+          "approvalDelayYears": 0,
+          "peakPenetration": 0.4819213361452568,
+          "yearsToPeak": 1,
+          "operatingMargin": 0.3156868150122782,
+          "discountRate": 0.0670902774302395,
+          "terminalGrowth": 0.024303131373688315,
+          "exitMultiple": 5.8357918918781575,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 5411.138560243381,
+          "investmentAmount": 692.8359147159532,
+          "targetMoic": 14.924109476190662,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.27862535592155646,
+          "exitNetDebt": 1034.4709282118388
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 1433.5998776563877,
+        "exitEnterpriseValue": 8366.190542224665,
+        "exitEquityValue": 7331.719614012827,
+        "currentAllowablePostMoney": 491.2668072898798,
+        "currentAllowablePreMoney": -201.5691074260734,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 1.4103047558577153,
+        "impliedTargetIrr": 0.7170292171790087,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -1.03725077544808,
+        "expectedEntryOwnership": 0.1135057031378836,
+        "expectedExitOwnership": 0.03162556693591935,
+        "expectedProceeds": 231.86978940835544,
+        "expectedMoic": 0.33466768174599715,
+        "expectedIrr": -0.19661678269208682,
+        "intrinsicValue": 14151.270434725373,
+        "diagnostics": {
+          "effectiveLaunchYear": 4,
+          "exitRevenue": 1433.5998776563877
+        },
+        "warnings": [
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    },
+    {
+      "id": "random-17",
+      "tags": [
+        "random",
+        "media_tech"
+      ],
+      "input": {
+        "sector": "media_tech",
+        "exitInputs": {
+          "currentMau": 3805905.8934578984,
+          "mauGrowth": -0.055847944276231354,
+          "growthDecay": 0.5558791891246988,
+          "currentMonthlyArpu": 494.15120014597636,
+          "arpuGrowth": -0.12808435450806066,
+          "exitMultiple": 1.757950324377712,
+          "yearsToExit": 5
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 24.761056104979104,
+          "proposedPreMoney": 3590.289570869466,
+          "investmentAmount": 1720.6464699851515,
+          "targetMoic": 2.4001958320210597,
+          "yearsToExit": 5,
+          "dilutionRetention": 0.3284958423353007,
+          "exitNetDebt": 1765.5426251542763
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 10072.767037145566,
+        "exitEnterpriseValue": 17707.424080331173,
+        "exitEquityValue": 15941.881455176897,
+        "currentAllowablePostMoney": 6641.908648659391,
+        "currentAllowablePreMoney": 4921.262178674239,
+        "theoreticalSharePrice": 198.75009199161912,
+        "requiredEntryOwnership": 0.2590590387497197,
+        "impliedTargetIrr": 0.19137733970130655,
+        "proposedPricePerShare": 144.9974328900902,
+        "valuationGapToProposed": 0.37071455701063405,
+        "expectedEntryOwnership": 0.3239817720923393,
+        "expectedExitOwnership": 0.10642666512475642,
+        "expectedProceeds": 1696.6412790886761,
+        "expectedMoic": 0.9860487373116904,
+        "expectedIrr": -0.0028059551838770513,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitMau": 3370818.2457086192,
+          "exitMonthlyArpu": 249.01884109714268
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "random-18",
+      "tags": [
+        "random",
+        "drug_discovery"
+      ],
+      "input": {
+        "sector": "drug_discovery",
+        "exitInputs": {
+          "currentRnpv": 2736.6436618797266,
+          "currentPeakSales": 5066.433030967517,
+          "peakSalesGrowth": 0.2639420382358136,
+          "yearsToExit": 8,
+          "posAtExit": 0.652293058893317,
+          "valueCaptureRate": 0.8844808496893221,
+          "exitMultiple": 2.2058539305051696
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 16.434860852821394,
+          "proposedPreMoney": 2315.8700113080868,
+          "investmentAmount": 1689.686377569057,
+          "targetMoic": 13.70637637251668,
+          "yearsToExit": 8,
+          "dilutionRetention": 0.20373119611838186,
+          "exitNetDebt": 1896.1080069791242
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "リスク調整後経済価値",
+        "exitMetric": 19039.290761751774,
+        "exitEnterpriseValue": 41997.89436084092,
+        "exitEquityValue": 40101.7863538618,
+        "currentAllowablePostMoney": 2925.7759501097485,
+        "currentAllowablePreMoney": 1236.0895725406915,
+        "theoreticalSharePrice": 75.21144131430175,
+        "requiredEntryOwnership": 0.5775173514245598,
+        "impliedTargetIrr": 0.3871241459643733,
+        "proposedPricePerShare": 140.9120546895606,
+        "valuationGapToProposed": -0.46625261067977486,
+        "expectedEntryOwnership": 0.42183562370038624,
+        "expectedExitOwnership": 0.08594107618182333,
+        "expectedProceeds": 3446.3906760644395,
+        "expectedMoic": 2.039662934977758,
+        "expectedIrr": 0.093187860857324,
+        "intrinsicValue": 2736.6436618797266,
+        "diagnostics": {
+          "peakSalesAtExit": 33000.42818182559,
+          "posAtExit": 0.652293058893317
+        },
+        "warnings": [
+          "Exit価値はイベント取引価値の簡易モデルです。案件固有の導出・M&A条件で調整してください。"
+        ]
+      }
+    },
+    {
+      "id": "random-19",
+      "tags": [
+        "random",
+        "media_tech"
+      ],
+      "input": {
+        "sector": "media_tech",
+        "exitInputs": {
+          "currentMau": 2076999.3077826877,
+          "mauGrowth": 0.3397938359552482,
+          "growthDecay": 0.9689106558358127,
+          "currentMonthlyArpu": 168.75698314321775,
+          "arpuGrowth": -0.05076596340855094,
+          "exitMultiple": 1.828385951905247,
+          "yearsToExit": 4
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 6783.188000559797,
+          "investmentAmount": 422.23774026478907,
+          "targetMoic": 10.819772544326327,
+          "yearsToExit": 4,
+          "dilutionRetention": 0.6777089656245212,
+          "exitNetDebt": 950.3968312244685
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 10500.712022966633,
+        "exitEnterpriseValue": 19199.354347794717,
+        "exitEquityValue": 18248.957516570248,
+        "currentAllowablePostMoney": 1686.6304205387053,
+        "currentAllowablePreMoney": 1264.392680273916,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.25034396102610756,
+        "impliedTargetIrr": 0.813654395472776,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -0.8135990510406657,
+        "expectedEntryOwnership": 0.058599971112389584,
+        "expectedExitOwnership": 0.03971372580820437,
+        "expectedProceeds": 724.734095098641,
+        "expectedMoic": 1.7164124046423557,
+        "expectedIrr": 0.1446044002130018,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitMau": 6386788.582356728,
+          "exitMonthlyArpu": 137.01085043969346
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "random-20",
+      "tags": [
+        "random",
+        "saas_jp"
+      ],
+      "input": {
+        "sector": "saas_jp",
+        "exitInputs": {
+          "currentArr": 2288.8545703010495,
+          "arrGrowth": 0.9691758559174253,
+          "growthDecay": 0.8943356501570126,
+          "exitOperatingMargin": -0.08330854143272781,
+          "exitMultiple": 3.1967053013728384,
+          "yearsToExit": 8
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 6059.372091237796,
+          "investmentAmount": 1522.1301374962077,
+          "targetMoic": 1.1202739459953281,
+          "yearsToExit": 8,
+          "dilutionRetention": 0.30718201216665064,
+          "exitNetDebt": 1438.6039127826396
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit ARR",
+        "exitMetric": 137531.5222489208,
+        "exitEnterpriseValue": 439647.74627900164,
+        "exitEquityValue": 438209.142366219,
+        "currentAllowablePostMoney": 391162.4865799088,
+        "currentAllowablePreMoney": 389640.3564424126,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 0.0038912988584483255,
+        "impliedTargetIrr": 0.014297907354032358,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": 63.30375137480915,
+        "expectedEntryOwnership": 0.20076893623104303,
+        "expectedExitOwnership": 0.06167260581200976,
+        "expectedProceeds": 27025.499700370692,
+        "expectedMoic": 17.755051972642534,
+        "expectedIrr": 0.432732932109946,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitGrowthRate": 0.4435130341467741,
+          "ruleOf40": 36.02044927140463
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "random-21",
+      "tags": [
+        "random",
+        "media_tech"
+      ],
+      "input": {
+        "sector": "media_tech",
+        "exitInputs": {
+          "currentMau": 1935294.9619924054,
+          "mauGrowth": 0.2912182051288415,
+          "growthDecay": 0.9080821937439858,
+          "currentMonthlyArpu": 369.7825846906942,
+          "arpuGrowth": -0.07424055200642837,
+          "exitMultiple": 9.143953356432059,
+          "yearsToExit": 8
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 46.69575836418398,
+          "proposedPreMoney": 9500.34332707839,
+          "investmentAmount": 1394.873225883906,
+          "targetMoic": 7.873573230351321,
+          "yearsToExit": 8,
+          "dilutionRetention": 0.6614775364049804,
+          "exitNetDebt": 1032.6416240775236
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit売上",
+        "exitMetric": 21573.77126776145,
+        "exitEnterpriseValue": 197269.55819474484,
+        "exitEquityValue": 196236.91657066732,
+        "currentAllowablePostMoney": 24923.48909821611,
+        "currentAllowablePreMoney": 23528.615872332204,
+        "theoreticalSharePrice": 503.8705162218511,
+        "requiredEntryOwnership": 0.05596621004334997,
+        "impliedTargetIrr": 0.29425986494050593,
+        "proposedPricePerShare": 203.45195495026437,
+        "valuationGapToProposed": 1.4766069038020633,
+        "expectedEntryOwnership": 0.12802620481229943,
+        "expectedExitOwnership": 0.08468645855451927,
+        "expectedProceeds": 16618.609502028474,
+        "expectedMoic": 11.914064442306262,
+        "expectedIrr": 0.3630365231703674,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitMau": 9011833.226066554,
+          "exitMonthlyArpu": 199.4948449682037
+        },
+        "warnings": []
+      }
+    },
+    {
+      "id": "random-22",
+      "tags": [
+        "random",
+        "climate_tech"
+      ],
+      "input": {
+        "sector": "climate_tech",
+        "exitInputs": {
+          "currentProjectNpv": 1429.638468614436,
+          "annualCapacity": 477869.8821556722,
+          "unitPrice": 6716.586907273767,
+          "unitCost": 2651.597068780566,
+          "fixedOpex": 1382.6219282846469,
+          "carbonCreditVolume": 324253.1602463731,
+          "massProductionProbability": 0.46069715789561005,
+          "offtakeCoverage": 0.1447783401896765,
+          "merchantRealization": 0.6263259182049581,
+          "costDeclineRate": 0.2854967009828041,
+          "carbonCreditPrice": 7608.7988100396,
+          "exitMultiple": 5.158632497699387,
+          "yearsToExit": 1
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 1205.718951625574,
+          "investmentAmount": 1481.9425202188352,
+          "targetMoic": 11.226970874395965,
+          "yearsToExit": 1,
+          "dilutionRetention": 0.6089793390033643,
+          "exitNetDebt": 743.0185486882995
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "確率調整後Exit EBITDA",
+        "exitMetric": 1221.9791795142726,
+        "exitEnterpriseValue": 6303.74150695436,
+        "exitEquityValue": 5560.722958266061,
+        "currentAllowablePostMoney": 495.3003815969408,
+        "currentAllowablePreMoney": -986.6421386218944,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 2.9920076286652075,
+        "impliedTargetIrr": 10.226970874395965,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -1.8183019245834067,
+        "expectedEntryOwnership": 0.5513873438836966,
+        "expectedExitOwnership": 0.33578350021311426,
+        "expectedProceeds": 1867.1990186420012,
+        "expectedMoic": 1.2599672343339443,
+        "expectedIrr": 0.2599672343339443,
+        "intrinsicValue": 1429.638468614436,
+        "diagnostics": {
+          "exitUnitCost": 1894.574853308041,
+          "unadjustedExitEbitda": 2652.4565184992143
+        },
+        "warnings": [
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    },
+    {
+      "id": "random-23",
+      "tags": [
+        "random",
+        "ec_d2c"
+      ],
+      "input": {
+        "sector": "ec_d2c",
+        "exitInputs": {
+          "currentRevenue": 5893.996251006053,
+          "revenueGrowth": 0.7763474101665231,
+          "growthDecay": 0.7181378334074562,
+          "exitGrossMargin": 0.1806249955195845,
+          "multipleBasis": "grossProfit",
+          "exitMultiple": 2.6965905666610106,
+          "yearsToExit": 3
+        },
+        "coreInputs": {
+          "fullyDilutedShares": 0.0,
+          "proposedPreMoney": 4811.810115358198,
+          "investmentAmount": 1421.9003957836376,
+          "targetMoic": 8.049807907518513,
+          "yearsToExit": 3,
+          "dilutionRetention": 0.3720592231317782,
+          "exitNetDebt": 763.8111024065568
+        }
+      },
+      "expected": {
+        "exitMetricLabel": "Exit粗利",
+        "exitMetric": 4124.736378001434,
+        "exitEnterpriseValue": 11122.72520688217,
+        "exitEquityValue": 10358.914104475614,
+        "currentAllowablePostMoney": 1286.8523352961502,
+        "currentAllowablePreMoney": -135.04806048748742,
+        "theoreticalSharePrice": null,
+        "requiredEntryOwnership": 1.104944488799026,
+        "impliedTargetIrr": 1.004142074646631,
+        "proposedPricePerShare": null,
+        "valuationGapToProposed": -1.028065957976281,
+        "expectedEntryOwnership": 0.22809856075963117,
+        "expectedExitOwnership": 0.08486617331370508,
+        "expectedProceeds": 879.1213997322116,
+        "expectedMoic": 0.6182721394122056,
+        "expectedIrr": -0.14809096231997299,
+        "intrinsicValue": null,
+        "diagnostics": {
+          "exitRevenue": 22835.91130970688,
+          "exitGrossMargin": 0.1806249955195845
+        },
+        "warnings": [
+          "要求リターンから逆算した許容Pre-moneyが0未満です。",
+          "要求持分が100%を超えており、この条件では投資が成立しません。"
+        ]
+      }
+    }
+  ]
+}
