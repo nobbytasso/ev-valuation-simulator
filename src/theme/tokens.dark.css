@@ -60,5 +60,17 @@
   /* ボタンの押下スケール(§6.2)。ダークは控えめ、ライトの「ぷにっと感」とはトークンで差を付ける。 */
   --button-active-scale: 0.98;
 
+  /*
+   * 第3層トークン(V2本採用Batch2 C7・出典: docs/v2-adoption-spec.md §6.3)。
+   * カテゴリ別(識別用)チャート系列色。dataviz skillの検証済み既定パレット(references/palette.md)の
+   * hue順(blue/aqua/yellow/green/violet/red)をそのまま採用し、固定順で割当てる(循環させない)。
+   */
+  --color-chart-1: #3987e5;
+  --color-chart-2: #199e70;
+  --color-chart-3: #c98500;
+  --color-chart-4: #2ea62e;
+  --color-chart-5: #9085e9;
+  --color-chart-6: #e66767;
+
   color-scheme: dark;
 }

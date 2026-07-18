@@ -13,10 +13,22 @@ import { formatMoney, formatMoneyValue, moneyAxisLabel } from './format/money.ts
 import { formatUnavailable } from './format/unavailable.ts'
 import { useMoneyUnit } from './format/useMoneyUnit.ts'
 import { aggregatePortfolio, evaluateHolding } from './portfolio/portfolioAggregation.ts'
-import { buildV2ValuationMap, listV2CompanyOptions } from './portfolio/v2Linking.ts'
+import { buildFundFollowOnCashflows, buildV2ValuationMap, listV2CompanyOptions } from './portfolio/v2Linking.ts'
 import { loadWorkbenchCollection } from '../v2/store/workbenchStorage.ts'
 import { SectionHeading } from './SectionHeading.tsx'
+import { CashflowChart } from './cashflow/CashflowChart.tsx'
+import { CompositionPieChart } from './charts/CompositionPieChart.tsx'
+import type { CompositionSlice } from './charts/CompositionPieChart.tsx'
 import './PortfolioPage.css'
+
+const HOLDING_CHART_COLORS = [
+  'var(--color-chart-1)',
+  'var(--color-chart-2)',
+  'var(--color-chart-3)',
+  'var(--color-chart-4)',
+  'var(--color-chart-5)',
+  'var(--color-chart-6)',
+]
 
 const V2_OPTION_PREFIX = 'v2:'
 
@@ -117,6 +129,29 @@ export function PortfolioPage() {
   }
 
   const fundSummary = aggregatePortfolio(holdings, scenarioById, evalDateIso, v2ValuationByCompanyId)
+
+  // ファンドCFバーチャート(V2連動+採用ケースが解決できる銘柄のみ。§6.3)。
+  const fundCashflows = useMemo(
+    () => buildFundFollowOnCashflows(holdings, workbenchCollection),
+    [holdings, workbenchCollection],
+  )
+  const v2CfExcludedCount = holdings.filter((h) => {
+    if (!h.v2CompanyId) return false
+    const state = workbenchCollection.workbenches[h.v2CompanyId]
+    return !state?.adoptedCaseId
+  }).length
+
+  // 時価構成円チャート(銘柄別、V2連動・非連動を問わず全銘柄。§6.3)。
+  const marketValueSlices: CompositionSlice[] = holdings.map((h, index) => {
+    const linkedScenario = h.scenarioId ? (scenarioById.get(h.scenarioId) ?? null) : null
+    const v2Valuation = h.v2CompanyId ? (v2ValuationByCompanyId.get(h.v2CompanyId) ?? null) : null
+    const valuation = evaluateHolding(h, linkedScenario, evalDateIso, v2Valuation)
+    return {
+      name: h.companyName,
+      value: valuation.marketValue.base,
+      color: HOLDING_CHART_COLORS[index % HOLDING_CHART_COLORS.length],
+    }
+  })
 
   const handleExportXlsx = () => {
     const workbook = buildPortfolioWorkbook(
@@ -302,6 +337,29 @@ export function PortfolioPage() {
               </tr>
             </tbody>
           </table>
+
+          <div className="portfolio-page__charts">
+            <div>
+              <h3>ファンドCF(V2連動・採用ケース確定銘柄)</h3>
+              {fundCashflows.length > 0 ? (
+                <CashflowChart cashflows={fundCashflows} />
+              ) : (
+                <p className="status-caution">
+                  V2連動かつ採用ケースが選択された銘柄がありません。
+                </p>
+              )}
+              {v2CfExcludedCount > 0 && (
+                <p className="portfolio-page__summary-caption">
+                  V2連動だが採用ケース未選択の銘柄{v2CfExcludedCount}件、および旧シナリオ/コスト評価銘柄は
+                  投資日不明分としてCFバーから除外しています(時価構成には含みます)。
+                </p>
+              )}
+            </div>
+            <div>
+              <h3>時価構成(銘柄別)</h3>
+              <CompositionPieChart data={marketValueSlices} formatValue={(value) => formatMoney(value, unit)} />
+            </div>
+          </div>
         </section>
       )}
     </section>

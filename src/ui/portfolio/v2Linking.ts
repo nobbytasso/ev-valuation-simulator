@@ -8,7 +8,9 @@
  */
 import { getSectorDefinition } from '../../v2/domain/sectorDefinitions.ts'
 import type { WorkbenchCollection, WorkbenchState } from '../../v2/domain/types.ts'
+import { computeFollowOnReturn } from '../../engine/index.ts'
 import type { Money } from '../../engine/index.ts'
+import type { PortfolioHolding } from '../../store/scenarioTypes.ts'
 
 export interface V2LinkedValuation {
   companyId: string
@@ -48,4 +50,50 @@ export function buildV2ValuationMap(collection: WorkbenchCollection): Map<string
     map.set(state.company.id, resolveV2CompanyValuation(state))
   }
   return map
+}
+
+export interface FundCashflowDatum {
+  t: number
+  cf: Money
+}
+
+/**
+ * V2連動銘柄のうち採用ケースが解決できる銘柄について、採用ケースの投資家キャッシュフロー
+ * (`computeFollowOnReturn` が返す実CF列)を年次(t)で合算し、ファンドCFバーチャートの
+ * データを作る(docs/v2-adoption-spec.md §6.3)。
+ *
+ * 採用ケースの `investmentAmount`/`dilutionRetention` は既にファンド自身の出資条件を表すため、
+ * `holding.ownershipPct`(旧シナリオ紐付け用の持分)は二重適用しない。
+ * V2未連動・採用ケース未選択の銘柄はここでは除外する(呼び出し側で注記する)。
+ */
+export function buildFundFollowOnCashflows(
+  holdings: PortfolioHolding[],
+  collection: WorkbenchCollection,
+): FundCashflowDatum[] {
+  const byYear = new Map<number, number>()
+  for (const holding of holdings) {
+    if (!holding.v2CompanyId) continue
+    const state = collection.workbenches[holding.v2CompanyId]
+    if (!state || !state.adoptedCaseId) continue
+    const investmentCase = state.cases.find((item) => item.id === state.adoptedCaseId)
+    if (!investmentCase) continue
+    const definition = getSectorDefinition(state.company.sector)
+    const caseResult = definition.evaluate(state.company, investmentCase)
+    const followOnResult = computeFollowOnReturn(
+      {
+        investmentAmount: investmentCase.investmentAmount,
+        proposedPreMoney: state.company.proposedPreMoney,
+        yearsToExit: investmentCase.yearsToExit,
+        dilutionRetention: investmentCase.dilutionRetention,
+      },
+      investmentCase.followOns,
+      caseResult.exitEquityValue,
+    )
+    for (const { t, cf } of followOnResult.cashflows) {
+      byYear.set(t, (byYear.get(t) ?? 0) + cf)
+    }
+  }
+  return Array.from(byYear.entries())
+    .sort(([a], [b]) => a - b)
+    .map(([t, cf]) => ({ t, cf }))
 }

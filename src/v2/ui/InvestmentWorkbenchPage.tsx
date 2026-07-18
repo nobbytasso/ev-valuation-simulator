@@ -30,7 +30,9 @@ import { formatMoney, formatMoneyValue, moneyAxisLabel } from '../../ui/format/m
 import { useMoneyUnit } from '../../ui/format/useMoneyUnit.ts'
 import { useStableListKeys } from '../../ui/useStableListKeys.ts'
 import { CategoryBarChart } from '../../ui/charts/CategoryBarChart.tsx'
-import { computeFollowOnReturn } from '../../engine/index.ts'
+import { CompositionPieChart } from '../../ui/charts/CompositionPieChart.tsx'
+import { CashflowChart } from '../../ui/cashflow/CashflowChart.tsx'
+import { composeFollowOnProceeds, computeFollowOnReturn } from '../../engine/index.ts'
 import type { WorkbenchFollowOnInput } from '../../engine/index.ts'
 import { displayedValue, storedValue } from './workbenchFieldFormat.ts'
 import './InvestmentWorkbenchPage.css'
@@ -215,6 +217,13 @@ export function InvestmentWorkbenchPage() {
     [state.cases, state.company.proposedPreMoney, results],
   )
 
+  const adoptedCaseIndex = state.adoptedCaseId ? state.cases.findIndex((item) => item.id === state.adoptedCaseId) : -1
+  const adoptedCase = adoptedCaseIndex >= 0 ? state.cases[adoptedCaseIndex] : null
+  const adoptedFollowOnResult = adoptedCaseIndex >= 0 ? followOnResults[adoptedCaseIndex] : null
+  const adoptedComposition = adoptedFollowOnResult
+    ? composeFollowOnProceeds(adoptedFollowOnResult.proceeds, adoptedFollowOnResult.totalInvested)
+    : null
+
   useEffect(() => {
     saveWorkbenchCollection(collection)
   }, [collection])
@@ -285,6 +294,17 @@ export function InvestmentWorkbenchPage() {
 
   const handleSectorChange = (sector: V2SectorId) => {
     updateActive((current) => preserveCompanyId(resetForSector(current, sector), current.company.id))
+  }
+
+  /**
+   * ケース比較の列ヘッダをクリックして採用ケースをハイライト選択する(docs/v2-adoption-spec.md §6.3、
+   * ドロップダウン禁止のユーザー指示)。既に採用済みのケースを再クリックすると解除する(トグル)。
+   */
+  const toggleAdoptedCase = (caseId: string) => {
+    updateActive((current) => ({
+      ...current,
+      adoptedCaseId: current.adoptedCaseId === caseId ? null : caseId,
+    }))
   }
 
   const handleSwitchCompany = (companyId: string) => {
@@ -561,7 +581,10 @@ export function InvestmentWorkbenchPage() {
           {state.cases.map((item, caseIndex) => {
             const followOnResult = followOnResults[caseIndex]
             return (
-            <article key={item.id} className="workbench-case-card">
+            <article
+              key={item.id}
+              className={`workbench-case-card${state.adoptedCaseId === item.id ? ' workbench-case-card--adopted' : ''}`}
+            >
               <input
                 className="workbench-case-card__title"
                 value={item.name}
@@ -713,7 +736,19 @@ export function InvestmentWorkbenchPage() {
             <thead>
               <tr>
                 <th>項目</th>
-                {state.cases.map((item) => <th key={item.id}>{item.name}</th>)}
+                {state.cases.map((item) => (
+                  <th key={item.id}>
+                    <button
+                      type="button"
+                      className="workbench-adopt-header"
+                      aria-pressed={state.adoptedCaseId === item.id}
+                      onClick={() => toggleAdoptedCase(item.id)}
+                    >
+                      {item.name}
+                      {state.adoptedCaseId === item.id && <span className="workbench-adopt-header__badge">採用中</span>}
+                    </button>
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
@@ -795,6 +830,53 @@ export function InvestmentWorkbenchPage() {
             </tbody>
           </table>
         </div>
+      </section>
+
+      <section className="panel">
+        <div className="workbench-section-heading">
+          <div>
+            <p>ADOPTED CASE RETURNS</p>
+            <h2>採用ケースの投資家リターン</h2>
+          </div>
+          <span>{adoptedCase ? adoptedCase.name : '列ヘッダをクリックして採用ケースを選択'}</span>
+        </div>
+        {adoptedCase && adoptedFollowOnResult && adoptedComposition ? (
+          <>
+            <div className="workbench-adopted-summary">
+              <p>
+                MOIC <strong>{formatMultiple(adoptedFollowOnResult.moic)}</strong>
+              </p>
+              <p>
+                IRR <strong>{formatPercent(adoptedFollowOnResult.irr)}</strong>
+              </p>
+              <p>
+                回収額 <strong>{formatMoney(adoptedFollowOnResult.proceeds, unit)}</strong>
+              </p>
+            </div>
+            <div className="workbench-adopted-charts">
+              <CashflowChart cashflows={adoptedFollowOnResult.cashflows} />
+              <div>
+                <h3>回収額の構成</h3>
+                <CompositionPieChart
+                  data={
+                    adoptedComposition.kind === 'return'
+                      ? [
+                          { name: '投下資本の回収分', value: adoptedComposition.recoveredPrincipal, color: 'var(--color-accent)' },
+                          { name: '超過リターン分', value: adoptedComposition.excessReturn, color: 'var(--color-chart-2)' },
+                        ]
+                      : [
+                          { name: '回収', value: adoptedComposition.recoveredPrincipal, color: 'var(--color-accent)' },
+                          { name: '元本毀損分', value: adoptedComposition.principalLoss, color: 'var(--color-status-bad)' },
+                        ]
+                  }
+                  formatValue={(value) => formatMoney(value, unit)}
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className="status-caution">採用ケースが未選択です。上表の列ヘッダ(ケース名)をクリックして選択してください。</p>
+        )}
       </section>
 
       <section className="panel">
